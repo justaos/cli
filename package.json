@@ -1,37 +1,24 @@
 {
   "name": "anysols",
-  "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
-  "dependencies": {
-    "sails": "^1.0.0-46",
-    "grunt": "1.0.1",
-    "sails-hook-grunt": "^3.0.2",
-    "sails-hook-orm": "^2.0.0-16",
-    "sails-hook-sockets": "^1.4.0",
-    "connect-redis": "3.2.0",
-    "socket.io-redis": "5.2.0",
-    "lodash": "3.10.1",
-    "async": "2.0.1"
-  },
-  "devDependencies": {
-    "eslint": "4.11.0"
-  },
-  "scripts": {
-    "start": "NODE_ENV=production node app.js",
-    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
-    "lint": "node ./node_modules/eslint/bin/eslint . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your code looks good.'",
-    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
-  },
+  "version": "1.0.0",
+  "description": "",
   "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/anonymous node/sails user/anysols.git"
+    "url": "git+https://gitlab.com/anysols/anysols.git"
   },
-  "author": "anonymous node/sails user",
-  "license": "",
-  "engines": {
-    "node": "8"
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/anysols/anysols/issues"
+  },
+  "homepage": "https://gitlab.com/anysols/anysols#README",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.16.2"
   }
 }
