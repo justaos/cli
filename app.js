@@ -49,18 +49,47 @@ db.application.sync({force: true}).then(() => {
     // Table created
     db.application.create({
         name: 'CRM'
-    });
-
-    let obj = db.application.create({
-        name: 'HRMS'
-    });
-    obj.then(function (application) {
+    }).then(function (application) {
         db.module.sync({force: true}).then(() => {
             // Table created
-            return db.module.create({
+            db.module.create({
+                name: 'Customer',
+                application: application.id
+            }).then(function(parent){
+                db.module.create({
+                    name: 'Create',
+                    parent: parent.id,
+                    application: application.id
+                });
+                db.module.create({
+                    name: 'All',
+                    parent: parent.id,
+                    application: application.id
+                })
+            });
+        });
+    });
+
+    db.application.create({
+        name: 'HRMS'
+    }).then(function (application) {
+        db.module.sync({force: true}).then(() => {
+            // Table created
+            db.module.create({
                 name: 'Employee',
                 application: application.id
+            }).then(function(parent){
+                db.module.create({
+                    name: 'All',
+                    parent: parent.id,
+                    application: application.id
+                })
             });
+
+            db.module.create({
+                name: 'Leave',
+                application: application.id
+            })
         });
     });
 });
@@ -75,7 +104,8 @@ app.get('/application/:id', function (req, res, next) {
         order: sequelize.col('order')
     }));
     Promise.all(promises).then(responses => {
-        res.render('application', {application: responses[0], modules: responses[1]});
+        let modules = flatToHierarchy(responses[1]);
+        res.render('application', {application: responses[0], modules: modules});
     });
 });
 
@@ -86,3 +116,32 @@ app.get('/', function (req, res, next) {
         res.render('index', {applications: applications});
     });
 });
+
+function flatToHierarchy (flat) {
+
+    let roots = [];// things without parent
+
+    // make them accessible by guid on this map
+    let all = {};
+
+    flat.forEach(function(item) {
+        all[item.id] = item
+    });
+
+    // connect childrens to its parent, and split roots apart
+    Object.keys(all).forEach(function (id) {
+        let item = all[id];
+        if (item.parent === null) {
+            roots.push(item)
+        } else if (item.parent in all) {
+            let p = all[item.parent];
+            if (!('children' in p)) {
+                p.children = []
+            }
+            p.children.push(item)
+        }
+    });
+
+    // done!
+    return roots
+}

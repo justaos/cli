@@ -140,7 +140,6 @@
     }
     .sidebar-sub-level-items {
         display: none;
-        padding-bottom: 8px;
     }
 
     .sidebar-top-level-items>li.active .sidebar-sub-level-items:not(.is-fly-out-only) {
@@ -175,8 +174,12 @@
         padding: 12px 15px;
     }
 
-    .sidebar-sub-level-items>li.active a, .sidebar-sub-level-items>li.active a:hover, .sidebar-sub-level-items>li.active .participants-more .btn-link:hover, .participants-more .sidebar-sub-level-items>li.active .btn-link:hover, .sidebar-sub-level-items>li.active .user-list-more .btn-link:hover, .user-list-more .sidebar-sub-level-items>li.active .btn-link:hover, .sidebar-sub-level-items>li.active a:focus {
+    .sidebar-sub-level-items>li.active a, .sidebar-sub-level-items>li.active a:hover, .sidebar-sub-level-items>li.active a:focus {
         background: rgba(0,0,0,0.04);
+    }
+
+    .nav-sidebar li a.link:hover {
+        background: rgba(0,0,0,0.2);
     }
 
     .sidebar-sub-level-items>li a {
@@ -250,21 +253,7 @@
                 </a>
             </div>
             <ul class="sidebar-top-level-items">
-                <% modules.forEach(function(module, index) { %>
-                <li class="">
-                    <a class="shortcuts-tree" href="javascript:void(0)" style="position:relative">
-                        <span class="nav-item-name"><%= module.name %></span>
-                        <i class="fas fa-chevron-down" style="position: absolute; right: 10px;"></i>
-                    </a>
-                    <ul class="sidebar-sub-level-items fly-out-list" style="">
-                        <li class="divider fly-out-top-item"></li>
-                        <% for(var i=0; i < modules.length; i++) { %>
-                        <li class=""><a href=""><%= modules[i].name %>
-                            </a></li>
-                        <% } %>
-                    </ul>
-                </li>
-                <% }); %>
+                <%- partial('partials/nav-tree', {modules: modules}) %>
             </ul>
 
         </div>

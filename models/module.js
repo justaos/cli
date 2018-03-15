@@ -11,6 +11,9 @@ module.exports = {
         name: {
             type: Sequelize.STRING
         },
+        parent: {
+            type: Sequelize.UUID
+        },
         application: {
             type: Sequelize.UUID
         },
