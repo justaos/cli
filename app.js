@@ -46,10 +46,10 @@ db.table.sync({force: true}).then(function(){
                 label: table.label
             });
             app.get('/p/' + table.name + '/list', function (req, res, next) {
-                res.render('pages/list', {title: table.label, _layoutFile: '/views/layouts/layout'});
+                res.render('pages/list', {title: table.label, _layoutFile: '/layouts/layout'});
             });
             app.get('/p/' + table.name + '/new', function (req, res, next) {
-                res.render('pages/form', {title: table.label, _layoutFile: '/views/layouts/layout'});
+                res.render('pages/form', {title: table.label, _layoutFile: '/layouts/layout'});
             });
         }
     });
@@ -133,7 +133,7 @@ db.table.sync({force: true}).then(function(){
                 res.render('application', {
                     application: responses[0],
                     modules: modules,
-                    _layoutFile: '/views/layouts/layout'
+                    _layoutFile: '/layouts/layout'
                 });
             } else
                 res.redirect('/');
@@ -144,7 +144,7 @@ db.table.sync({force: true}).then(function(){
         db.application.findById(req.params.id).then(application => {
             res.render('pages/home', {
                 application: application,
-                _layoutFile: '/views/layouts/layout'
+                _layoutFile: '/layouts/layout'
             });
         });
     });
