@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = {
-    name: 'module',
+    name: 'application',
+    label: 'Application',
     schema: {
         id: {
             type: Sequelize.UUID,
@@ -10,12 +11,6 @@ module.exports = {
         },
         name: {
             type: Sequelize.STRING
-        },
-        parent: {
-            type: Sequelize.UUID
-        },
-        application: {
-            type: Sequelize.UUID
         },
         order: {
             type: Sequelize.INTEGER

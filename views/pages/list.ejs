@@ -25,13 +25,13 @@
         padding-bottom: 5px;
     }
 
-    header.shadow{
+    header.shadow {
         -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
         -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
         box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     }
 
-    header .title{
+    header .title {
         margin-top: 3px;
     }
 
@@ -40,14 +40,14 @@
     }
 </style>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         var header = $('header');
-        $(window).scroll(function(e){
-            if(header.offset().top !== 0){
-                if(!header.hasClass('shadow')){
+        $(window).scroll(function (e) {
+            if (header.offset().top !== 0) {
+                if (!header.hasClass('shadow')) {
                     header.addClass('shadow');
                 }
-            }else{
+            } else {
                 header.removeClass('shadow');
             }
         });
@@ -58,7 +58,9 @@
         <div class="row">
             <div class="col-sm-6">
                 <button class="btn btn-link btn-sm float-left"><i class="fas fa-bars"></i></button>
-                <h1 class="h6 float-left title">Employee</h1>
+                <h1 class="h6 float-left title">
+                    <%= title %>
+                </h1>
             </div>
             <div class="col-sm-6">
                 <div class="float-right">

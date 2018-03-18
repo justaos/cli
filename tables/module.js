@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = {
-    name: 'application',
+    name: 'module',
+    label: 'Module',
     schema: {
         id: {
             type: Sequelize.UUID,
@@ -9,6 +10,18 @@ module.exports = {
             defaultValue: Sequelize.UUIDV4
         },
         name: {
+            type: Sequelize.STRING
+        },
+        parent: {
+            type: Sequelize.UUID
+        },
+        application: {
+            type: Sequelize.UUID
+        },
+        type: {
+            type: Sequelize.STRING
+        },
+        table: {
             type: Sequelize.STRING
         },
         order: {
