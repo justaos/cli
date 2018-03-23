@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname + '/views'));
 app.use('/assets', express.static(path.join(__dirname, '/assets')));
 app.use('/views/styles/', express.static(__dirname + '/views/styles'));
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 
 app.listen(80, function () {
     console.log('Example app listening on port 80!')
@@ -34,6 +34,9 @@ db.table = sequelize.define('table', {
         defaultValue: Sequelize.UUIDV4
     },
     name: {
+        type: Sequelize.STRING
+    },
+    label: {
         type: Sequelize.STRING
     }
 });
@@ -64,7 +67,6 @@ function dynamicallyIncludeSchema(path) {
                 name: table.name,
                 label: table.label
             });
-            db[table.name].sync({force: true});
             Object.keys(table.schema).forEach(function (key) {
                 db.column.create({
                     name: key,
@@ -72,7 +74,7 @@ function dynamicallyIncludeSchema(path) {
                     type: table.schema[key].type.key
                 });
             });
-
+            db[table.name].sync({force: true});
             app.get('/p/' + table.name + '/list', function (req, res, next) {
                 db[table.name].findAll().then(function (data) {
                     res.render('pages/list', {
@@ -91,9 +93,9 @@ function dynamicallyIncludeSchema(path) {
                 });
             });
             app.post('/p/' + table.name + '/new', function (req, res, next) {
-                db[table.name].create(req.body).then(function(){
+                db[table.name].create(req.body).then(function () {
                     res.send({});
-                }, function(){
+                }, function () {
                     res.status(400);
                     res.send({});
                 });
@@ -108,65 +110,31 @@ db.table.sync({force: true}).then(function () {
         dynamicallyIncludeSchema('./tables/**.js');
         dynamicallyIncludeSchema('./apps/**/tables/**.js');
 
-        db.application.sync({force: true}).then(() => {
-            // Table created
+        db.application.sync({force: true}).then(function(){
             db.application.create({
-                name: 'ITSM'
-            }).then(function (application) {
-                db.module.sync({force: true}).then(() => {
-                    // Table created
-                    db.module.create({
-                        name: 'Incident',
-                        application: application.id
-                    }).then(function (parent) {
+                name: 'All'
+            }).then(function(application){
+                db.table.findAll().then(function(tables){
+                    tables.forEach(function(table){
                         db.module.create({
-                            name: 'Create',
-                            parent: parent.id,
-                            type: 'new',
-                            table: 'incident',
+                            name: table.label,
                             application: application.id
+                        }).then(function (parent) {
+                            db.module.create({
+                                name: 'Create',
+                                parent: parent.id,
+                                type: 'new',
+                                table: table.name,
+                                application: application.id
+                            });
+                            db.module.create({
+                                name: 'All',
+                                parent: parent.id,
+                                type: 'list',
+                                table: table.name,
+                                application: application.id
+                            })
                         });
-                        db.module.create({
-                            name: 'All',
-                            parent: parent.id,
-                            type: 'list',
-                            table: 'incident',
-                            application: application.id
-                        })
-                    });
-                });
-            });
-
-            db.application.create({
-                name: 'HRMS'
-            }).then(function (application) {
-                db.module.sync({force: true}).then(() => {
-                    // Table created
-                    db.module.create({
-                        name: 'Employee',
-                        application: application.id
-                    }).then(function (parent) {
-                        db.module.create({
-                            name: 'All',
-                            parent: parent.id,
-                            type: 'list',
-                            table: 'employee',
-                            application: application.id
-                        });
-                        db.module.create({
-                            name: 'Create',
-                            parent: parent.id,
-                            type: 'new',
-                            table: 'employee',
-                            application: application.id
-                        })
-                    });
-
-                    db.module.create({
-                        name: 'Leave',
-                        type: 'new',
-                        table: 'leave',
-                        application: application.id
                     });
                 });
             });
