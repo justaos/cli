@@ -11,9 +11,6 @@ module.exports = {
         },
         name: {
             type: Sequelize.STRING
-        },
-        order: {
-            type: Sequelize.INTEGER
         }
     }
 };

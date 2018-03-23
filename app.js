@@ -2,9 +2,10 @@ const express = require('express');
 const engine = require('ejs-locals');
 const path = require('path');
 const Sequelize = require('sequelize');
-fs = require('fs');
+const glob = require('glob');
+var bodyParser = require('body-parser');
 const app = express();
-const sequelize = new Sequelize('mysql://root:root@localhost:3306/anysols', {
+const sequelize = new Sequelize('mysql://root:root@127.0.0.1:3306/anysols', {
     define: {
         //prevent sequelize from pluralizing table names
         freezeTableName: true
@@ -18,6 +19,8 @@ app.set('views', path.join(__dirname + '/views'));
 
 app.use('/assets', express.static(path.join(__dirname, '/assets')));
 app.use('/views/styles/', express.static(__dirname + '/views/styles'));
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.listen(80, function () {
     console.log('Example app listening on port 80!')
@@ -35,136 +38,192 @@ db.table = sequelize.define('table', {
     }
 });
 
-db.table.sync({force: true}).then(function(){
-    // dynamically include schemas
-    fs.readdirSync('./tables').forEach(function (file) {
+db.column = sequelize.define('column', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4
+    },
+    table: {
+        type: Sequelize.UUID
+    },
+    name: {
+        type: Sequelize.STRING
+    },
+    type: {
+        type: Sequelize.STRING
+    }
+});
+
+function dynamicallyIncludeSchema(path) {
+    glob.sync(path).forEach(function (file) {
         if (file.substr(-3) === '.js') {
-            let table = require('./tables/' + file);
+            let table = require(file);
             db[table.name] = sequelize.define(table.name, table.schema);
             db.table.create({
                 name: table.name,
                 label: table.label
             });
+            db[table.name].sync({force: true});
+            Object.keys(table.schema).forEach(function (key) {
+                db.column.create({
+                    name: key,
+                    table: table.id,
+                    type: table.schema[key].type.key
+                });
+            });
+
             app.get('/p/' + table.name + '/list', function (req, res, next) {
-                res.render('pages/list', {title: table.label, _layoutFile: '/layouts/layout'});
+                db[table.name].findAll().then(function (data) {
+                    res.render('pages/list', {
+                        table: {label: table.label, name: table.name},
+                        data: data,
+                        cols: Object.keys(table.schema),
+                        _layoutFile: '../layouts/layout'
+                    });
+                });
             });
             app.get('/p/' + table.name + '/new', function (req, res, next) {
-                res.render('pages/form', {title: table.label, _layoutFile: '/layouts/layout'});
+                res.render('pages/form', {
+                    table: {label: table.label, name: table.name},
+                    cols: Object.keys(table.schema),
+                    _layoutFile: '../layouts/layout'
+                });
+            });
+            app.post('/p/' + table.name + '/new', function (req, res, next) {
+                db[table.name].create(req.body).then(function(){
+                    res.send({});
+                }, function(){
+                    res.status(400);
+                    res.send({});
+                });
             });
         }
     });
+}
 
-    db.application.sync({force: true}).then(() => {
-        // Table created
-        db.application.create({
-            name: 'ITSM'
-        }).then(function (application) {
-            db.module.sync({force: true}).then(() => {
-                // Table created
-                db.module.create({
-                    name: 'Incident',
-                    application: application.id
-                }).then(function (parent) {
+db.table.sync({force: true}).then(function () {
+
+    db.column.sync({force: true}).then(function () {
+        dynamicallyIncludeSchema('./tables/**.js');
+        dynamicallyIncludeSchema('./apps/**/tables/**.js');
+
+        db.application.sync({force: true}).then(() => {
+            // Table created
+            db.application.create({
+                name: 'ITSM'
+            }).then(function (application) {
+                db.module.sync({force: true}).then(() => {
+                    // Table created
                     db.module.create({
-                        name: 'Create',
-                        parent: parent.id,
+                        name: 'Incident',
+                        application: application.id
+                    }).then(function (parent) {
+                        db.module.create({
+                            name: 'Create',
+                            parent: parent.id,
+                            type: 'new',
+                            table: 'incident',
+                            application: application.id
+                        });
+                        db.module.create({
+                            name: 'All',
+                            parent: parent.id,
+                            type: 'list',
+                            table: 'incident',
+                            application: application.id
+                        })
+                    });
+                });
+            });
+
+            db.application.create({
+                name: 'HRMS'
+            }).then(function (application) {
+                db.module.sync({force: true}).then(() => {
+                    // Table created
+                    db.module.create({
+                        name: 'Employee',
+                        application: application.id
+                    }).then(function (parent) {
+                        db.module.create({
+                            name: 'All',
+                            parent: parent.id,
+                            type: 'list',
+                            table: 'employee',
+                            application: application.id
+                        });
+                        db.module.create({
+                            name: 'Create',
+                            parent: parent.id,
+                            type: 'new',
+                            table: 'employee',
+                            application: application.id
+                        })
+                    });
+
+                    db.module.create({
+                        name: 'Leave',
                         type: 'new',
-                        table: 'incident',
+                        table: 'leave',
                         application: application.id
                     });
-                    db.module.create({
-                        name: 'All',
-                        parent: parent.id,
-                        type: 'list',
-                        table: 'incident',
-                        application: application.id
-                    })
                 });
             });
         });
 
-        db.application.create({
-            name: 'HRMS'
-        }).then(function (application) {
-            db.module.sync({force: true}).then(() => {
-                // Table created
-                db.module.create({
-                    name: 'Employee',
-                    application: application.id
-                }).then(function (parent) {
-                    db.module.create({
-                        name: 'All',
-                        parent: parent.id,
-                        type: 'list',
-                        table: 'employee',
-                        application: application.id
+
+        app.get('/app/:id', function (req, res, next) {
+            let applicationId = req.params.id;
+            let promises = [];
+            promises.push(db.application.findById(applicationId));
+            promises.push(db.module.findAll({
+                where: {application: applicationId},
+                order: sequelize.col('order')
+            }));
+            Promise.all(promises).then(responses => {
+                if (responses[0] && responses[0].id) {
+                    let modules = flatToHierarchy(responses[1]);
+                    res.render('application', {
+                        application: responses[0],
+                        url: req.query.url,
+                        modules: modules,
+                        _layoutFile: 'layouts/layout'
                     });
-                    db.module.create({
-                        name: 'Create',
-                        parent: parent.id,
-                        type: 'new',
-                        table: 'employee',
-                        application: application.id
-                    })
-                });
+                } else
+                    res.redirect('/');
+            });
+        });
 
-                db.module.create({
-                    name: 'Leave',
-                    type: 'new',
-                    table: 'leave',
-                    application: application.id
+        app.get('/app/:id/home', function (req, res, next) {
+            db.application.findById(req.params.id).then(application => {
+                res.render('pages/home', {
+                    application: application,
+                    _layoutFile: '../layouts/layout'
                 });
             });
         });
-    });
 
-
-    app.get('/app/:id', function (req, res, next) {
-        let applicationId = req.params.id;
-        let promises = [];
-        promises.push(db.application.findById(applicationId));
-        promises.push(db.module.findAll({
-            where: {application: applicationId},
-            order: sequelize.col('order')
-        }));
-        Promise.all(promises).then(responses => {
-            if(responses[0] && responses[0].id){
-                let modules = flatToHierarchy(responses[1]);
-                res.render('application', {
-                    application: responses[0],
-                    modules: modules,
-                    _layoutFile: '/layouts/layout'
-                });
-            } else
-                res.redirect('/');
-        });
-    });
-
-    app.get('/app/:id/home', function (req, res, next) {
-        db.application.findById(req.params.id).then(application => {
-            res.render('pages/home', {
-                application: application,
-                _layoutFile: '/layouts/layout'
+        app.get('/module/:id', function (req, res, next) {
+            db.module.findById(req.params.id).then(module => {
+                if (module.type === 'list') {
+                    res.redirect('/p/' + module.table + '/list');
+                } else if (module.type === 'new') {
+                    res.redirect('/p/' + module.table + '/new');
+                } else
+                    res.redirect('/404');
             });
         });
-    });
 
-    app.get('/module/:id', function (req, res, next) {
-        db.module.findById(req.params.id).then(module => {
-            if (module.type === 'list') {
-                res.redirect('/p/' + module.table + '/list');
-            } else if(module.type === 'new'){
-                res.redirect('/p/' + module.table + '/new');
-            } else
-                res.redirect('/404');
+        app.get('/', function (req, res, next) {
+            db.application.findAll({
+                order: sequelize.col('order')
+            }).then(applications => {
+                res.render('index', {applications: applications});
+            });
         });
-    });
-
-    app.get('/', function (req, res, next) {
-        db.application.findAll({
-            order: sequelize.col('order')
-        }).then(applications => {
-            res.render('index', {applications: applications});
+        app.get('/signin', function (req, res, next) {
+            res.render('signin');
         });
     });
 });
