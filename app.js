@@ -110,12 +110,14 @@ db.table.sync({force: true}).then(function () {
         dynamicallyIncludeSchema('./tables/**.js');
         dynamicallyIncludeSchema('./apps/**/tables/**.js');
 
-        db.application.sync({force: true}).then(function(){
-            db.application.create({
-                name: 'All'
-            }).then(function(application){
-                db.table.findAll().then(function(tables){
-                    tables.forEach(function(table){
+        db.application.sync({force: true}).then(function () {
+
+            db.table.findAll().then(function (tables) {
+                tables.forEach(function (table) {
+                    if(table.name !== 'application' && table.name !== 'module')
+                    db.application.create({
+                        name: table.label
+                    }).then(function (application) {
                         db.module.create({
                             name: table.label,
                             application: application.id
