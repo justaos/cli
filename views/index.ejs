@@ -1,0 +1,66 @@
+<% layout('layouts/layout') -%>
+<style>
+    /* Show it is fixed to the top */
+    body {
+        padding-top: 38.8px;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+
+    .navbar-brand {
+        font-size: inherit;
+        border-radius: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .navbar-brand:hover {
+        background-color: #6c757d;
+    }
+
+    a.no-style {
+        color: inherit; /* blue colors for links too */
+        text-decoration: inherit; /* no underline */
+    }
+
+</style>
+
+<%- partial('partials/header-navigation') %>
+
+<main role="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 pt-2">
+                <h1 class="h4">Applications</h1>
+            </div>
+            <% applications.forEach(function(application, index) { %>
+            <div class="col-md-1 col-sm-2 p-2">
+                <a class="no-style" href="/app/<%= application.id %>">
+                <div class="card bg-light mb-3">
+                    <div class="card-header text-center"><%= application.name %></div>
+                </div>
+                </a>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</main>
+
