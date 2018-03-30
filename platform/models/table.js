@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = {
-    name: 'module',
-    label: 'Module',
+    name: 'sys_table',
+    label: 'Table',
     schema: {
         id: {
             type: Sequelize.UUID,
@@ -12,20 +12,8 @@ module.exports = {
         name: {
             type: Sequelize.STRING
         },
-        parent: {
-            type: Sequelize.UUID
-        },
-        application: {
-            type: Sequelize.UUID
-        },
-        type: {
+        label: {
             type: Sequelize.STRING
-        },
-        table: {
-            type: Sequelize.STRING
-        },
-        order: {
-            type: Sequelize.INTEGER
         }
     }
 };

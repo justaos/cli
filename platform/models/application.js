@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = {
-    name: 'application',
+    name: 'sys_application',
     label: 'Application',
     schema: {
         id: {
