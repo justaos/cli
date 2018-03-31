@@ -1,0 +1,15 @@
+{
+  "name": "sys_application",
+  "label": "Application",
+  "columns": [
+	{
+	  "name": "name",
+	  "type": "STRING",
+	  "displayValue": true
+	},
+	{
+	  "name": "order",
+	  "type": "INTEGER"
+	}
+  ]
+}

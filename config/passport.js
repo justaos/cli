@@ -1,5 +1,5 @@
 const passport = require('passport');
-const myUtils = require('../platform/utils');
+const myUtils = require('../utils');
 
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');

@@ -1,17 +1,5 @@
 /* Show it is fixed to the top */
 body {
-  padding-top: 38.8px;
-
-  .navbar-brand {
-    font-size: inherit;
-    border-radius: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
-    &:hover {
-      background-color: #6c757d;
-    }
-  }
-
   main {
     margin-left: 220px;
     #main-iframe {
@@ -96,26 +84,6 @@ body {
       }
     }
   }
-}
-
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 
 .nav-sidebar-inner-scroll {

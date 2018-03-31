@@ -3,7 +3,7 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-
+const config = require('../config/config');
 
 /* POST login. */
 router.post('/login', function (req, res, next) {
@@ -20,7 +20,7 @@ router.post('/login', function (req, res, next) {
                 res.send(err);
 
             const token = jwt.sign(user, process.env.JWT_SECRET || 'secret');
-            res.cookie('x-auth-token', token, {maxAge: 900000, httpOnly: true});
+            res.cookie('x-auth-token', token, {maxAge: config.app.tokenExpiration, httpOnly: true});
 
             return res.json({user, token});
         });
