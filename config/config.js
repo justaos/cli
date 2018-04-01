@@ -41,13 +41,21 @@ const configs = {
     production: {
         loggerLevel: 'info',
         cookieName: 'myCookie',
-        app: {
-            name: 'Anysols - Platform for Business applications - PROD',
-            port: 3001,
-            cookieName: 'myCookie',
-            cookieSecret: 'boom',
-            tokenExpiration: 3600000 * 2
-        }
+		db: {
+			host: 'localhost',
+			port: '3306',
+			name: 'anysols',
+			user: 'root',
+			password: 'anysols',
+			dialect: 'mysql'
+		},
+		app: {
+			name: 'Anysols - Platform for Business applications',
+			port: 80,
+			cookieName: 'myCookie',
+			cookieSecret: 'boom',
+			tokenExpiration: 3600000 * 2
+		}
     }
 };
 
