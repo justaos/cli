@@ -1,8 +1,9 @@
 const config = require('./config');
 const Q = require('q');
 const logger = require('./logger');
+const Sequelize = require('sequelize');
 
-module.exports = function (Sequelize) {
+module.exports = function () {
 
 	let connection;
 

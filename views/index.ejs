@@ -1,7 +1,7 @@
 <%- partial('partials/header-navigation') %>
 <main role="main">
 
-    <% if(!applications.length) { %>
+    <% if(!menus.length) { %>
     <div class="center-div">
         <div class="get-apps">
             <div class="d-flex justify-content-center">
@@ -18,11 +18,12 @@
     <% } else { %>
     <div class="container-fluid">
         <div class="row">
-            <% applications.forEach(function(application, index) { %>
+            <% menus.forEach(function(menu, index) { %>
             <div class="col-md-1 col-sm-2 p-2">
-                <a class="no-style" href="/app/<%= application.id %>">
-                    <div class="card bg-light mb-3">
-                        <div class="card-header text-center"><%= application.name %></div>
+                <a class="no-style" href="/menu/<%= menu.id %>">
+                    <div class="mb-3">
+                        <p class="text-center h1"><i class="fas fa-rocket"></i></p>
+                        <p class="text-center small"><%= menu.name %></p>
                     </div>
                 </a>
             </div>

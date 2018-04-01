@@ -1,0 +1,19 @@
+{
+  "name": "sys_menu",
+  "label": "Menu",
+  "columns": [
+	{
+	  "name": "name",
+	  "type": "STRING",
+	  "displayValue": true
+	},
+	{
+	  "name": "application",
+	  "type": "UUID"
+	},
+	{
+	  "name": "order",
+	  "type": "INTEGER"
+	}
+  ]
+}

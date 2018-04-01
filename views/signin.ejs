@@ -60,7 +60,7 @@
                 window.location.href = redirect;
             }, function (res) {
                 $signInHeader.find('.alert').remove();
-                $signInHeader.append("<div class=\"alert alert-danger\" role=\"alert\">" + res.responseJSON.message + "</div>");
+                $signInHeader.append(" ");
                 if(!res.responseJSON.user) {
                     $username.val(null).focus();
                     $password.val(null);

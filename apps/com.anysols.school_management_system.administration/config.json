@@ -1,0 +1,7 @@
+{
+  "package": "com.anysols.school_management_system.administration",
+  "name": "School Administration",
+  "version": "1.0.0",
+  "description": "School Administrative module allows you carry out all the administrative tasks which consume a lot of time and requires much attention and efforts, easily and effortlessly. It saves a lot of time and human resource by managing many of the things which your school carries out on a daily basis. The user can manage school administrative tasks easily and make reports on daily basis of different tasks.",
+  "dependencies": []
+}

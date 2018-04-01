@@ -1,0 +1,31 @@
+{
+  "name": "sys_module",
+  "label": "Module",
+  "columns": [
+	{
+	  "name": "name",
+	  "type": "STRING",
+	  "displayValue": true
+	},
+	{
+	  "name": "parent",
+	  "type": "UUID"
+	},
+	{
+	  "name": "menu",
+	  "type": "UUID"
+	},
+	{
+	  "name": "type",
+	  "type": "STRING"
+	},
+	{
+	  "name": "table",
+	  "type": "STRING"
+	},
+	{
+	  "name": "order",
+	  "type": "INTEGER"
+	}
+  ]
+}

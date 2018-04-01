@@ -1,0 +1,10 @@
+{
+    "name": "student",
+    "label": "Student",
+    "columns": [
+        {
+            "name": "name",
+            "type": "STRING"
+        }
+    ]
+}
