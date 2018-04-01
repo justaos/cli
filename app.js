@@ -33,14 +33,7 @@ app.listen(config.app.port);
 logger.info('listening on port ' + config.app.port);
 
 
-//platform.installApplication("apps/human-resource-management-system");
-
-
-
 /*
-
-let db = {};
-
 db.table.sync({force: true}).then(function () {
 
     db.column.sync({force: true}).then(function () {

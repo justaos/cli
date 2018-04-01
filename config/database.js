@@ -19,6 +19,9 @@ module.exports = function () {
 		getModel: function (name) {
 			return models[name];
 		},
+		setModel: function (name, model) {
+			models[name] = model;
+		},
 		connect: function () {
 			connection = new Sequelize(config.db.name, config.db.user, config.db.password, {
 				host: config.db.host,

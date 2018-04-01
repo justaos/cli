@@ -9,10 +9,6 @@ const config = require('../config/config');
 const logger = require('../config/logger');
 const utils = require('../utils');
 
-let application = {};
-let db = {};
-
-
 module.exports = function (database, router) {
 	class Platform {
 		constructor() {
@@ -43,12 +39,6 @@ module.exports = function (database, router) {
 			return dfd.promise;
 		}
 
-		camelCase(input) {
-			input = input.charAt(0).toUpperCase() + input.substr(1);
-			return input.replace(/_(.)/g, function (match, letter) {
-				return ' ' + letter.toUpperCase();
-			});
-		}
 
 		upsert(model, values, condition) {
 			return model.findOne({where: condition}).then(function (obj) {
@@ -62,14 +52,14 @@ module.exports = function (database, router) {
 		populateSysData(tableJson) {
 			let that = this;
 			let dfd = Q.defer();
-			db.sys_table.create({
+			database.getModel('sys_table').create({
 				name: tableJson.name,
 				label: tableJson.label
 			}).then(function (tableRecord) {
 				let promises = [];
 				tableJson.columns.forEach(function (col) {
-					let label = that.camelCase(col.name);
-					promises.push(db.sys_column.create({
+					let label = utils.underscoreToCamelCase(col.name);
+					promises.push(database.getModel('sys_column').create({
 						name: col.name,
 						label: col.label ? col.label : label,
 						type: col.type,
@@ -89,7 +79,7 @@ module.exports = function (database, router) {
 				let tableJson = utils.getObjectFromFile(file);
 				let tableSchemaDef = platformUtils.convertToScheme(tableJson);
 				let tableSchema = sequelize.define(tableJson.name, tableSchemaDef);
-				db[tableJson.name] = tableSchema;
+				database.setModel(tableJson.name, tableSchema);
 				promises.push(tableSchema.sync({force: true}));
 			});
 			return Q.all(promises);
@@ -99,9 +89,8 @@ module.exports = function (database, router) {
 			let that = this;
 			that.loadSchemas();
 			that.scanApplications();
-			database.setModels(db);
 			platformRoutes(database, router, this);
-			return db.sys_user.create({
+			return database.getModel('sys_user').create({
 				username: 'admin',
 				password: utils.generateHash('admin')
 			});
@@ -143,9 +132,9 @@ module.exports = function (database, router) {
 			glob.sync(path).forEach(function (file) {
 				let tableJson = utils.getObjectFromFile(file);
 				let tableSchemaDef = platformUtils.convertToScheme(tableJson);
-				db[tableJson.name] = sequelize.define(tableJson.name, tableSchemaDef);
+				database.setModel(tableJson.name, sequelize.define(tableJson.name, tableSchemaDef));
 				if (alter)
-					db[tableJson.name].sync({alter: true});
+					database.getModel(tableJson.name).sync({alter: true});
 			});
 		}
 
@@ -156,17 +145,17 @@ module.exports = function (database, router) {
 					let dfd = Q.defer();
 					promises.push(dfd.promise);
 					let table = require('../' + file);
-					db[table.name] = database.getConnection().define(table.name, table.schema);
+					database.setModel(table.name, database.getConnection().define(table.name, table.schema));
 					if (createTables) {
-						db[table.name].sync({force: true}).then(function () {
-							db.sys_table.create({
+						database.getModel(table.name).sync({force: true}).then(function () {
+							database.getModel('sys_table').create({
 								name: table.name,
 								label: table.label
 							}).then(function () {
 								dfd.resolve();
 							});
 							Object.keys(table.schema).forEach(function (key) {
-								db.sys_column.create({
+								database.getModel('sys_column').create({
 									name: key,
 									table: table.id,
 									type: table.schema[key].type.key
@@ -231,7 +220,7 @@ module.exports = function (database, router) {
 			let that = this;
 			glob.sync('apps/**/config.json').forEach(function (file) {
 				let config = utils.getObjectFromFile(file);
-				that.upsert(db.sys_application, config, {package: config.package});
+				that.upsert(database.getModel('sys_application'), config, {package: config.package});
 			});
 		}
 	}
