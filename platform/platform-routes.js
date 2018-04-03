@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const authenticate = require('../config/authenticate');
 const utils = require('../utils');
+const Q = require('q');
 
 module.exports = function (database, router, platform) {
 
@@ -27,7 +28,7 @@ module.exports = function (database, router, platform) {
 	});
 
 	router.post('/store/:id/install', authenticate, function (req, res, next) {
-		platform.installApplication(req.params.id).then(function(){
+		platform.installApplication(req.params.id).then(function () {
 			res.send({});
 		});
 	});
@@ -41,39 +42,89 @@ module.exports = function (database, router, platform) {
 			where: {menu: menuId},
 			order: Sequelize.col('order')
 		}));
-		Promise.all(promises).then(responses => {
-			if (responses[0] && responses[0].id) {
-				let modules = utils.flatToHierarchy(responses[1]);
+		Q.all(promises).then(function (responses) {
+			if (responses[0] && responses[1]) {
+				let menu = responses[0];
+				let modules = responses[1];
+				modules.forEach(function (module) {
+					if (module.type === 'list') {
+						module.url = '/p/' + module.table + '/list';
+					} else if (module.type === 'new') {
+						module.url = '/p/' + module.table + '/new';
+					}
+				});
+				modules = utils.flatToHierarchy(modules);
 				res.render('pages/menu', {
-					application: responses[0],
+					menu: menu,
 					url: req.query.url,
 					modules: modules,
 					_layoutFile: '../layouts/layout'
 				});
 			} else
-				res.redirect('/');
+				res.render('404');
 		});
 	});
 
-	router.get('/app/:id/home', function (req, res, next) {
-		database.getModel('sys_application').findById(req.params.id).then(application => {
+	router.get('/menu/:id/home', authenticate, function (req, res, next) {
+		database.getModel('sys_menu').findById(req.params.id).then(menu => {
 			res.render('pages/home', {
-				application: application,
+				menu: menu,
 				_layoutFile: '../layouts/layout'
 			});
 		});
 	});
 
-	router.get('/module/:id', function (req, res, next) {
-		database.getModel('sys_module').findById(req.params.id).then(module => {
-			if (module.type === 'list') {
-				res.redirect('/p/' + module.table + '/list');
-			} else if (module.type === 'new') {
-				res.redirect('/p/' + module.table + '/new');
-			} else
-				res.redirect('/404');
+	router.get('/p/:table/list', authenticate, function (req, res, next) {
+		database.getModel('sys_table').findOne({where: {name: req.params.table}}).then(function (table) {
+			let schema = database.getModel(req.params.table);
+			if (schema)
+				database.getModel('sys_column').findAll({where: {table: table.id}}).then(function (cols) {
+					schema.findAll().then(function (data) {
+						res.render('pages/list', {
+							table: {label: table.label, name: table.name},
+							data: data,
+							cols: cols,
+							_layoutFile: '../layouts/no-header-layout'
+						});
+					});
+				});
+			else
+				res.render('404');
 		});
 	});
+
+
+	router.get('/p/:table/new', authenticate, function (req, res, next) {
+		database.getModel('sys_table').findOne({where: {name: req.params.table}}).then(function (table) {
+			let schema = database.getModel(req.params.table);
+			if (schema)
+				database.getModel('sys_column').findAll({where: {table: table.id}}).then(function (cols) {
+					res.render('pages/form', {
+						table: {label: table.label, name: table.name},
+						cols: cols,
+						_layoutFile: '../layouts/no-header-layout'
+					});
+				});
+			else
+				res.render('404');
+		});
+	});
+
+	router.post('/p/:table/new', authenticate, function (req, res, next) {
+		database.getModel('sys_table').findOne({where: {name: req.params.table}}).then(function (table) {
+			let schema = database.getModel(req.params.table);
+			if (schema)
+				schema.create(req.body).then(function () {
+					res.send({});
+				}, function (err) {
+					res.status(400);
+					res.send(err);
+				});
+			else
+				res.render('404');
+		});
+	});
+
 
 	return router;
 };

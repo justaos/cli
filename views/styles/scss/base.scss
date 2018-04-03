@@ -17,15 +17,10 @@
 }
 
 body {
-  padding-top: 38.8px; /* Show it is fixed to the top */
   .navbar-brand {
     font-size: inherit;
-    border-radius: 3px;
     padding-left: 10px;
     padding-right: 10px;
-    &:hover {
-      background-color: #6c757d;
-    }
   }
   a.no-style {
     color: inherit; /* blue colors for links too */

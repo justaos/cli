@@ -1,11 +1,8 @@
 'use strict';
-const fs = require('fs');
 const glob = require('glob');
 const Q = require('q');
-const path = require('path');
 const platformUtils = require('./platform-utils');
 const platformRoutes = require('./platform-routes');
-const config = require('../config/config');
 const logger = require('../config/logger');
 const utils = require('../utils');
 
@@ -28,7 +25,6 @@ module.exports = function (database, router) {
 					glob.sync(modelPath).forEach(function (file) {
 						let tableJson = utils.getObjectFromFile(file);
 						promises.push(that.populateSysData(tableJson));
-
 					});
 					Q.all(promises).then(function () {
 						dfd.resolve();
@@ -39,36 +35,47 @@ module.exports = function (database, router) {
 			return dfd.promise;
 		}
 
-
-		upsert(model, values, condition) {
-			return model.findOne({where: condition}).then(function (obj) {
-				if (obj) // update
-					return obj.update(values);
-				else  // insert
-					return model.create(values);
+		createColumn(col, tableId) {
+			return database.getModel('sys_column').create({
+				name: col.name,
+				label: col.label ? col.label : utils.underscoreToCamelCase(col.name),
+				type: col.type,
+				table: tableId
 			});
 		}
 
 		populateSysData(tableJson) {
 			let that = this;
 			let dfd = Q.defer();
-			database.getModel('sys_table').create({
-				name: tableJson.name,
-				label: tableJson.label
-			}).then(function (tableRecord) {
-				let promises = [];
-				tableJson.columns.forEach(function (col) {
-					let label = utils.underscoreToCamelCase(col.name);
-					promises.push(database.getModel('sys_column').create({
-						name: col.name,
-						label: col.label ? col.label : label,
-						type: col.type,
-						table: tableRecord.id
-					}));
-				});
-				Q.all(promises).then(function () {
-					dfd.resolve();
-				})
+			database.getModel('sys_table').findOne({where: {name: tableJson.name}}).then(function (table) {
+				if (!table)
+					database.getModel('sys_table').create({
+						name: tableJson.name,
+						label: tableJson.label
+					}).then(function (tableRecord) {
+						let promises = [];
+						tableJson.columns.forEach(function (col) {
+							promises.push(that.createColumn(col, tableRecord.id));
+						});
+						Q.all(promises).then(function () {
+							dfd.resolve();
+						})
+					});
+				else {
+					database.getModel('sys_column').destroy({
+						where: {
+							table: table.id
+						}
+					}).then(function (columns) {
+						let promises = [];
+						tableJson.columns.forEach(function (col) {
+							promises.push(that.createColumn(col, table.id));
+						});
+						Q.all(promises).then(function () {
+							dfd.resolve();
+						})
+					});
+				}
 			});
 			return dfd.promise;
 		}
@@ -87,13 +94,19 @@ module.exports = function (database, router) {
 
 		startUp() {
 			let that = this;
-			that.loadSchemas();
-			that.scanApplications();
-			platformRoutes(database, router, this);
-			return database.getModel('sys_user').create({
-				username: 'admin',
-				password: utils.generateHash('admin')
+			let dfd = Q.defer();
+			that.loadSchemas().then(function () {
+				that.scanApplications();
+				platformRoutes(database, router, that);
+				database.getModel('sys_user').create({
+					username: 'admin',
+					password: utils.generateHash('admin')
+				}).then(function () {
+					dfd.resolve();
+				});
 			});
+
+			return dfd.promise;
 		}
 
 		installApplication(appId) {
@@ -101,13 +114,18 @@ module.exports = function (database, router) {
 			let dfd = Q.defer();
 			logger.info('STARTED INSTALLING');
 			database.getModel('sys_application').findById(appId).then(function (application) {
-				//let config = utils.getObjectFromFile('apps/'+application.package+'/config.json');
-				that.loadSchemasFromPath('apps/' + application.package + '/models/**.json', true);
+				let modelPath = 'apps/' + application.package + '/models/**.json';
+				that.loadSchemasFromPath(modelPath, true);
 				that.loadData('apps/' + application.package + '/update/**.json');
-				application.updateAttributes({installed_version: application.version}).then(function () {
+				let promises = [];
+				glob.sync(modelPath).forEach(function (file) {
+					let tableJson = utils.getObjectFromFile(file);
+					promises.push(that.populateSysData(tableJson));
+				});
+				promises.push(application.updateAttributes({installed_version: application.version}));
+				Q.all(promises).then(function () {
 					dfd.resolve();
 				});
-				console.log(config);
 			});
 			return dfd.promise;
 		}
@@ -115,15 +133,13 @@ module.exports = function (database, router) {
 		loadSchemas() {
 			let that = this;
 			that.loadSchemasFromPath('platform/models/**.json', true);
-			//promises.push(that.loadSchemasFrom('platform/models/**.js', createTables));
-			//promises.push(that.loadSchemasFrom('apps/**/tables/**.js', createTables));
+			return that.loadSchemasFromDB();
 		}
 
 		loadData(path) {
-			let that = this;
 			glob.sync(path).forEach(function (file) {
 				let data = utils.getObjectFromFile(file);
-				that.upsert(database.getModel(data.table), data.record, {id: data.record.id});
+				platformUtils.upsert(database.getModel(data.table), data.record, {id: data.record.id});
 			});
 		}
 
@@ -138,89 +154,48 @@ module.exports = function (database, router) {
 			});
 		}
 
-		loadSchemasFrom(path, createTables) {
-			let promises = [];
-			glob.sync(path).forEach(function (file) {
-				if (file.substr(-3) === '.js') {
-					let dfd = Q.defer();
-					promises.push(dfd.promise);
-					let table = require('../' + file);
-					database.setModel(table.name, database.getConnection().define(table.name, table.schema));
-					if (createTables) {
-						database.getModel(table.name).sync({force: true}).then(function () {
-							database.getModel('sys_table').create({
-								name: table.name,
-								label: table.label
-							}).then(function () {
-								dfd.resolve();
-							});
-							Object.keys(table.schema).forEach(function (key) {
-								database.getModel('sys_column').create({
-									name: key,
-									table: table.id,
-									type: table.schema[key].type.key
+		loadSchemasFromDB() {
+			let dfd = Q.defer();
+			database.getModel('sys_table').findAll().then(function (tables) {
+				if (tables.length) {
+					let promises = [];
+					tables.forEach(function (table) {
+						if (!database.getModel(table.name)) {
+							let tableJson = {
+								'name': table.name,
+								'label': table.label,
+								'columns': []
+							};
+							let colDfd = Q.defer();
+							database.getModel('sys_column').findAll({where: {table: table.id}}).then(function (columns) {
+								columns.forEach(function (col) {
+									tableJson.columns.push({
+										name: col.name,
+										type: col.type
+									})
 								});
+								let tableSchemaDef = platformUtils.convertToScheme(tableJson);
+								database.setModel(tableJson.name, database.getConnection().define(tableJson.name, tableSchemaDef));
+								colDfd.resolve();
 							});
-						});
-					} else
-						dfd.resolve();
-				}
-			});
-			return Q.all(promises);
-		}
-
-		initializeRoutes() {
-			let that = this;
-
-			/*db.sys_table.findAll().then(function (tables) {
-				tables.forEach(function (table) {
-					that.bindPlatformView(app, table);
-				});
-			});*/
-		}
-
-		bindPlatformView(app, table) {
-			app.get('/p/' + table.name + '/list', this.createListView(table));
-			app.get('/p/' + table.name + '/new', this.createFormView(table));
-			app.post('/p/' + table.name + '/new', function (req, res, next) {
-				db[table.name].create(req.body).then(function () {
-					res.send({});
-				}, function () {
-					res.status(400);
-					res.send({});
-				});
-			});
-		}
-
-		createListView(table) {
-			return function (req, res, next) {
-				db[table.name].findAll().then(function (data) {
-					res.render('pages/list', {
-						table: {label: table.label, name: table.name},
-						data: data,
-						cols: ['name'],
-						_layoutFile: '../layouts/layout'
+							promises.push(colDfd.promise);
+						}
 					});
-				});
-			}
-		}
-
-		createFormView(table) {
-			return function (req, res, next) {
-				res.render('pages/form', {
-					table: {label: table.label, name: table.name},
-					cols: ['name'],
-					_layoutFile: '../layouts/layout'
-				});
-			};
+					Q.all(promises).then(function () {
+						dfd.resolve();
+					})
+				}
+				else
+					dfd.resolve();
+			});
+			return dfd.promise;
 		}
 
 		scanApplications() {
 			logger.info('Scanning for apps');
-			let that = this;
 			glob.sync('apps/**/config.json').forEach(function (file) {
 				let config = utils.getObjectFromFile(file);
-				that.upsert(database.getModel('sys_application'), config, {package: config.package});
+				platformUtils.upsert(database.getModel('sys_application'), config, {package: config.package});
 			});
 		}
 	}

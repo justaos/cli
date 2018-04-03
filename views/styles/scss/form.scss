@@ -1,0 +1,28 @@
+$table-top: 40px;
+
+main {
+  padding-top: $table-top;
+}
+
+header {
+  position: fixed;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  z-index: 10;
+  background-color: #e3e3e3;;
+}
+
+.shadow {
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.title {
+  margin-top: 0.35em;
+}
+
+.form-group.required .col-form-label:after {
+  content: "*";
+  color: red;
+}

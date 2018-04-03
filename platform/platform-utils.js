@@ -6,7 +6,7 @@ const SEQUELIZE_TYPES = {
 	'STRING': Sequelize.STRING,
 	'TEXT': Sequelize.TEXT,
 	'UUID': Sequelize.UUID,
-	'INTERGER': Sequelize.INTERGER
+	'INTEGER': Sequelize.INTEGER
 };
 
 module.exports = {
@@ -26,6 +26,15 @@ module.exports = {
 			schema[col.name] = colDef;
 		});
 		return schema;
+	},
+
+	upsert: function(model, values, condition) {
+		return model.findOne({where: condition}).then(function (obj) {
+			if (obj) // update
+				return obj.update(values);
+			else  // insert
+				return model.create(values);
+		});
 	},
 
 	getSequelizeType: function(type) {
