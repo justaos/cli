@@ -35,7 +35,7 @@ module.exports = function (database, router) {
 			return dfd.promise;
 		}
 
-		createColumn(col, tableId) {
+		static createColumn(col, tableId) {
 			return database.getModel('sys_column').create({
 				name: col.name,
 				label: col.label ? col.label : utils.underscoreToCamelCase(col.name),
@@ -55,7 +55,7 @@ module.exports = function (database, router) {
 					}).then(function (tableRecord) {
 						let promises = [];
 						tableJson.columns.forEach(function (col) {
-							promises.push(that.createColumn(col, tableRecord.id));
+							promises.push(Platform.createColumn(col, tableRecord.id));
 						});
 						Q.all(promises).then(function () {
 							dfd.resolve();
@@ -66,10 +66,10 @@ module.exports = function (database, router) {
 						where: {
 							table: table.id
 						}
-					}).then(function (columns) {
+					}).then(() => {
 						let promises = [];
 						tableJson.columns.forEach(function (col) {
-							promises.push(that.createColumn(col, table.id));
+							promises.push(Platform.createColumn(col, table.id));
 						});
 						Q.all(promises).then(function () {
 							dfd.resolve();
@@ -82,7 +82,7 @@ module.exports = function (database, router) {
 
 		createPlatformTables(sequelize, path) {
 			let promises = [];
-			glob.sync(path).forEach(function (file) {
+			glob.sync(path).forEach((file) => {
 				let tableJson = utils.getObjectFromFile(file);
 				let tableSchemaDef = platformUtils.convertToScheme(tableJson);
 				let tableSchema = sequelize.define(tableJson.name, tableSchemaDef);
@@ -98,11 +98,18 @@ module.exports = function (database, router) {
 			that.loadSchemas().then(function () {
 				that.scanApplications();
 				platformRoutes(database, router, that);
-				database.getModel('sys_user').create({
-					username: 'admin',
-					password: utils.generateHash('admin')
-				}).then(function () {
-					dfd.resolve();
+				database.getModel('sys_user').count({
+					username: 'admin'
+				}).then((count) => {
+					if (!count)
+						database.getModel('sys_user').create({
+							username: 'admin',
+							password: utils.generateHash('admin')
+						}).then(function () {
+							dfd.resolve();
+						});
+					else
+						dfd.resolve();
 				});
 			});
 
@@ -118,7 +125,7 @@ module.exports = function (database, router) {
 				that.loadSchemasFromPath(modelPath, true);
 				that.loadData('apps/' + application.package + '/update/**.json');
 				let promises = [];
-				glob.sync(modelPath).forEach(function (file) {
+				glob.sync(modelPath).forEach((file) => {
 					let tableJson = utils.getObjectFromFile(file);
 					promises.push(that.populateSysData(tableJson));
 				});
@@ -133,6 +140,7 @@ module.exports = function (database, router) {
 		loadSchemas() {
 			let that = this;
 			that.loadSchemasFromPath('platform/models/**.json', true);
+			that.loadData('platform/update/**.json', true);
 			return that.loadSchemasFromDB();
 		}
 

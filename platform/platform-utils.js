@@ -11,7 +11,7 @@ const SEQUELIZE_TYPES = {
 
 module.exports = {
 	// generating a hash
-	convertToScheme: function (json) {
+	convertToScheme(json) {
 		let that = this;
 		let schema = {
 			id: {
@@ -20,7 +20,7 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4
 			}
 		};
-		json.columns.forEach(function(col){
+		json.columns.forEach(function (col) {
 			let colDef = {};
 			colDef.type = that.getSequelizeType(col.type);
 			schema[col.name] = colDef;
@@ -28,7 +28,7 @@ module.exports = {
 		return schema;
 	},
 
-	upsert: function(model, values, condition) {
+	upsert(model, values, condition) {
 		return model.findOne({where: condition}).then(function (obj) {
 			if (obj) // update
 				return obj.update(values);
@@ -37,14 +37,14 @@ module.exports = {
 		});
 	},
 
-	getSequelizeType: function(type) {
-		if(SEQUELIZE_TYPES[type])
+	getSequelizeType(type) {
+		if (SEQUELIZE_TYPES[type])
 			return SEQUELIZE_TYPES[type];
 		return Sequelize.STRING;
 	},
 
 	// checking if password is valid
-	validPassword: function (password, hashedPwd) {
+	validPassword(password, hashedPwd) {
 		return bcrypt.compareSync(password, hashedPwd);
 	}
 };

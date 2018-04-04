@@ -3,7 +3,7 @@
 <script>
 	window.MENU = <%- JSON.stringify(menu) %>;
 
-	function onloadIframe(obj, resize) {
+	function onLoadFrame(obj, resize) {
 		if (window.history.pushState) {
 			let frameUrl = new URL(obj.src);
 			let newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?url=' + frameUrl.pathname;
@@ -18,7 +18,7 @@
 	$(document).ready(function () {
 		$('.shortcuts-tree').on('click', function () {
 			$(this).parent().toggleClass('active');
-			$(this).find('.svg-inline--fa').toggleClass('fa-chevron-down fa-chevron-up');
+			$(this).find('.svg-inline--fa').toggleClass('fa-chevron-right fa-chevron-down');
 		});
 		$('.link a').on('click', function () {
 			$('.link').removeClass('active');
@@ -65,6 +65,6 @@
     }
     %>
     <iframe id="main-iframe" class="d-none" src="<%= url %>" frameBorder="0" scrolling="yes"
-            onload="onloadIframe(this)"></iframe>
+            onload="onLoadFrame(this)"></iframe>
 </main>
 

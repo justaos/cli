@@ -75,7 +75,8 @@ module.exports = function (database, router, platform) {
 	});
 
 	router.get('/p/:table/list', authenticate, function (req, res, next) {
-		database.getModel('sys_table').findOne({where: {name: req.params.table}}).then(function (table) {
+		let condition = {where: {name: req.params.table}};
+		database.getModel('sys_table').findOne(condition).then(function (table) {
 			let schema = database.getModel(req.params.table);
 			if (schema)
 				database.getModel('sys_column').findAll({where: {table: table.id}}).then(function (cols) {

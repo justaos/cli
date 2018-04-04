@@ -38,19 +38,21 @@ table.responsive-table {
   height: 100%;
 
   thead.fixed-top {
-    position: fixed;
-    top: $table-top;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: #eee;
-    table-layout: fixed;
-    display: table;
+	position: fixed;
+	top: $table-top;
+	left: 0;
+	right: 0;
+	width: 100%;
+	background: #eee;
+	table-layout: fixed;
+	display: table;
   }
   th {
-    background: #eee;
+	background: #eee;
+	text-align: left;
   }
-  tr > td, th {
-    text-align: left;
+  tr > td {
+	overflow: hidden;
+	text-overflow: ellipsis;
   }
 }
