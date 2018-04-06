@@ -1,48 +1,87 @@
-<div class="container pt-3">
-    <h1 class="h5"><%= table.label %></h1>
-    <form id="view-form" class="needs-validation" novalidate>
-        <% cols.forEach(function(col){ if(col != 'id'){ %>
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label"><%= col %></label>
-            <div class="col-sm-10">
-                <input type="text" required class="form-control" id="<%= col %>" name="<%= col %>" placeholder="<%= col %>">
-                <div class="invalid-feedback">
-                    Please provide a <%= col %>.
+<link href="/views/styles/form.css" rel="stylesheet">
+<div class="form-page">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-link btn-sm float-left mr-2" data-toggle="tooltip"
+                        data-placement="top" data-container="body" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h6 float-left title mb-0">
+                    <%= table.label %>
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <div class="float-right">
+                    <button class="btn btn-sm btn-primary" onclick="(function(){$('#view-form').submit();})()">Save
+                    </button>
                 </div>
             </div>
         </div>
-        <% }}); %>
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
+    </header>
+    <main>
+        <div class="container-fluid">
+            <form id="view-form" class="needs-validation row mt-4" novalidate>
+                <% cols.forEach(function(col){ if(col.name != 'id'){ %>
+                <div class="col-md-6">
+                    <div class="form-group row no-gutters">
+                        <label for="form-<%= col.name %>"
+                               class="col-sm-2 col-form-label col-form-label"><%= col.label %></label>
+                        <div class="col-sm-8">
+                            <% if(col.type == 'INTEGER'){ %>
+                            <input type="number" class="form-control form-control" id="form-<%= col.name %>"
+                                   name="<%= col.name %>"
+                                   placeholder="<%= col.label %>">
+                            <% } else { %>
+                            <input type="text" class="form-control form-control" id="<%= col.name %>"
+                                   name="<%= col.name %>"
+                                   placeholder="<%= col.label %>">
+                            <% } %>
+                            <div class="invalid-feedback">
+                                Please provide a <%= col.label %>.
+                            </div>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+                <% }}); %>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-primary">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-
-    <script>
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var form = document.getElementById('view-form');
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === true) {
-                        var formObj = {};
-                        var inputs = $(form).serializeArray();
-                        $.each(inputs, function (i, input) {
-                            formObj[input.name] = input.value;
-                        });
-                        $.post("/p/<%= table.name %>/new", formObj)
-                            .done(function (data) {
-                                window.location.reload();
-                            }, function () {
-                                alert('something went wrong check you fields.')
-                            });
-                    }
-                    event.preventDefault();
-                    event.stopPropagation();
-                }, false);
-            }, false);
-        })();
-    </script>
+    </main>
 </div>
+<script>
+	(function () {
+		'use strict';
+		window.addEventListener('load', function () {
+			// Fetch all the forms we want to apply custom Bootstrap validation styles to
+			let form = document.getElementById('view-form');
+			form.addEventListener('submit', function (event) {
+				if (form.checkValidity() === true) {
+					let formObj = {};
+					let inputs = $(form).serializeArray();
+					$.each(inputs, function (i, input) {
+						formObj[input.name] = input.value ? input.value : null;
+					});
+					$.ajax({
+						url: "/p/<%= table.name %>/new",
+						data: JSON.stringify(formObj),
+						contentType: 'application/json',
+						type: 'POST'
+					}).then(function (data) {
+						window.location.reload();
+					}, function (err) {
+						alert(err.responseJSON.original.sqlMessage);
+					});
+				}
+				form.classList.add('was-validated')
+				event.preventDefault();
+				event.stopPropagation();
+			}, false);
+		}, false);
+	})();
+</script>

@@ -1,0 +1,30 @@
+$table-top: 40px;
+
+body {
+  background-color: white;
+  main {
+	padding-top: $table-top;
+
+	.form-group.required .col-form-label:after {
+	  content: "*";
+	  color: red;
+	}
+  }
+
+  header {
+	position: fixed;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	z-index: 10;
+	background-color: #e3e3e3;
+	.title {
+	  margin-top: 0.35em;
+	}
+  }
+
+  .shadow {
+	-webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+	-moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+	box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  }
+}

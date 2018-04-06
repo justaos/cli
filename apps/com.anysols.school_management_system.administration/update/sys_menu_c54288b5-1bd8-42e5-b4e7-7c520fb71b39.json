@@ -1,0 +1,8 @@
+{
+  "table": "sys_menu",
+  "record": {
+	"id": "c54288b5-1bd8-42e5-b4e7-7c520fb71b39",
+	"name": "School Administration",
+	"description": "Manage the admission of old/new students easily and register their details"
+  }
+}

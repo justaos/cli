@@ -1,0 +1,42 @@
+<script src="/assets/js/angular.min.js"></script>
+<script>
+	angular.module('storeApp', [])
+		.controller('storeAppController', function ($scope) {
+			$scope.open = function (appId) {
+				window.location.href = "/store/"+ appId;
+			};
+		})
+		.directive('asAppCard', function () {
+			return {
+				scope: {
+					name: '@'
+				},
+				replace: true,
+				template: '<div class="col-md-1">\n' +
+				'                <img src="/assets/img/app.png" class="img-fluid">\n' +
+				'                <p class="text-center small">{{name}}</p>\n' +
+				'            </div>'
+			};
+		});
+</script>
+<%- partial('../partials/header-navigation') %>
+
+<main role="main" ng-app="storeApp">
+
+    <div class="container-fluid">
+        <h1 class="h4 mt-1">Store</h1>
+        <div class="bd-callout bd-callout-info">
+            <p>The Store is a digital distribution platform, developed and maintained by Anysols., for apps. The store
+               allows users to browse and download apps developed with Anysols's platform.</p>
+        </div>
+
+        <div class="row" ng-controller="storeAppController">
+            <% applications.forEach(function(application){ %>
+            <as-app-card style="cursor: pointer" ng-click="open('<%= application.id %>')"
+                         name="<%= application.name %>"></as-app-card>
+            <% }); %>
+        </div>
+    </div>
+
+</main>
+
