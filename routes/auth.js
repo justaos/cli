@@ -22,7 +22,7 @@ router.post('/login', function (req, res, next) {
             const token = jwt.sign(user, process.env.JWT_SECRET || 'secret');
             res.cookie('x-auth-token', token, {maxAge: config.app.tokenExpiration, httpOnly: true});
 
-            return res.json({user, token});
+            return res.json({token});
         });
     })
     (req, res);

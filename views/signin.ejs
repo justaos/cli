@@ -11,7 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/theme.css" rel="stylesheet">
+    <link href="/views/styles/theme.css" rel="stylesheet">
     <link href="/assets/css/signin.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 
@@ -43,35 +43,35 @@
 <script src="/assets/js/popper.min.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
 <script>
-    (function () {
-        'use strict';
-        let $signInHeader = $('#signin-header');
-        let $username = $('#username');
-        let $password = $('#password');
-        let searchParams = new URLSearchParams(window.location.search);
-        let redirect = searchParams.get('redirect');
-        if (!redirect)
-            redirect = '/';
-        $('form').on('submit', function (e) {
-            let data = {};
-            data.username = $username.val();
-            data.password = $password.val();
-            $.post('/auth/login', data).then(function () {
-                window.location.href = redirect;
-            }, function (res) {
-                $signInHeader.find('.alert').remove();
-				$signInHeader.append("<div class=\"alert alert-danger\" role=\"alert\">" + res.responseJSON.message + "</div>");
-				if(!res.responseJSON.user) {
-                    $username.val(null).focus();
-                    $password.val(null);
-                } else
-                    $password.val(null).focus();
-            });
+	(function () {
+		'use strict';
+		let $signInHeader = $('#signin-header');
+		let $username = $('#username');
+		let $password = $('#password');
+		let searchParams = new URLSearchParams(window.location.search);
+		let redirect = searchParams.get('redirect');
+		if (!redirect)
+			redirect = '/';
+		$('form').on('submit', function (e) {
+			let data = {};
+			data.username = $username.val();
+			data.password = $password.val();
+			$.post('/auth/login', data).then(function () {
+				window.location.href = redirect;
+			}, function (res) {
+				$signInHeader.find('.alert').remove();
+				$signInHeader.append('<div class="alert alert-danger" role="alert">' + res.responseJSON.message + '</div>');
+				if (!res.responseJSON.user) {
+					$username.val(null).focus();
+					$password.val(null);
+				} else
+					$password.val(null).focus();
+			});
 
-            //stop form submission
-            e.preventDefault();
-        });
-    })();
+			//stop form submission
+			e.preventDefault();
+		});
+	})();
 </script>
 </body>
 </html>

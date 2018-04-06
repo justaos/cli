@@ -1,3 +1,4 @@
+<link href="/views/styles/index.css" rel="stylesheet">
 <%- partial('partials/header-navigation') %>
 <main role="main">
 
@@ -16,23 +17,45 @@
         </div>
     </div>
     <% } else { %>
-    <div class="container-fluid">
+    <script src="/assets/js/angular.min.js"></script>
+    <script>
+		angular.module('indexApp', [])
+			.controller('indexAppController', function ($scope) {
+				$scope.menus = <%- JSON.stringify(menus) %>;
+			})
+			.directive('asMenuItem', function () {
+				return {
+					scope: {
+						menuId: '@',
+						name: '@',
+						icon: '@',
+						description: '@'
+					},
+					replace: true,
+					template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
+					'                <div class="row menu-item box-shadow rounded m-0">\n' +
+					'                    <div class="col-md-4 my-auto">\n' +
+					'                        <i class="menu-icon fas fa-rocket fa-4x" ng-class="icon"></i>\n' +
+					'                    </div>\n' +
+					'                    <div class="col-md-8 my-auto">\n' +
+					'                        <h2 class="h5">{{name}}</h2>\n' +
+					'                        <p class="small mb-1">{{description}}</p>\n' +
+					'                    </div>\n' +
+					'                </div>\n' +
+					'            </a>'
+				};
+			});
+    </script>
+    <div class="container-fluid" ng-app="indexApp" ng-controller="indexAppController">
         <div class="row">
             <div class="col-sm-4 my-3">
-                <input type="text" class="form-control form-control-sm" placeholder="Search" aria-label="Search">
+                <input type="text" class="form-control form-control-sm" ng-model="search" placeholder="Search" aria-label="Search">
             </div>
         </div>
-        <div class="row">
-            <% menus.forEach(function(menu, index) { %>
-            <div class="col-md-2 col-sm-2">
-                <a class="no-style" href="/menu/<%= menu.id %>">
-                    <div class="my-2 bg-white box-shadow rounded py-2">
-                        <div class="text-center h1"><i class="fas fa-rocket"></i></div>
-                        <div class="text-center small"><%= menu.name %></div>
-                    </div>
-                </a>
-            </div>
-            <% }); %>
+        <div class="d-flex flex-wrap">
+            <as-menu-item ng-repeat="menu in menus | filter:search"
+                          menu-id="{{menu.id}}" icon="{{menu.icon}}" name="{{menu.name}}"
+                          description="{{menu.description}}"></as-menu-item>
         </div>
     </div>
     <% } %>

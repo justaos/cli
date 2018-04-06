@@ -2,6 +2,8 @@
   "table": "sys_menu",
   "record": {
 	"id": "b292bc85-1743-444d-9185-de33039de2f3",
-	"name": "User Administration"
+	"name": "User Administration",
+	"description": "Set up users and control how they can view or edit your business data.",
+	"icon": "fa-users"
   }
 }
