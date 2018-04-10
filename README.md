@@ -1,24 +1,26 @@
-<p align="center">
-  <a href="https://getbootstrap.com/">
-    <img src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width=72 height=72>
-  </a>
 
-  <h3 align="center">Bootstrap</h3>
+<a href="https://anysols.com/">
+    <img src="http://anysols.com/assets/img/logo.png" alt="" width=72 height=72>
+</a>
 
-  <p align="center">
-    Sleek, intuitive, and powerful front-end framework for faster and easier web development.
-    <br>
-    <a href="https://getbootstrap.com/docs/4.0/"><strong>Explore Bootstrap docs »</strong></a>
-    <br>
-    <br>
-    <a href="https://github.com/twbs/bootstrap/issues/new?template=bug.md">Report bug</a>
-    ·
-    <a href="https://github.com/twbs/bootstrap/issues/new?template=feature.md&labels=feature">Request feature</a>
-    ·
-    <a href="https://themes.getbootstrap.com/">Themes</a>
-    ·
-    <a href="https://jobs.getbootstrap.com/">Jobs</a>
-    ·
-    <a href="https://blog.getbootstrap.com/">Blog</a>
-  </p>
-</p>
+### Anysols
+##### Your Problem Solved With Our Solution
+
+Sleek and powerful platform for faster and easier application development.
+
+
+## Setup
+* Install nodejs  (version 8.9.4)  
+https://nodejs.org/en/download/
+
+* Install npm
+
+* Install mysql  
+https://www.mysql.com/downloads/
+
+## Run
+`Note: Check db config in config/config.js before running the application.`
+```cmd 
+npm i -g anysols
+anysols
+```
