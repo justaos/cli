@@ -28,6 +28,7 @@ const devConfig = {
 
 const prodConfig = _.clone(devConfig, true);
 prodConfig.logger = 'info';
+prodConfig.db.password = 'anysols';
 
 const configs = {
 	development: devConfig,
