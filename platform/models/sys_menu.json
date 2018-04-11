@@ -4,6 +4,10 @@
   "columns": [
 	{
 	  "name": "name",
+	  "type": "STRING"
+	},
+	{
+	  "name": "label",
 	  "type": "STRING",
 	  "displayValue": true
 	},
@@ -22,6 +26,10 @@
 	{
 	  "name": "icon",
 	  "type": "STRING"
+	},
+	{
+	  "name": "hidden",
+	  "type": "BOOLEAN"
 	}
   ]
 }

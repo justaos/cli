@@ -6,7 +6,8 @@ const SEQUELIZE_TYPES = {
 	'STRING': Sequelize.STRING,
 	'TEXT': Sequelize.TEXT,
 	'UUID': Sequelize.UUID,
-	'INTEGER': Sequelize.INTEGER
+	'INTEGER': Sequelize.INTEGER,
+	'BOOLEAN': Sequelize.BOOLEAN
 };
 
 module.exports = {

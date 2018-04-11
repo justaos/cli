@@ -172,4 +172,7 @@ body {
 	}
   }
 
+  .table-hover tbody tr:hover {
+	background-color: rgba(33, 150, 243, 0.2);
+  }
 }

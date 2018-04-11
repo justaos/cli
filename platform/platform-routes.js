@@ -13,6 +13,11 @@ module.exports = function (database, router, platform) {
 		});
 	});
 
+	router.get('/dev-tools', authenticate, function (req, res, next) {
+		req.url = '/menu/8377670d-c09b-400c-886c-83b9ddc6366d';
+		next();
+	});
+
 	router.get('/store', authenticate, function (req, res, next) {
 		database.getModel('sys_application').findAll({
 			order: Sequelize.col('order')
@@ -40,7 +45,7 @@ module.exports = function (database, router, platform) {
 		promises.push(database.getModel('sys_menu').findById(menuId));
 		promises.push(database.getModel('sys_module').findAll({
 			where: {menu: menuId},
-			order: Sequelize.col('order')
+			order: [Sequelize.col('order'), Sequelize.col('name')]
 		}));
 		Q.all(promises).then(function (responses) {
 			if (responses[0] && responses[1]) {

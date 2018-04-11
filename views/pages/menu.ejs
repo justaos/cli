@@ -5,7 +5,7 @@
 
 	function onLoadFrame(obj, resize) {
 		if (window.history.pushState) {
-			let frameUrl = new URL(obj.src);
+			let frameUrl = new URL(obj.contentWindow.location.href);
 			let newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?url=' + frameUrl.pathname;
 			window.history.pushState({path: newUrl}, '', newUrl);
 		}
@@ -43,10 +43,10 @@
             <div class="context-header">
                 <a href="javascript:void(0)">
                     <div class="avatar-container">
-                        <div class="avatar  avatar-tile"><%= menu.name[0] %></div>
+                        <div class="avatar  avatar-tile"><%= menu.label[0] %></div>
                     </div>
                     <div class="sidebar-context-title">
-                        <%= menu.name %>
+                        <%= menu.label %>
                     </div>
                 </a>
             </div>

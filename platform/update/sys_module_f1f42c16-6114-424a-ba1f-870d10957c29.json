@@ -2,7 +2,7 @@
   "table": "sys_module",
   "record": {
 	"id": "f1f42c16-6114-424a-ba1f-870d10957c29",
-	"name": "List",
+	"name": "User",
 	"order": 100,
 	"type": "list",
 	"table": "sys_user",
