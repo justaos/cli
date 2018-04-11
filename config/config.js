@@ -29,6 +29,7 @@ const devConfig = {
 const prodConfig = _.clone(devConfig, true);
 prodConfig.logger = 'info';
 prodConfig.db.password = 'anysols';
+prodConfig.app.port = 80;
 
 const configs = {
 	development: devConfig,
