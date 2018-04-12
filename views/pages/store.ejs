@@ -1,23 +1,21 @@
 <script src="/assets/js/angular.min.js"></script>
 <script>
-	angular.module('storeApp', [])
-		.controller('storeAppController', function ($scope) {
-			$scope.open = function (appId) {
-				window.location.href = "/store/"+ appId;
-			};
-		})
-		.directive('asAppCard', function () {
-			return {
-				scope: {
-					name: '@'
-				},
-				replace: true,
-				template: '<div class="col-md-1">\n' +
-				'                <img src="/assets/img/app.png" class="img-fluid">\n' +
-				'                <p class="text-center small">{{name}}</p>\n' +
-				'            </div>'
-			};
-		});
+  angular.module('storeApp', []).controller('storeAppController', function($scope) {
+    $scope.open = function(appId) {
+      window.location.href = '/store/' + appId;
+    };
+  }).directive('asAppCard', function() {
+    return {
+      scope: {
+        name: '@',
+      },
+      replace: true,
+      template: '<div class="col-md-1">\n' +
+      '                <img src="/assets/img/app.png" class="img-fluid">\n' +
+      '                <p class="text-center small">{{name}}</p>\n' +
+      '            </div>',
+    };
+  });
 </script>
 <%- partial('../partials/header-navigation') %>
 

@@ -2,14 +2,14 @@
   "name": "sys_table",
   "label": "Table",
   "columns": [
-	{
-	  "name": "name",
-	  "type": "STRING"
-	},
-	{
-	  "name": "label",
-	  "type": "STRING",
-	  "displayValue": true
-	}
+    {
+      "name": "name",
+      "type": "STRING"
+    },
+    {
+      "name": "label",
+      "type": "STRING",
+      "displayValue": true
+    }
   ]
 }

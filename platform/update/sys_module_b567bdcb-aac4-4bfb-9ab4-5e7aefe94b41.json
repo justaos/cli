@@ -1,11 +1,11 @@
 {
   "table": "sys_module",
   "record": {
-	"id": "b567bdcb-aac4-4bfb-9ab4-5e7aefe94b41",
-	"name": "Table",
-	"order": 100,
-	"type": "list",
-	"table": "sys_table",
-	"menu" : "8377670d-c09b-400c-886c-83b9ddc6366d"
+    "id": "b567bdcb-aac4-4bfb-9ab4-5e7aefe94b41",
+    "name": "Table",
+    "order": 100,
+    "type": "list",
+    "table": "sys_table",
+    "menu": "8377670d-c09b-400c-886c-83b9ddc6366d"
   }
 }

@@ -63,23 +63,23 @@
     </main>
 </div>
 <script>
-	$(document).ready(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-		let header = $('.responsive-table thead');
-		let body = $('header');
-		$(window).scroll(function (e) {
-			console.log(body.offset().top)
-			if (body.offset().top > 50) {
-				if (!header.hasClass('shadow')) {
-					header.addClass('shadow');
-					header.addClass('fixed-top');
-					$('.table-area').css('margin-top', '50px')
-				}
-			} else {
-				header.removeClass('shadow');
-				header.removeClass('fixed-top');
-				$('.table-area').css('margin-top', '0px')
-			}
-		});
-	});
+  $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    let header = $('.responsive-table thead');
+    let body = $('header');
+    $(window).scroll(function(e) {
+      console.log(body.offset().top);
+      if (body.offset().top > 50) {
+        if (!header.hasClass('shadow')) {
+          header.addClass('shadow');
+          header.addClass('fixed-top');
+          $('.table-area').css('margin-top', '50px');
+        }
+      } else {
+        header.removeClass('shadow');
+        header.removeClass('fixed-top');
+        $('.table-area').css('margin-top', '0px');
+      }
+    });
+  });
 </script>

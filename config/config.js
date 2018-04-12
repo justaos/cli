@@ -8,22 +8,22 @@ dotEnv.config();
 const env = process.env.NODE_ENV || 'development';
 
 const devConfig = {
-	loggerLevel: 'debug', // use info for test/prod
-	db: {
-		host: 'localhost',
-		port: '3306',
-		name: 'anysols',
-		user: 'root',
-		password: 'root',
-		dialect: 'mysql'
-	},
-	app: {
-		name: 'Anysols - Platform for Business applications',
-		port: 8080,
-		cookieName: 'myCookie',
-		cookieSecret: 'boom',
-		tokenExpiration: 3600000 * 2
-	}
+  loggerLevel: 'debug', // use info for test/prod
+  db: {
+    host: 'localhost',
+    port: '3306',
+    name: 'anysols',
+    user: 'root',
+    password: 'root',
+    dialect: 'mysql',
+  },
+  app: {
+    name: 'Anysols - Platform for Business applications',
+    port: 8080,
+    cookieName: 'myCookie',
+    cookieSecret: 'boom',
+    tokenExpiration: 3600000 * 2,
+  },
 };
 
 const prodConfig = _.clone(devConfig, true);
@@ -32,9 +32,9 @@ prodConfig.db.password = 'anysols';
 prodConfig.app.port = 80;
 
 const configs = {
-	development: devConfig,
-	test: devConfig,
-	production: devConfig
+  development: devConfig,
+  test: devConfig,
+  production: devConfig,
 };
 
 let config = configs[env];

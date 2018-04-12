@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="float-right">
-                    <button class="btn btn-sm btn-primary" onclick="(function(){$('#view-form').submit();})()">Save
+                    <button class="btn btn-sm btn-primary" onclick="(function(){$('#view-form').submit();})();">Save
                     </button>
                 </div>
             </div>
@@ -55,33 +55,33 @@
     </main>
 </div>
 <script>
-	(function () {
-		'use strict';
-		window.addEventListener('load', function () {
-			// Fetch all the forms we want to apply custom Bootstrap validation styles to
-			let form = document.getElementById('view-form');
-			form.addEventListener('submit', function (event) {
-				if (form.checkValidity() === true) {
-					let formObj = {};
-					let inputs = $(form).serializeArray();
-					$.each(inputs, function (i, input) {
-						formObj[input.name] = input.value ? input.value : null;
-					});
-					$.ajax({
-						url: "/p/<%= table.name %>/new",
-						data: JSON.stringify(formObj),
-						contentType: 'application/json',
-						type: 'POST'
-					}).then(function (data) {
-						window.location.reload();
-					}, function (err) {
-						alert(err.responseJSON.original.sqlMessage);
-					});
-				}
-				form.classList.add('was-validated')
-				event.preventDefault();
-				event.stopPropagation();
-			}, false);
-		}, false);
-	})();
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      let form = document.getElementById('view-form');
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === true) {
+          let formObj = {};
+          let inputs = $(form).serializeArray();
+          $.each(inputs, function(i, input) {
+            formObj[input.name] = input.value ? input.value : null;
+          });
+          $.ajax({
+            url: "/p/<%= table.name %>/new",
+            data: JSON.stringify(formObj),
+            contentType: 'application/json',
+            type: 'POST',
+          }).then(function(data) {
+            window.location.reload();
+          }, function(err) {
+            alert(err.responseJSON.original.sqlMessage);
+          });
+        }
+        form.classList.add('was-validated');
+        event.preventDefault();
+        event.stopPropagation();
+      }, false);
+    }, false);
+  })();
 </script>

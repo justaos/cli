@@ -2,22 +2,22 @@
   "name": "sys_column",
   "label": "Column",
   "columns": [
-	{
-	  "name": "name",
-	  "type": "STRING"
-	},
-	{
-	  "name": "label",
-	  "type": "STRING",
-	  "displayValue": true
-	},
-	{
-	  "name": "table",
-	  "type": "UUID"
-	},
-	{
-	  "name": "type",
-	  "type": "STRING"
-	}
+    {
+      "name": "name",
+      "type": "STRING"
+    },
+    {
+      "name": "label",
+      "type": "STRING",
+      "displayValue": true
+    },
+    {
+      "name": "table",
+      "type": "UUID"
+    },
+    {
+      "name": "type",
+      "type": "STRING"
+    }
   ]
 }
