@@ -1,4 +1,3 @@
-
 <a href="https://anysols.com/">
     <img src="http://anysols.com/assets/img/logo.png" alt="" width=72 height=72>
 </a>
@@ -24,3 +23,6 @@ https://www.mysql.com/downloads/
 npm i -g anysols
 anysols
 ```
+
+## License
+[Apache License 2.0](/LICENSE)
