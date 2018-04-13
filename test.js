@@ -8,13 +8,13 @@ let sequelize = new Sequelize('anysolsd', 'root', 'root', {
     max: 5,
     min: 0,
     acquire: 30000,
-    idle: 10000,
+    idle: 10000
   },
   define: {
     //prevent sequelize from pluralizing table namesN
-    freezeTableName: true,
+    freezeTableName: true
   },
-  operatorsAliases: false,
+  operatorsAliases: false
 });
 
 sequelize.authenticate().then(() => {

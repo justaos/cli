@@ -14,7 +14,7 @@ module.exports = function(app, userModel) {
           if (!user)
             return done(null, false, {
               found: false,
-              message: 'Username does not exist',
+              message: 'Username does not exist'
             });
 
           if (!myUtils.validPassword(password, user.password))
@@ -36,7 +36,7 @@ module.exports = function(app, userModel) {
             token = req.cookies['x-auth-token'];
           return token;
         },
-        secretOrKey: process.env.JWT_SECRET || 'secret',
+        secretOrKey: process.env.JWT_SECRET || 'secret'
       },
       function(jwtPayload, cb) {
 

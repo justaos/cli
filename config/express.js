@@ -19,7 +19,7 @@ module.exports = function(app, router) {
     filter: function(req, res) {
       return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
     },
-    level: 9,
+    level: 9
   }));
 
   //app.use(express.favicon());
@@ -72,7 +72,7 @@ module.exports = function(app, router) {
   app.use(function(req, res, next) {
     res.status(404).render('404', {
       url: req.originalUrl,
-      error: 'Not found',
+      error: 'Not found'
     });
   });
 

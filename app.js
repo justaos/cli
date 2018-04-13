@@ -6,7 +6,6 @@ var args = process.argv.splice(process.execArgv.length + 2);
 // Retrieve the first argument
 var name = args[0];
 
-
 const express = require('express');
 const router = express.Router();
 const config = require('./config/config');

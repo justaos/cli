@@ -22,18 +22,18 @@
     '     * Returns the next fact',
     '     */',
     '    static next():string',
-    '}',
+    '}'
   ].join('\n'));
   var editor = monaco.editor.create(document.getElementById('container'), {
     value: [
       'function x() {',
       '\tconsole.log("Hello world!");',
-      '}',
+      '}'
     ].join('\n'),
     language: 'javascript',
-    theme: 'vs-dark',
+    theme: 'vs-dark'
   });
-  console.log(editor.getValue())
+  console.log(editor.getValue());
 </script>
 
 </body>

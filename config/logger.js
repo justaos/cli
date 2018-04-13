@@ -7,7 +7,7 @@ const config = require('./config');
 const colors = {
   info: 'green',
   debug: 'blue',
-  error: 'red',
+  error: 'red'
 };
 
 const level = config.loggerLevel;
@@ -16,22 +16,22 @@ const options = {
   transports: [
     new (winston.transports.Console)({
       colorize: true,
-      level: level,
-    }),
+      level: level
+    })
     //new (winston.transports.File)({ filename: 'logs/log.log', level: level })
   ],
-  colors: colors,
+  colors: colors
 };
 
 const logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       colorize: true,
-      level: level,
-    }),
+      level: level
+    })
     //new (winston.transports.File)({ filename: 'logs/log.log', level: level })
   ],
-  colors: colors,
+  colors: colors
 });
 
 logger.options = options;

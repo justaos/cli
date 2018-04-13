@@ -9,7 +9,7 @@ let DEST = './styles/';
 
 gulp.task('sass', function() {
   return gulp.src(path.join(SRC)).pipe(sourcemaps.init()).pipe(sass({
-    outputStyle: 'compressed',
+    outputStyle: 'compressed'
   }).on('error', sass.logError)).pipe(sourcemaps.write()).pipe(gulp.dest(DEST));
 });
 

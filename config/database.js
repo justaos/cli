@@ -32,15 +32,15 @@ module.exports = function() {
               max: 5,
               min: 0,
               acquire: 30000,
-              idle: 10000,
+              idle: 10000
             },
             define: {
               //prevent sequelize from pluralizing table namesN
               freezeTableName: true,
               createdAt: 'sys_created_on',
-              updatedAt: 'sys_updated_on',
+              updatedAt: 'sys_updated_on'
             },
-            operatorsAliases: false,
+            operatorsAliases: false
           });
       return connection;
     },
@@ -52,7 +52,7 @@ module.exports = function() {
         host: config.db.host,
         port: config.db.port,
         dialect: config.db.dialect,
-        operatorsAliases: false,
+        operatorsAliases: false
       });
     },
     createDatabase: function() {
@@ -87,6 +87,6 @@ module.exports = function() {
         }
       });
       return dfd.promise;
-    },
+    }
   };
 };

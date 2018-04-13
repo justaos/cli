@@ -50,5 +50,5 @@ module.exports = {
     return input.replace(/_(.)/g, function(match, letter) {
       return ' ' + letter.toUpperCase();
     });
-  },
+  }
 };

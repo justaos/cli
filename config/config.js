@@ -20,15 +20,15 @@ const devConfig = {
     name: 'anysols',
     user: 'root',
     password: 'root',
-    dialect: 'mysql',
+    dialect: 'mysql'
   },
   app: {
     name: 'Anysols - Platform for Business applications',
     port: 8080,
     cookieName: 'myCookie',
     cookieSecret: 'boom',
-    tokenExpiration: 3600000 * 2,
-  },
+    tokenExpiration: 3600000 * 2
+  }
 };
 
 const prodConfig = _.cloneDeep(devConfig, true);
@@ -39,7 +39,7 @@ prodConfig.app.port = 80;
 const configs = {
   development: devConfig,
   test: prodConfig,
-  production: prodConfig,
+  production: prodConfig
 };
 
 let config = configs[env];

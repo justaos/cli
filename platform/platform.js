@@ -17,7 +17,7 @@ module.exports = function(database, router) {
         name: col.name,
         label: col.label ? col.label : utils.underscoreToCamelCase(col.name),
         type: col.type,
-        table: tableId,
+        table: tableId
       });
     }
 
@@ -53,7 +53,7 @@ module.exports = function(database, router) {
             if (!table)
               database.getModel('sys_table').create({
                 name: tableJson.name,
-                label: tableJson.label,
+                label: tableJson.label
               }).then(function(tableRecord) {
                 let promises = [];
                 tableJson.columns.forEach(function(col) {
@@ -66,8 +66,8 @@ module.exports = function(database, router) {
             else {
               database.getModel('sys_column').destroy({
                 where: {
-                  table: table.id,
-                },
+                  table: table.id
+                }
               }).then(() => {
                 let promises = [];
                 tableJson.columns.forEach(function(col) {
@@ -101,12 +101,12 @@ module.exports = function(database, router) {
         that.scanApplications();
         platformRoutes(database, router, that);
         database.getModel('sys_user').count({
-          username: 'admin',
+          username: 'admin'
         }).then((count) => {
           if (!count)
             database.getModel('sys_user').create({
               username: 'admin',
-              password: utils.generateHash('admin'),
+              password: utils.generateHash('admin')
             }).then(function() {
               dfd.resolve();
             });
@@ -179,7 +179,7 @@ module.exports = function(database, router) {
               let tableJson = {
                 'name': table.name,
                 'label': table.label,
-                'columns': [],
+                'columns': []
               };
               let colDfd = Q.defer();
               database.getModel('sys_column').
@@ -188,7 +188,7 @@ module.exports = function(database, router) {
                     columns.forEach(function(col) {
                       tableJson.columns.push({
                         name: col.name,
-                        type: col.type,
+                        type: col.type
                       });
                     });
                     let tableSchemaDef = platformUtils.convertToScheme(

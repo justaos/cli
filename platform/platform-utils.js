@@ -7,7 +7,7 @@ const SEQUELIZE_TYPES = {
   'TEXT': Sequelize.TEXT,
   'UUID': Sequelize.UUID,
   'INTEGER': Sequelize.INTEGER,
-  'BOOLEAN': Sequelize.BOOLEAN,
+  'BOOLEAN': Sequelize.BOOLEAN
 };
 
 module.exports = {
@@ -18,8 +18,8 @@ module.exports = {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-      },
+        defaultValue: Sequelize.UUIDV4
+      }
     };
     json.columns.forEach(function(col) {
       let colDef = {};
@@ -47,5 +47,5 @@ module.exports = {
   // checking if password is valid
   validPassword(password, hashedPwd) {
     return bcrypt.compareSync(password, hashedPwd);
-  },
+  }
 };

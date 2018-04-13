@@ -7,7 +7,7 @@ module.exports = function(database, router, platform) {
 
   router.get('/', authenticate, function(req, res, next) {
     database.getModel('sys_menu').findAll({
-      order: Sequelize.col('order'),
+      order: Sequelize.col('order')
     }).then(menus => {
       res.render('index', {menus: menus, _layoutFile: 'layouts/layout'});
     });
@@ -20,7 +20,7 @@ module.exports = function(database, router, platform) {
 
   router.get('/store', authenticate, function(req, res, next) {
     database.getModel('sys_application').findAll({
-      order: Sequelize.col('order'),
+      order: Sequelize.col('order')
     }).then(applications => {
       res.render('pages/store',
           {applications: applications, _layoutFile: '../layouts/layout'});
@@ -48,7 +48,7 @@ module.exports = function(database, router, platform) {
     promises.push(database.getModel('sys_menu').findById(menuId));
     promises.push(database.getModel('sys_module').findAll({
       where: {menu: menuId},
-      order: [Sequelize.col('order'), Sequelize.col('name')],
+      order: [Sequelize.col('order'), Sequelize.col('name')]
     }));
     Q.all(promises).then(function(responses) {
       if (responses[0] && responses[1]) {
@@ -66,7 +66,7 @@ module.exports = function(database, router, platform) {
           menu: menu,
           url: req.query.url,
           modules: modules,
-          _layoutFile: '../layouts/layout',
+          _layoutFile: '../layouts/layout'
         });
       } else
         res.render('404');
@@ -77,7 +77,7 @@ module.exports = function(database, router, platform) {
     database.getModel('sys_menu').findById(req.params.id).then(menu => {
       res.render('pages/home', {
         menu: menu,
-        _layoutFile: '../layouts/layout',
+        _layoutFile: '../layouts/layout'
       });
     });
   });
@@ -95,7 +95,7 @@ module.exports = function(database, router, platform) {
                   table: {label: table.label, name: table.name},
                   data: data,
                   cols: cols,
-                  _layoutFile: '../layouts/no-header-layout',
+                  _layoutFile: '../layouts/no-header-layout'
                 });
               });
             });
@@ -116,7 +116,7 @@ module.exports = function(database, router, platform) {
                   res.render('pages/form', {
                     table: {label: table.label, name: table.name},
                     cols: cols,
-                    _layoutFile: '../layouts/no-header-layout',
+                    _layoutFile: '../layouts/no-header-layout'
                   });
                 });
           else
