@@ -4,6 +4,7 @@ const Q = require('q');
 const platformUtils = require('./platform-utils');
 const platformRoutes = require('./platform-routes');
 const logger = require('../config/logger');
+const config = require('../config/config');
 const utils = require('../utils');
 
 module.exports = function(database, router) {
@@ -144,8 +145,8 @@ module.exports = function(database, router) {
 
     loadSchemas() {
       let that = this;
-      that.loadSchemasFromPath('platform/models/**.json', true);
-      that.loadData('platform/update/**.json', true);
+      that.loadSchemasFromPath(config.root + '/platform/models/**.json', true);
+      that.loadData(config.root + '/platform/update/**.json', true);
       return that.loadSchemasFromDB();
     }
 
@@ -212,7 +213,7 @@ module.exports = function(database, router) {
 
     scanApplications() {
       logger.info('Scanning for apps');
-      glob.sync('apps/**/config.json').forEach(function(file) {
+      glob.sync(config.cwd + '/apps/**/config.json').forEach(function(file) {
         let config = utils.getObjectFromFile(file);
         platformUtils.upsert(database.getModel('sys_application'), config,
             {package: config.package});

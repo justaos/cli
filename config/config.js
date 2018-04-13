@@ -2,17 +2,23 @@ const path = require('path');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 
-console.log(process.cwd());
-
-var programName = path.basename(process.argv[1]);
-console.log(JSON.stringify(process.title));
-
 const rootPath = path.normalize(__dirname + '/..');
 
+let cwdPath;
+
+var programName = path.basename(process.argv[1]);
+if (programName === 'anysols.js')
+  cwdPath = process.cwd(); // current working directory
+else
+  cwdPath = rootPath;
+
+console.log("cwd : " + cwdPath);
+
 dotEnv.config();
+
 const env = process.env.NODE_ENV || 'development';
 
-const devConfig = {
+const defaultConfig = {
   loggerLevel: 'debug', // use info for test/prod
   db: {
     host: 'localhost',
@@ -31,18 +37,20 @@ const devConfig = {
   }
 };
 
-const prodConfig = _.cloneDeep(devConfig, true);
+const prodConfig = _.cloneDeep(defaultConfig, true);
 prodConfig.logger = 'info';
 prodConfig.db.password = 'anysols';
 prodConfig.app.port = 80;
 
 const configs = {
-  development: devConfig,
+  development: defaultConfig,
   test: prodConfig,
   production: prodConfig
 };
 
-let config = configs[env];
+let config = configs[env] ? configs[env] : defaultConfig;
 config.env = env;
 config.root = rootPath;
+config.cwd = cwdPath;
+
 module.exports = config;

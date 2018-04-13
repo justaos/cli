@@ -39,8 +39,4 @@ router.get('/logout', (req, res, next) => {
   res.redirect('./login');
 });
 
-router.get('/editor', (req, res, next) => {
-  res.render('editor');
-});
-
 module.exports = router;
