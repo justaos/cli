@@ -1,6 +1,4 @@
-<a href="https://anysols.com/">
-    <img src="http://anysols.com/assets/img/logo.png" alt="" width=72 height=72>
-</a>
+[![Anysols](assets/img/logo-color.png "Anysols" )](https://anysols.com)
 
 ### Anysols
 ##### Your Problem Solved With Our Solution

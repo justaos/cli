@@ -1,7 +1,17 @@
+#!/usr/bin/env node
+
+// Delete the 0 and 1 argument (node and script.js)
+var args = process.argv.splice(process.execArgv.length + 2);
+
+// Retrieve the first argument
+var name = args[0];
+
+
 const express = require('express');
 const router = express.Router();
 const config = require('./config/config');
 const logger = require('./config/logger');
+const passportConfig = require('./config/passport');
 
 const app = express();
 
@@ -19,7 +29,7 @@ database.validateConnection().then(startUp, function() {
 
 function startUp() {
   platform.startUp().then(function() {
-    require('./config/passport')(app, database.getModel('sys_user'));
+    passportConfig(app, database.getModel('sys_user'));
     router.use('/auth', require('./routes/auth'));
     platform.appStarting = false;
   });
@@ -29,48 +39,3 @@ function startUp() {
 app.listen(config.app.port);
 
 logger.info('listening on port ' + config.app.port);
-
-/*
-db.table.sync({force: true}).then(function () {
-
-    db.column.sync({force: true}).then(function () {
-        dynamicallyIncludeSchema('./tables/!**.js');
-        dynamicallyIncludeSchema('./apps/!**!/tables/!**.js');
-
-        db.application.sync({force: true}).then(function () {
-
-            db.table.findAll().then(function (tables) {
-                tables.forEach(function (table) {
-                    if (table.name !== 'application' && table.name !== 'module')
-                        db.application.create({
-                            name: table.label
-                        }).then(function (application) {
-                            db.module.create({
-                                name: table.label,
-                                application: application.id
-                            }).then(function (parent) {
-                                db.module.create({
-                                    name: 'Create',
-                                    parent: parent.id,
-                                    type: 'new',
-                                    table: table.name,
-                                    application: application.id
-                                });
-                                db.module.create({
-                                    name: 'All',
-                                    parent: parent.id,
-                                    type: 'list',
-                                    table: table.name,
-                                    application: application.id
-                                })
-                            });
-                        });
-                });
-            });
-        });
-
-
-    });
-});
-
-*/

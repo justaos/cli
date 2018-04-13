@@ -1,7 +1,7 @@
 {
   "name": "anysols",
   "version": "0.0.2",
-  "description": "",
+  "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -12,10 +12,11 @@
     "url": "git+https://gitlab.com/anysols/anysols.git"
   },
   "bin": {
-    "anysols": "./bin/start.js"
+    "anysols": "./app.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Shivaji Varma <contact@shivajivarma.com>",
+  "contributors": [],
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://gitlab.com/anysols/anysols/issues"
   },

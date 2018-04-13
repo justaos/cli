@@ -2,6 +2,11 @@ const path = require('path');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 
+console.log(process.cwd());
+
+var programName = path.basename(process.argv[1]);
+console.log(JSON.stringify(process.title));
+
 const rootPath = path.normalize(__dirname + '/..');
 
 dotEnv.config();
@@ -26,15 +31,15 @@ const devConfig = {
   },
 };
 
-const prodConfig = _.clone(devConfig, true);
+const prodConfig = _.cloneDeep(devConfig, true);
 prodConfig.logger = 'info';
 prodConfig.db.password = 'anysols';
 prodConfig.app.port = 80;
 
 const configs = {
   development: devConfig,
-  test: devConfig,
-  production: devConfig,
+  test: prodConfig,
+  production: prodConfig,
 };
 
 let config = configs[env];

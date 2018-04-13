@@ -27,8 +27,7 @@ module.exports = function(app, userModel) {
           console.log('Error:', err);
           return done(null, false, {});
         });
-      },
-  ));
+      }));
 
   passport.use(new JWTStrategy({
         jwtFromRequest: function(req) {
@@ -47,7 +46,7 @@ module.exports = function(app, userModel) {
         }).catch(err => {
           return cb(err);
         });
-      },
+      }
   ));
 
 };
