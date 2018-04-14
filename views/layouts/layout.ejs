@@ -35,5 +35,14 @@
 <%- body %>
 
 <script defer src="/assets/js/jquery.smoothwheel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+
+  window.onfocus = function() {
+    console.log('test');
+    if (!Cookies.get('x-authenticated'))
+      window.location.reload();
+  }
+</script>
 </body>
 </html>

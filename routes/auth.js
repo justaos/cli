@@ -22,7 +22,7 @@ router.post('/login', function(req, res, next) {
       const token = jwt.sign(user, process.env.JWT_SECRET || 'secret');
       res.cookie('x-auth-token', token,
           {maxAge: config.app.tokenExpiration, httpOnly: true});
-
+      res.cookie('x-authenticated', true, {maxAge: config.app.tokenExpiration});
       return res.json({token});
     });
   })
@@ -36,6 +36,7 @@ router.get('/login', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
   res.clearCookie('x-auth-token');
+  res.clearCookie('x-authenticated');
   res.redirect('./login');
 });
 

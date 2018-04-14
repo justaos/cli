@@ -10,8 +10,6 @@
           frameUrl.pathname;
       window.history.pushState({path: newUrl}, '', newUrl);
     }
-    $('#main-iframe-loading').addClass('d-none');
-    $('#main-iframe').removeClass('d-none');
     if (resize)
       obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
   }
@@ -57,15 +55,12 @@
 
         </div>
     </div>
-    <div class="container-fluid pt-3" id="main-iframe-loading">
-        loading
-    </div>
     <%
     if (!url) {
         url = "/menu/" + menu.id + "/home";
     }
     %>
-    <iframe id="main-iframe" class="d-none" src="<%= url %>" frameBorder="0" scrolling="yes"
+    <iframe id="main-iframe"  src="<%= url %>" frameBorder="0" scrolling="yes"
             onload="onLoadFrame(this);"></iframe>
 </main>
 

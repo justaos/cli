@@ -5,7 +5,9 @@ const platformUtils = require('./platform-utils');
 const platformRoutes = require('./platform-routes');
 const logger = require('../config/logger');
 const config = require('../config/config');
+
 const utils = require('../utils');
+const fileUtils = require('../utils/file-utils');
 
 module.exports = function(database, router) {
   class Platform {
@@ -29,11 +31,11 @@ module.exports = function(database, router) {
       database.createDatabase().then(function() {
         database.connect();
         let sequelize = database.getConnection();
-        let modelPath = 'platform/models/**.json';
+        let modelPath = config.root + '/platform/models/**.json';
         that.createPlatformTables(sequelize, modelPath).then(function() {
           let promises = [];
           glob.sync(modelPath).forEach(function(file) {
-            let tableJson = utils.getObjectFromFile(file);
+            let tableJson = fileUtils.readJsonFileSync(file);
             promises.push(that.populateSysData(tableJson));
           });
           Q.all(promises).then(function() {
@@ -86,7 +88,7 @@ module.exports = function(database, router) {
     createPlatformTables(sequelize, path) {
       let promises = [];
       glob.sync(path).forEach((file) => {
-        let tableJson = utils.getObjectFromFile(file);
+        let tableJson = fileUtils.readJsonFileSync(file);
         let tableSchemaDef = platformUtils.convertToScheme(tableJson);
         let tableSchema = sequelize.define(tableJson.name, tableSchemaDef);
         database.setModel(tableJson.name, tableSchema);
@@ -131,7 +133,7 @@ module.exports = function(database, router) {
             that.loadData('apps/' + application.package + '/update/**.json');
             let promises = [];
             glob.sync(modelPath).forEach((file) => {
-              let tableJson = utils.getObjectFromFile(file);
+              let tableJson = fileUtils.readJsonFileSync(file);
               promises.push(that.populateSysData(tableJson));
             });
             promises.push(application.updateAttributes(
@@ -152,16 +154,22 @@ module.exports = function(database, router) {
 
     loadData(path) {
       glob.sync(path).forEach(function(file) {
-        let data = utils.getObjectFromFile(file);
-        platformUtils.upsert(database.getModel(data.table), data.record,
-            {id: data.record.id});
+        let data = fileUtils.readJsonFileSync(file);
+        if (data.record)
+          platformUtils.upsert(database.getModel(data.table), data.record,
+              {id: data.record.id});
+        else if(data.records)
+          data.records.forEach(function(record){
+            platformUtils.upsert(database.getModel(data.table), record,
+                {id: record.id});
+          })
       });
     }
 
     loadSchemasFromPath(path, alter) {
       let sequelize = database.getConnection();
       glob.sync(path).forEach(function(file) {
-        let tableJson = utils.getObjectFromFile(file);
+        let tableJson = fileUtils.readJsonFileSync(file);
         let tableSchemaDef = platformUtils.convertToScheme(tableJson);
         database.setModel(tableJson.name,
             sequelize.define(tableJson.name, tableSchemaDef));
@@ -214,7 +222,7 @@ module.exports = function(database, router) {
     scanApplications() {
       logger.info('Scanning for apps');
       glob.sync(config.cwd + '/apps/**/config.json').forEach(function(file) {
-        let config = utils.getObjectFromFile(file);
+        let config = fileUtils.readJsonFileSync(file);
         platformUtils.upsert(database.getModel('sys_application'), config,
             {package: config.package});
       });

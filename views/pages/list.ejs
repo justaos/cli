@@ -65,19 +65,31 @@
 <script>
   $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-    let header = $('.responsive-table thead');
+    let $table = $('.responsive-table');
+    let $thead = $table.find('thead');
+    let $tbody = $table.find('tbody');
+
+
     let body = $('header');
+    $thead.width($thead.width());
+    $thead.find('th').each(function(i, el){
+      $(el).width($(el).width());
+    });
+    $tbody.width($tbody.width());
+    $tbody.find('tr:first-child').find('td').each(function(i, el){
+      $(el).width($(el).width());
+    })
     $(window).scroll(function(e) {
       console.log(body.offset().top);
       if (body.offset().top > 50) {
-        if (!header.hasClass('shadow')) {
-          header.addClass('shadow');
-          header.addClass('fixed-top');
+        if (!$tbody.hasClass('shadow')) {
+          $thead.addClass('shadow');
+          $table.addClass('fixed-table-header');
           $('.table-area').css('margin-top', '50px');
         }
       } else {
-        header.removeClass('shadow');
-        header.removeClass('fixed-top');
+        $thead.removeClass('shadow');
+        $table.removeClass('fixed-table-header');
         $('.table-area').css('margin-top', '0px');
       }
     });

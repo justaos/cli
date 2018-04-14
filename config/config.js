@@ -1,4 +1,5 @@
 const path = require('path');
+const jsonfile = require('jsonfile');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 
@@ -6,13 +7,13 @@ const rootPath = path.normalize(__dirname + '/..');
 
 let cwdPath;
 
-var programName = path.basename(process.argv[1]);
+const programName = path.basename(process.argv[1]);
 if (programName === 'anysols.js')
   cwdPath = process.cwd(); // current working directory
 else
   cwdPath = rootPath;
 
-console.log("cwd : " + cwdPath);
+console.log('cwd : ' + cwdPath);
 
 dotEnv.config();
 

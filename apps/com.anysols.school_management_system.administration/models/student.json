@@ -7,6 +7,25 @@
       "type": "STRING"
     },
     {
+      "name": "name1",
+      "type": "STRING"
+    },{
+      "name": "name22",
+      "type": "STRING"
+    },{
+      "name": "name3",
+      "type": "STRING"
+    },{
+      "name": "name5sadfasdfasdfname5sadfasdfasdf4",
+      "type": "STRING"
+    },{
+      "name": "name5sadfasdfasdfname5sadfasdfasdf",
+      "type": "STRING"
+    },{
+      "name": "name6_testsetsetsetsa_asdf",
+      "type": "STRING"
+    },
+    {
       "name": "age",
       "type": "INTEGER"
     }
