@@ -2,8 +2,8 @@
   "table": "sys_module",
   "record": {
     "id": "9eaf7664-1a45-4349-9264-f28eb46ed923",
-    "name": "Details",
-    "order": 100,
+    "name": "List",
+    "order": 200,
     "type": "list",
     "table": "student",
     "parent": "121d05d9-df57-43ab-ab40-04b26eb88286",

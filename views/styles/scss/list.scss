@@ -2,14 +2,14 @@ $table-top: 40px;
 
 body {
   background-color: white;
-  header {
+  .navbar {
 	position: fixed;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	z-index: 10;
-	background-color: #e3e3e3;
-	.title {
-	  margin-top: 0.35em;
+	width: 100%;
+	.navbar-brand {
+	  font-size: inherit;
+	  padding-left: 10px;
+	  padding-right: 10px;
 	}
   }
 
@@ -37,6 +37,7 @@ body {
 			table-layout: fixed;
 			display: table;
 			position: sticky;
+			z-index: 2;
 		  }
 		  tbody{
 			table-layout: fixed;
@@ -52,6 +53,18 @@ body {
 		tr > td {
 		  overflow: hidden;
 		  text-overflow: ellipsis;
+		}
+
+		tbody tr:hover {
+		  background-color: rgba(33, 150, 243, 0.2);
+		  td{
+			border-top: 1px solid #2196F3;
+			border-bottom: 1px solid #2196F3;
+		  }
+		}
+
+		.custom-control-label::before{
+		  background-color: #bababa;
 		}
 	  }
 	}

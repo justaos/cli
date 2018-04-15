@@ -156,12 +156,10 @@ module.exports = function(database, router) {
       glob.sync(path).forEach(function(file) {
         let data = fileUtils.readJsonFileSync(file);
         if (data.record)
-          platformUtils.upsert(database.getModel(data.table), data.record,
-              {id: data.record.id});
+          database.getModel(data.table).upsert(data.record);
         else if(data.records)
           data.records.forEach(function(record){
-            platformUtils.upsert(database.getModel(data.table), record,
-                {id: record.id});
+            database.getModel(data.table).upsert(record);
           })
       });
     }

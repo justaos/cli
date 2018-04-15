@@ -21,6 +21,7 @@
     $('#btn-install').on('click', function() {
       let that = this;
       $(that).prop('disabled', true);
+      $('.load-bar').removeClass('d-none');
       $.post('/store/' + window.APPLICATION.id + '/install').then(function() {
         swal({
           title: "Success",
@@ -30,6 +31,7 @@
         });
       }).always(function() {
         $(that).prop('disabled', false);
+        $('.load-bar').addClass('d-none');
       });
 
     });

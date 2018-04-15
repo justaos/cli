@@ -1,9 +1,29 @@
 #!/usr/bin/env node
 
 // Delete the 0 and 1 argument (node and script.js)
-var args = process.argv.splice(process.execArgv.length + 2);
+let args = process.argv.splice(process.execArgv.length + 2);
 
 // Retrieve the first argument
-var name = args[0];
+let name = args[0];
 
-require('../app');
+if (name === 'init') {
+  const fileUtils = require('../utils/file-utils');
+  const _ = require('lodash');
+  let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../config.json'); // load from default config.
+  const prodConfig = _.cloneDeep(defaultConfig, true);
+  prodConfig.logger = 'info';
+  prodConfig.db.password = 'YOUR_DB_PASSWORD';
+  prodConfig.app.port = 80;
+
+  let generatedConfig = {
+    development: defaultConfig,
+    test: prodConfig,
+    production: prodConfig
+  };
+  fileUtils.writeJsonFileSync(process.cwd() + '/anysols-config.json',
+      generatedConfig);
+  fileUtils.writeFileSync(process.cwd() + '/.env', 'NODE_ENV=development');
+  console.log("Project setup complete.");
+  console.log("Modify the anysols-config.js file.");
+} else
+  require('../app');

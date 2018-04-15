@@ -1,55 +1,45 @@
 const path = require('path');
-const jsonfile = require('jsonfile');
+const fileUtils = require('../utils/file-utils');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 
 const rootPath = path.normalize(__dirname + '/..');
 
 let cwdPath;
+let configs;
+let defaultConfig;
 
 const programName = path.basename(process.argv[1]);
-if (programName === 'anysols.js')
+if (programName === 'anysols.js') {
   cwdPath = process.cwd(); // current working directory
-else
+  try {
+    configs = fileUtils.readJsonFileSync(cwdPath + '/anysols-config.json'); // load from default config.
+  } catch (e) {
+    const FgRed = '\x1b[31m';
+    console.log(FgRed,
+        '*********************************************************************');
+    console.log(FgRed,
+        '***               anyols-config.js file not found                 ***');
+    console.log(FgRed,
+        '*** Please initiate the project by running `anysols init` command ***');
+    console.log(FgRed,
+        '*********************************************************************');
+    console.log("\x1b[0m", "EXIT");
+    process.exit(0);
+  }
+  dotEnv.config(cwdPath + '.env');
+}
+else {
   cwdPath = rootPath;
-
-console.log('cwd : ' + cwdPath);
-
-dotEnv.config();
+  dotEnv.config();
+  defaultConfig = fileUtils.readJsonFileSync(rootPath + '/config.json'); // load from default config.
+}
 
 const env = process.env.NODE_ENV || 'development';
 
-const defaultConfig = {
-  loggerLevel: 'debug', // use info for test/prod
-  db: {
-    host: 'localhost',
-    port: '3306',
-    name: 'anysols',
-    user: 'root',
-    password: 'root',
-    dialect: 'mysql'
-  },
-  app: {
-    name: 'Anysols - Platform for Business applications',
-    port: 8080,
-    cookieName: 'myCookie',
-    cookieSecret: 'boom',
-    tokenExpiration: 3600000 * 2
-  }
-};
+console.log("-------- " + env);
 
-const prodConfig = _.cloneDeep(defaultConfig, true);
-prodConfig.logger = 'info';
-prodConfig.db.password = 'anysols';
-prodConfig.app.port = 80;
-
-const configs = {
-  development: defaultConfig,
-  test: prodConfig,
-  production: prodConfig
-};
-
-let config = configs[env] ? configs[env] : defaultConfig;
+let config = configs && configs[env] ? configs[env] : defaultConfig;
 config.env = env;
 config.root = rootPath;
 config.cwd = cwdPath;

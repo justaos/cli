@@ -1,11 +1,11 @@
 {
   "name": "anysols",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive test"
   },
   "repository": {
     "type": "git",
@@ -41,5 +41,11 @@
     "q": "^1.5.1",
     "sequelize": "^4.36.0",
     "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.1.0",
+    "nyc": "^11.6.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }

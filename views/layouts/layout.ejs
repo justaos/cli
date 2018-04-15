@@ -39,7 +39,6 @@
 <script>
 
   window.onfocus = function() {
-    console.log('test');
     if (!Cookies.get('x-authenticated'))
       window.location.reload();
   }

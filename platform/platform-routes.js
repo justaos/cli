@@ -124,22 +124,36 @@ module.exports = function(database, router, platform) {
         });
   });
 
-  router.post('/p/:table/new', authenticate, function(req, res, next) {
-    database.getModel('sys_table').
-        findOne({where: {name: req.params.table}}).
-        then(function(table) {
-          let schema = database.getModel(req.params.table);
-          if (schema)
-            schema.create(req.body).then(function() {
-              res.send({});
-            }, function(err) {
-              res.status(400);
-              res.send(err);
-            });
-          else
-            res.render('404');
-        });
+  router.post('/p/:table', authenticate, function(req, res, next) {
+    let schema = database.getModel(req.params.table);
+    if (schema)
+      schema.upsert(req.body).then(function() {
+        res.send({});
+      }, function(err) {
+        res.status(400);
+        res.send(err);
+      });
+    else
+      res.render('404');
+  });
+
+  router.post('/p/:table/action', authenticate, function(req, res, next) {
+    let schema = database.getModel(req.params.table);
+    if (schema)
+      schema.destroy({
+        where: {
+          id: req.body.items
+        }
+      }).then(function() {
+        res.send({});
+      }, function(err) {
+        res.status(400);
+        res.send(err);
+      });
+    else
+      res.render('404');
   });
 
   return router;
+
 };

@@ -2,23 +2,24 @@ $table-top: 40px;
 
 body {
   background-color: white;
+
+  .navbar {
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    .navbar-brand {
+      font-size: inherit;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
   main {
     padding-top: $table-top;
 
     .form-group.required .col-form-label:after {
       content: "*";
       color: red;
-    }
-  }
-
-  header {
-    position: fixed;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    z-index: 10;
-    background-color: #e3e3e3;
-    .title {
-      margin-top: 0.35em;
     }
   }
 
