@@ -19,6 +19,9 @@ https://www.mysql.com/downloads/
 `Note: Check db config in config/config.js before running the application.`
 ```cmd 
 npm i -g anysols
+mkdir new-project
+cd new-project
+anysols init
 anysols
 ```
 
