@@ -1,0 +1,11 @@
+{
+  "table": "sys_menu",
+  "record": {
+    "id": "8377670d-c09b-400c-886c-83b9ddc6366d",
+    "name": "dev-tools",
+    "label": "Dev Tools",
+    "description": "The DevTools provide developers deep access into the internals of the platform and their applications.",
+    "icon": "fa-users",
+    "hidden": true
+  }
+}

@@ -1,65 +1,47 @@
 const path = require('path');
-const dotenv = require('dotenv');
-const rootPath = path.normalize(__dirname + '/..');
-dotenv.config();
+const fileUtils = require('../utils/file-utils');
+const _ = require('lodash');
+const dotEnv = require('dotenv');
 
-// Load configurations according to the selected environment
+const rootPath = path.normalize(__dirname + '/..');
+
+let cwdPath;
+let configs;
+let defaultConfig;
+
+const programName = path.basename(process.argv[1]);
+if (programName === 'anysols.js') {
+  cwdPath = process.cwd(); // current working directory
+  try {
+    configs = fileUtils.readJsonFileSync(cwdPath + '/anysols-config.json'); // load from default config.
+  } catch (e) {
+    const FgRed = '\x1b[31m';
+    console.log(FgRed,
+        '*********************************************************************');
+    console.log(FgRed,
+        '***               anyols-config.js file not found                 ***');
+    console.log(FgRed,
+        '*** Please initiate the project by running `anysols init` command ***');
+    console.log(FgRed,
+        '*********************************************************************');
+    console.log("\x1b[0m", "EXIT");
+    process.exit(0);
+  }
+  dotEnv.config(cwdPath + '.env');
+}
+else {
+  cwdPath = rootPath;
+  dotEnv.config();
+  defaultConfig = fileUtils.readJsonFileSync(rootPath + '/config.json'); // load from default config.
+}
+
 const env = process.env.NODE_ENV || 'development';
 
-const configs = {
-    development: {
-        loggerLevel: 'debug',
-        db: {
-            host: 'localhost',
-            port: '3306',
-            name: 'anysols',
-            user: 'root',
-            password: 'root',
-            dialect: 'mysql'
-        },
-        app: {
-            name: 'Anysols - Platform for Business applications',
-            port: 80,
-            cookieName: 'myCookie',
-            cookieSecret: 'boom',
-            tokenExpiration: 3600000 * 2
-        }
-    },
-    test: {
-        loggerLevel: 'info',
-        db: {
-            dialect: 'sqlite'
-        },
-        app: {
-            name: 'Anysols - Platform for Business applications - TEST',
-            port: 3001,
-            cookieName: 'myCookie',
-            cookieSecret: 'boom',
-            tokenExpiration: 3600000 * 2
-        },
-    },
-    production: {
-        loggerLevel: 'info',
-        cookieName: 'myCookie',
-		db: {
-			host: 'localhost',
-			port: '3306',
-			name: 'anysols',
-			user: 'root',
-			password: 'anysols',
-			dialect: 'mysql'
-		},
-		app: {
-			name: 'Anysols - Platform for Business applications',
-			port: 80,
-			cookieName: 'myCookie',
-			cookieSecret: 'boom',
-			tokenExpiration: 3600000 * 2
-		}
-    }
-};
+console.log("-------- " + env);
 
-let config = configs[env];
+let config = configs && configs[env] ? configs[env] : defaultConfig;
 config.env = env;
 config.root = rootPath;
+config.cwd = cwdPath;
+
 module.exports = config;

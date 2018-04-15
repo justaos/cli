@@ -1,32 +1,41 @@
 <%- partial('../partials/header-navigation') %>
 <% if(application){ %>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-	window.APPLICATION = <%- JSON.stringify(application || null) %>;
-	$(document).ready(function () {
-		let description = window.APPLICATION.description;
-		let $description = $('#app-description');
-		description = description.split(".");
-		$description.text(description[0] + '.');
-		if (description.length > 1) {
-			description.shift();
-			description = description.join(".");
-			$description.append('<span class="more-content d-none">' + description + '</span> <a class="read-more" href="javascript:void(0)">more</a>');
-		}
-		$('.read-more').on('click', function () {
-			$(this).remove();
-			$('.more-content').removeClass('d-none');
-		});
-		$('#btn-install').on('click', function () {
-			let that = this;
-			$(that).prop('disabled', true);
-			$.post('/store/' + window.APPLICATION.id + '/install').then(function () {
-				$('#installation-complete').modal('show')
-			}).always(function () {
-				$(that).prop('disabled', false);
-			});
+  window.APPLICATION = <%- JSON.stringify(application || null) %>;
+  $(document).ready(function() {
+    let description = window.APPLICATION.description;
+    let $description = $('#app-description');
+    description = description.split('.');
+    $description.text(description[0] + '.');
+    if (description.length > 1) {
+      description.shift();
+      description = description.join('.');
+      $description.append('<span class="more-content d-none">' + description +
+          '</span> <a class="read-more" href="javascript:void(0)">more</a>');
+    }
+    $('.read-more').on('click', function() {
+      $(this).remove();
+      $('.more-content').removeClass('d-none');
+    });
+    $('#btn-install').on('click', function() {
+      let that = this;
+      $(that).prop('disabled', true);
+      $('.load-bar').removeClass('d-none');
+      $.post('/store/' + window.APPLICATION.id + '/install').then(function() {
+        swal({
+          title: "Success",
+          text: "Installation completed",
+          icon: "success",
+          button: "Ok",
+        });
+      }).always(function() {
+        $(that).prop('disabled', false);
+        $('.load-bar').addClass('d-none');
+      });
 
-		})
-	});
+    });
+  });
 </script>
 <main role="main">
 
@@ -65,18 +74,3 @@
     <div class="alert alert-danger" role="alert">No application with sys id</div>
 </div>
 <% } %>
-<div id="installation-complete" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-light">
-                <h5 class="modal-title">Success</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="text-light" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>App installed completed.</p>
-            </div>
-        </div>
-    </div>
-</div>

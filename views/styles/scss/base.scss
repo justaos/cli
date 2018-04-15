@@ -17,18 +17,7 @@
 }
 
 body {
-  .navbar {
-	background-color: var(--primary);
-  }
 
-  .navbar-brand {
-	font-size: inherit;
-	padding-left: 10px;
-	padding-right: 10px;
-	&:hover, &:focus {
-	  background: var(--primary-dark);
-	}
-  }
   a.no-style {
 	color: inherit; /* blue colors for links too */
 	text-decoration: inherit; /* no underline */
@@ -148,6 +137,15 @@ body {
   }
 
   .header-navigation {
+	background-color: var(--primary);
+	.navbar-brand {
+	  font-size: inherit;
+	  padding-left: 10px;
+	  padding-right: 10px;
+	  &:hover, &:focus {
+		background: var(--primary-dark);
+	  }
+	}
 	#nav-search {
 	  background: var(--primary-dark);
 	  border-color: var(--primary-dark);
@@ -171,5 +169,4 @@ body {
 	  }
 	}
   }
-
 }

@@ -1,31 +1,57 @@
 <link href="/views/styles/list.css" rel="stylesheet">
 <div class="list-page">
-    <header class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-link btn-sm float-left mr-2" data-toggle="tooltip"
-                        data-placement="top" data-container="body" title="Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="h6 float-left title mb-0">
-                    <%= table.label %>
-                </h1>
-            </div>
-            <div class="col-sm-6">
-                <div class="float-right">
-                    <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                            data-container="body" title="Filter">
-                        <i class="fas fa-filter"></i>
-                    </button>
-                    <button class="btn btn-link btn-sm"><i class="fas fa-angle-double-left"></i></button>
-                    <button class="btn btn-link btn-sm"><i class="fas fa-angle-left"></i></button>
-                    <button class="btn btn-link btn-sm"><i class="fas fa-angle-right"></i></button>
-                    <button class="btn btn-link btn-sm"><i class="fas fa-angle-double-right"></i></button>
+    <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
+        <h4 class="navbar-brand py-2 m-0 float-left">
+            <%= table.label %>
+        </h4>
+        <form class="form-inline">
+            <a href="/p/<%= table.name %>/new" class="btn btn-sm btn-link">
+                <i class="fas fa-plus"></i>
+            </a>
+        </form>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Actions
+                </a>
+                <div class="dropdown-menu actions-dropdown" aria-labelledby="actionsDD">
+                    <a class="dropdown-item" href="#" data-action-name="delete">Delete</a>
                 </div>
-            </div>
-        </div>
-    </header>
-
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Filter">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Filter">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Filter">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Filter">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Filter">
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+            </li>
+        </ul>
+    </nav>
 
     <main>
         <div class="container-fluid">
@@ -37,6 +63,13 @@
                 <table class="responsive-table table table-hover">
                     <thead>
                     <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="select-all-checkbox">
+                                <label class="custom-control-label" for="select-all-checkbox"><span
+                                            class="sr-only"></span></label>
+                            </div>
+                        </th>
                         <% cols.forEach(function(col){ %>
                         <th><%= col.label %></th>
                         <% }); %>
@@ -45,6 +78,13 @@
                     <tbody>
                     <% data.forEach(function(item){ %>
                     <tr>
+                        <td class="item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input item-checkbox" value="<%= item.id %>" id="checkbox-<%= item.id %>">
+                                <label class="custom-control-label" for="checkbox-<%= item.id %>"><span
+                                            class="sr-only"></span></label>
+                            </div>
+                        </td>
                         <% cols.forEach(function(col){ %>
                         <td><%= item[col.name] %></td>
                         <% }); %>
@@ -59,23 +99,56 @@
     </main>
 </div>
 <script>
-	$(document).ready(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-		let header = $('.responsive-table thead');
-		let body = $('header');
-		$(window).scroll(function (e) {
-			console.log(body.offset().top)
-			if (body.offset().top > 50) {
-				if (!header.hasClass('shadow')) {
-					header.addClass('shadow');
-					header.addClass('fixed-top');
-					$('.table-area').css('margin-top', '50px')
-				}
-			} else {
-				header.removeClass('shadow');
-				header.removeClass('fixed-top');
-				$('.table-area').css('margin-top', '0px')
-			}
-		});
-	});
+  $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    let $table = $('.responsive-table');
+    let $thead = $table.find('thead');
+    let $tbody = $table.find('tbody');
+
+    let header = $('.list-page-header');
+    $thead.width($thead.width());
+    $thead.find('th').each(function(i, el) {
+      $(el).width($(el).width());
+    });
+    $tbody.width($tbody.width());
+    $tbody.find('tr:first-child').find('td').each(function(i, el) {
+      $(el).width($(el).width());
+    })
+    $(window).scroll(function(e) {
+      if (header.offset().top > 50) {
+        if (!$tbody.hasClass('shadow')) {
+          $thead.addClass('shadow');
+          $table.addClass('fixed-table-header');
+          $('.table-area').css('margin-top', '50px');
+        }
+      } else {
+        $thead.removeClass('shadow');
+        $table.removeClass('fixed-table-header');
+        $('.table-area').css('margin-top', '0px');
+      }
+    });
+    $('.actions-dropdown .dropdown-item').on('click', function(event){
+      event.preventDefault();
+      let action = $(this).attr('data-action-name');
+      let selectedItems = [];
+      $.each($(".item-checkbox:checked"), function(){
+        selectedItems.push($(this).val());
+      });
+      $.ajax({
+        url: "/p/<%= table.name %>/action",
+        data: JSON.stringify({items:selectedItems}),
+        contentType: 'application/json',
+        type: 'POST'
+      }).then(function(data) {
+        window.location.reload();
+      }, function(err) {
+        alert(err.responseJSON.original.sqlMessage);
+      });
+    })
+    $('#select-all-checkbox').on('click', function(){
+      if($(".item-checkbox:checked").length){
+
+      }
+    })
+  });
 </script>

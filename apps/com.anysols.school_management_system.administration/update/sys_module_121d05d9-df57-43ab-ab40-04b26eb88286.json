@@ -1,8 +1,8 @@
 {
   "table": "sys_module",
   "record": {
-	"id": "121d05d9-df57-43ab-ab40-04b26eb88286",
-	"name": "Student",
-	"menu" : "c54288b5-1bd8-42e5-b4e7-7c520fb71b39"
+    "id": "121d05d9-df57-43ab-ab40-04b26eb88286",
+    "name": "Student",
+    "menu": "c54288b5-1bd8-42e5-b4e7-7c520fb71b39"
   }
 }

@@ -19,42 +19,41 @@
     <% } else { %>
     <script src="/assets/js/angular.min.js"></script>
     <script>
-		angular.module('indexApp', [])
-			.controller('indexAppController', function ($scope) {
-				$scope.menus = <%- JSON.stringify(menus) %>;
-			})
-			.directive('asMenuItem', function () {
-				return {
-					scope: {
-						menuId: '@',
-						name: '@',
-						icon: '@',
-						description: '@'
-					},
-					replace: true,
-					template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
-					'                <div class="row menu-item box-shadow rounded m-0">\n' +
-					'                    <div class="col-md-4 my-auto">\n' +
-					'                        <i class="menu-icon fas fa-rocket fa-4x" ng-class="icon"></i>\n' +
-					'                    </div>\n' +
-					'                    <div class="col-md-8 my-auto">\n' +
-					'                        <h2 class="h5">{{name}}</h2>\n' +
-					'                        <p class="small mb-1">{{description}}</p>\n' +
-					'                    </div>\n' +
-					'                </div>\n' +
-					'            </a>'
-				};
-			});
+      angular.module('indexApp', []).controller('indexAppController', function($scope) {
+        $scope.menus = <%- JSON.stringify(menus) %>;
+      }).directive('asMenuItem', function() {
+        return {
+          scope: {
+            menuId: '@',
+            name: '@',
+            icon: '@',
+            description: '@'
+          },
+          replace: true,
+          template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
+          '                <div class="row menu-item box-shadow rounded m-0">\n' +
+          '                    <div class="col-md-4 my-auto">\n' +
+          '                        <i class="menu-icon fas fa-rocket fa-4x" ng-class="icon"></i>\n' +
+          '                    </div>\n' +
+          '                    <div class="col-md-8 my-auto">\n' +
+          '                        <h2 class="h5">{{name}}</h2>\n' +
+          '                        <p class="small mb-1">{{description}}</p>\n' +
+          '                    </div>\n' +
+          '                </div>\n' +
+          '            </a>'
+        };
+      });
     </script>
     <div class="container-fluid" ng-app="indexApp" ng-controller="indexAppController">
         <div class="row">
             <div class="col-sm-4 my-3">
-                <input type="text" class="form-control form-control-sm" ng-model="search" placeholder="Search" aria-label="Search">
+                <input type="text" class="form-control form-control-sm" ng-model="search" placeholder="Search"
+                       aria-label="Search">
             </div>
         </div>
         <div class="d-flex flex-wrap">
-            <as-menu-item ng-repeat="menu in menus | filter:search"
-                          menu-id="{{menu.id}}" icon="{{menu.icon}}" name="{{menu.name}}"
+            <as-menu-item ng-if="!menu.hidden" ng-repeat="menu in menus | filter:search"
+                          menu-id="{{menu.id}}" icon="{{menu.icon}}" name="{{menu.label}}"
                           description="{{menu.description}}"></as-menu-item>
         </div>
     </div>

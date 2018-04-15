@@ -11,7 +11,7 @@ body {
 	  }
 	}
 
-	&:hover, &:focus {
+	&:hover, &:focus, &:active {
 	  .menu-item {
 		transition: all .3s !important;
 		color: white;

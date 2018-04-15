@@ -1,14 +1,18 @@
 {
-    "name": "student",
-    "label": "Student",
-    "columns": [
-        {
-            "name": "name",
-            "type": "STRING"
-        },
-        {
-            "name": "age",
-            "type": "INTEGER"
-        }
-    ]
+  "name": "student",
+  "label": "Student",
+  "columns": [
+    {
+      "name": "name",
+      "type": "STRING"
+    },
+    {
+      "name": "age",
+      "type": "INTEGER"
+    },
+    {
+      "name": "gender",
+      "type": "STRING"
+    }
+  ]
 }

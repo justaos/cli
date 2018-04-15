@@ -1,0 +1,11 @@
+{
+  "table": "sys_module",
+  "record": {
+    "id": "470bb719-38fe-4e5c-87ba-e5178fd4df22",
+    "name": "Menu",
+    "order": 100,
+    "type": "list",
+    "table": "sys_menu",
+    "menu": "8377670d-c09b-400c-886c-83b9ddc6366d"
+  }
+}

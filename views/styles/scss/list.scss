@@ -2,14 +2,14 @@ $table-top: 40px;
 
 body {
   background-color: white;
-  header {
+  .navbar {
 	position: fixed;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	z-index: 10;
-	background-color: #e3e3e3;
-	.title {
-	  margin-top: 0.35em;
+	width: 100%;
+	.navbar-brand {
+	  font-size: inherit;
+	  padding-left: 10px;
+	  padding-right: 10px;
 	}
   }
 
@@ -27,33 +27,45 @@ body {
 	  z-index: 0;
 	}
 
-	table.responsive-table {
+	section {
+	  position: relative;
+	  table.responsive-table {
+		&.fixed-table-header {
+		  thead {
+			top: $table-top;
+			background: #eee;
+			table-layout: fixed;
+			display: table;
+			position: sticky;
+			z-index: 2;
+		  }
+		  tbody{
+			table-layout: fixed;
+			display: table;
+		  }
+		}
 
-	  display: table;
-	  /* required for table-layout to be used (not normally necessary; included for completeness) */
-	  table-layout: fixed;
-	  /* this keeps your columns with fixed with exactly the right width */
-	  width: 100%;
-	  /* table must have width set for fixed layout to work as expected */
-	  height: 100%;
+		th {
+		  background: #eee;
+		  vertical-align: middle;
+		  text-align: left;
+		}
+		tr > td {
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		}
 
-	  thead.fixed-top {
-		position: fixed;
-		top: $table-top;
-		left: 0;
-		right: 0;
-		width: 100%;
-		background: #eee;
-		table-layout: fixed;
-		display: table;
-	  }
-	  th {
-		background: #eee;
-		text-align: left;
-	  }
-	  tr > td {
-		overflow: hidden;
-		text-overflow: ellipsis;
+		tbody tr:hover {
+		  background-color: rgba(33, 150, 243, 0.2);
+		  td{
+			border-top: 1px solid #2196F3;
+			border-bottom: 1px solid #2196F3;
+		  }
+		}
+
+		.custom-control-label::before{
+		  background-color: #bababa;
+		}
 	  }
 	}
   }
