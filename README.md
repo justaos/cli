@@ -30,6 +30,7 @@ anysols init
 anysols
 ```
 
+browser [http://localhost:8080](http://localhost:8080)
 
 ## License
 [Apache License 2.0](/LICENSE)
