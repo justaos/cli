@@ -1,4 +1,4 @@
-[![Anysols](assets/img/logo-color.png "Anysols" )](https://anysols.com)
+[![Anysols](http://anysols.com/assets/img/logo.png "Anysols" )](https://anysols.com)
 
 ### Anysols
 ##### Your Problem Solved With Our Solution
