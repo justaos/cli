@@ -8,6 +8,7 @@ let name = args[0];
 
 if (name === 'init') {
   const fileUtils = require('../utils/file-utils');
+  const copydir = require('copy-dir');
   const _ = require('lodash');
   let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../config.json'); // load from default config.
   const prodConfig = _.cloneDeep(defaultConfig, true);
@@ -23,6 +24,9 @@ if (name === 'init') {
   fileUtils.writeJsonFileSync(process.cwd() + '/anysols-config.json',
       generatedConfig);
   fileUtils.writeFileSync(process.cwd() + '/.env', 'NODE_ENV=development');
+
+
+  copydir.sync(__dirname + '/../apps', process.cwd() + '/apps');
   console.log("Project setup complete.");
   console.log("Modify the anysols-config.js file.");
 } else

@@ -1,6 +1,6 @@
 {
   "name": "anysols",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "body-parser": "^1.18.2",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
+    "copy-dir": "^0.3.0",
     "dotenv": "^5.0.1",
     "ejs-locals": "^1.0.2",
     "express": "^4.16.2",
