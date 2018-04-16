@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/anysols/anysols.git"
+    "url": "https://gitlab.com/anysols/anysols"
   },
   "bin": {
     "anysols": "./bin/anysols.js"
@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://gitlab.com/anysols/anysols/issues"
   },
-  "homepage": "https://gitlab.com/anysols/anysols#README",
+  "homepage": "https://anysols.com",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
