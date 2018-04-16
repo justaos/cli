@@ -1,13 +1,13 @@
-[![Anysols](http://anysols.com/assets/img/logo.png "Anysols" )](https://anysols.com)
 
-**Master :** [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols)  
-**Development :** [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=platform)](https://travis-ci.org/anysols/anysols)
+
+[![Anysols](http://anysols.com/assets/img/logo-small.png "Anysols" )](https://anysols.com)  
 
 ### Anysols
 ##### Your Problem Solved With Our Solution
 
 Sleek and powerful platform for faster and easier application development.
 
+[![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols)   [![codecov](https://codecov.io/gh/anysols/anysols/branch/master/graph/badge.svg)](https://codecov.io/gh/anysols/anysols)
 
 ## Setup
 * Install nodejs  (version 8.9.4)  
