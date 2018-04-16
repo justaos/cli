@@ -34,7 +34,7 @@
   }
 </script>
 
-<%- partial('../partials/header-navigation') %>
+<%- include('../partials/header-navigation') %>
 
 <main role="main">
     <div class="nav-sidebar bg-light">
@@ -50,7 +50,7 @@
                 </a>
             </div>
             <ul class="sidebar-top-level-items">
-                <%- partial('../partials/nav-tree', {modules: modules}) %>
+                <%- include('../partials/nav-tree', {modules: modules}) %>
             </ul>
 
         </div>

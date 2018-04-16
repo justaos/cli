@@ -9,7 +9,7 @@
     <% if(module.children && module.children.length) { %>
     <ul class="sidebar-sub-level-items fly-out-list">
         <li class="divider fly-out-top-item"></li>
-        <%- partial('./nav-tree', {modules: module.children}) %>
+        <%- include('./nav-tree', {modules: module.children}) %>
     </ul>
     <% } %>
 </li>
