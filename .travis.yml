@@ -3,6 +3,7 @@ node_js:
   - "8.9.4"
 install:
   - npm install -g codecov istanbul
+  - npm install mocha
 script:
   - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
   - codecov
