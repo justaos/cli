@@ -1,5 +1,8 @@
 [![Anysols](http://anysols.com/assets/img/logo.png "Anysols" )](https://anysols.com)
 
+**Master :** [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols)  
+**Development :** [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=platform)](https://travis-ci.org/anysols/anysols)
+
 ### Anysols
 ##### Your Problem Solved With Our Solution
 
