@@ -9,7 +9,7 @@ module.exports = function(database, router, platform) {
     database.getModel('sys_menu').findAll({
       order: Sequelize.col('order')
     }).then(menus => {
-      res.render('index', {menus: menus, _layoutFile: 'layouts/layout'});
+      res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
   });
 
@@ -23,7 +23,7 @@ module.exports = function(database, router, platform) {
       order: Sequelize.col('order')
     }).then(applications => {
       res.render('pages/store',
-          {applications: applications, _layoutFile: '../layouts/layout'});
+          {applications: applications, layout: 'layouts/layout'});
     });
   });
 
@@ -32,7 +32,7 @@ module.exports = function(database, router, platform) {
         findById(req.params.id).
         then(function(application) {
           res.render('pages/store-app',
-              {application: application, _layoutFile: '../layouts/layout'});
+              {application: application, layout: 'layouts/layout'});
         });
   });
 
@@ -66,7 +66,7 @@ module.exports = function(database, router, platform) {
           menu: menu,
           url: req.query.url,
           modules: modules,
-          _layoutFile: '../layouts/layout'
+          layout: 'layouts/layout'
         });
       } else
         res.render('404');
@@ -77,7 +77,7 @@ module.exports = function(database, router, platform) {
     database.getModel('sys_menu').findById(req.params.id).then(menu => {
       res.render('pages/home', {
         menu: menu,
-        _layoutFile: '../layouts/layout'
+        layout: 'layouts/layout'
       });
     });
   });
@@ -95,7 +95,7 @@ module.exports = function(database, router, platform) {
                   table: {label: table.label, name: table.name},
                   data: data,
                   cols: cols,
-                  _layoutFile: '../layouts/no-header-layout'
+                  layout: 'layouts/no-header-layout'
                 });
               });
             });
@@ -116,7 +116,7 @@ module.exports = function(database, router, platform) {
                   res.render('pages/form', {
                     table: {label: table.label, name: table.name},
                     cols: cols,
-                    _layoutFile: '../layouts/no-header-layout'
+                    layout: 'layouts/no-header-layout'
                   });
                 });
           else
