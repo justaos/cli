@@ -2,15 +2,6 @@ const bcrypt = require('bcrypt-nodejs');
 const fs = require('fs');
 
 module.exports = {
-  // generating a hash
-  generateHash: /* istanbul ignore next */ function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-  },
-
-  // checking if password is valid
-  validPassword: function(password, hashedPwd) {
-    return bcrypt.compareSync(password, hashedPwd);
-  },
 
   flatToHierarchy: function(flat) {
 

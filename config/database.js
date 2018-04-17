@@ -40,6 +40,9 @@ module.exports = function() {
               createdAt: 'sys_created_on',
               updatedAt: 'sys_updated_on'
             },
+            logging: function(str) {
+              logger.info(str);
+            },
             operatorsAliases: false
           });
       return connection;

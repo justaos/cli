@@ -7,6 +7,7 @@ const logger = require('../config/logger');
 const config = require('../config/config');
 
 const utils = require('../utils');
+const hashUtils = require('../src/utils/hash-utils');
 const fileUtils = require('../src/utils/file-utils');
 
 module.exports = function(database, router) {
@@ -109,7 +110,7 @@ module.exports = function(database, router) {
           if (!count)
             database.getModel('sys_user').create({
               username: 'admin',
-              password: utils.generateHash('admin')
+              password: hashUtils.generateHash('admin')
             }).then(function() {
               dfd.resolve();
             });

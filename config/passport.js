@@ -1,5 +1,5 @@
 const passport = require('passport');
-const myUtils = require('../utils');
+const hashUtils = require('../src/utils/hash-utils');
 
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
@@ -17,7 +17,7 @@ module.exports = function(app, userModel) {
               message: 'Username does not exist'
             });
 
-          if (!myUtils.validPassword(password, user.password))
+          if (!hashUtils.validateHash(password, user.password))
             return done(null, false,
                 {found: true, message: 'Incorrect password.'});
 
