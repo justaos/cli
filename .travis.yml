@@ -5,5 +5,5 @@ install:
   - npm install -g coveralls istanbul
   - npm install mocha
 script:
-  - nom run test
+  - npm run test
 after_success: npm run coverage
