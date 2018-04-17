@@ -6,7 +6,13 @@
 
 Sleek and powerful platform for faster and easier application development.
 
-[![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols)   [![codecov](https://codecov.io/gh/anysols/anysols/branch/master/graph/badge.svg)](https://codecov.io/gh/anysols/anysols)
+**Master**  
+[![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols)  
+[![Coverage Status](https://coveralls.io/repos/github/anysols/anysols/badge.svg?branch=master)](https://coveralls.io/github/anysols/anysols?branch=master)
+
+**Dev**  
+[![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=platform)](https://travis-ci.org/anysols/anysols) 
+[![Coverage Status](https://coveralls.io/repos/github/anysols/anysols/badge.svg?branch=platform)](https://coveralls.io/github/anysols/anysols?branch=platform)
 
 ## Setup
 * Install nodejs  (version 8.9.4)  
