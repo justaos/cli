@@ -1,11 +1,31 @@
 {
   "name": "anysols",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --recursive test"
+    "test": "nyc mocha"
+  },
+  "nyc": {
+	"check-coverage": false,
+	"all": true,
+	"extension": [
+	  ".js"
+	],
+	"include": [
+	  "**/!(*.spec.*).js"
+	],
+	"exclude": [
+	  "assets/", "docs/", "bin/", "**/gulpfile.js", "test/"
+	],
+	"reporter": [
+	  "html",
+	  "lcov",
+	  "text",
+	  "text-summary"
+	],
+	"report-dir": "docs/reports/coverage"
   },
   "repository": {
     "type": "git",

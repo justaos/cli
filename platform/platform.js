@@ -7,7 +7,7 @@ const logger = require('../config/logger');
 const config = require('../config/config');
 
 const utils = require('../utils');
-const fileUtils = require('../utils/file-utils');
+const fileUtils = require('../src/utils/file-utils');
 
 module.exports = function(database, router) {
   class Platform {
@@ -130,7 +130,7 @@ module.exports = function(database, router) {
           then(function(application) {
             let modelPath = 'apps/' + application.package + '/models/**.json';
             that.loadSchemasFromPath(modelPath, true);
-            that.loadData('apps/' + application.package + '/update/**.json');
+            that.loadData('apps/' + application.package + '/updates/**.json');
             let promises = [];
             glob.sync(modelPath).forEach((file) => {
               let tableJson = fileUtils.readJsonFileSync(file);

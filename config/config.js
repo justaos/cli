@@ -1,5 +1,5 @@
 const path = require('path');
-const fileUtils = require('../utils/file-utils');
+const fileUtils = require('../src/utils/file-utils');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 

@@ -7,7 +7,7 @@ let args = process.argv.splice(process.execArgv.length + 2);
 let name = args[0];
 
 if (name === 'init') {
-  const fileUtils = require('../utils/file-utils');
+  const fileUtils = require('../src/utils/file-utils');
   const copydir = require('copy-dir');
   const _ = require('lodash');
   let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../config.json'); // load from default config.
