@@ -5,5 +5,5 @@ install:
   - npm install -g coveralls istanbul
   - npm install mocha
 script:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
-  - coveralls
+  - nom run test
+after_success: npm run coverage
