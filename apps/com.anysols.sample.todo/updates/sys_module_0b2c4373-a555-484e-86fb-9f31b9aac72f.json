@@ -1,11 +1,11 @@
 {
   "table": "sys_module",
   "record": {
-    "id": "9eaf7664-1a45-4349-9264-f28eb46ed923",
-    "name": "List",
-    "order": 200,
-    "type": "list",
-    "table": "student",
+    "id": "0b2c4373-a555-484e-86fb-9f31b9aac72f",
+    "name": "Create New",
+    "order": 100,
+    "type": "new",
+    "table": "todo",
     "parent": "121d05d9-df57-43ab-ab40-04b26eb88286",
     "menu": "c54288b5-1bd8-42e5-b4e7-7c520fb71b39"
   }

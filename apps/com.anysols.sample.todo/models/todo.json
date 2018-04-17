@@ -1,0 +1,14 @@
+{
+  "name": "todo",
+  "label": "Todo",
+  "columns": [
+	{
+	  "name": "value",
+	  "type": "STRING"
+	},
+	{
+	  "name": "status",
+	  "type": "STRING"
+	}
+  ]
+}

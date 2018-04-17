@@ -3,7 +3,7 @@ const fs = require('fs');
 
 module.exports = {
   // generating a hash
-  generateHash: function(password) {
+  generateHash: /* istanbul ignore next */ function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
   },
 
@@ -12,17 +12,10 @@ module.exports = {
     return bcrypt.compareSync(password, hashedPwd);
   },
 
-  getObjectFromFile: function(path) {
-    let obj = fs.readFileSync(path);
-    return JSON.parse(obj);
-  },
-
   flatToHierarchy: function(flat) {
 
     let roots = [];// things without parent
-
     let all = {};
-
     flat.forEach(function(item) {
       all[item.id] = item;
     });

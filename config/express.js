@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const engine = require('ejs-locals');
+const engine = require('express-ejs-layouts');
 const compression = require('compression');
 const expressWinston = require('express-winston');
 const logger = require('./logger');
@@ -24,12 +24,13 @@ module.exports = function(app, router) {
 
   //app.use(express.favicon());
   app.use(express.static(config.root + '/public'));
+  app.set('layout', 'layouts/blank');
 
   app.use('/assets', express.static(config.root + '/assets'));
   app.use('/views/styles/', express.static(config.root + '/views/styles'));
 
   // set views path, template engine and default layout
-  app.engine('ejs', engine);
+  app.use(engine);
   app.set('views', config.root + '/views');
   app.set('view engine', 'ejs');
 
