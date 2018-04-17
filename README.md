@@ -34,5 +34,8 @@ anysols
 
 browser [http://localhost:8080](http://localhost:8080)
 
+## Code of Conduct
+[Contributor Covenant](/CODE_OF_CONDUCT.md)
+
 ## License
 [Apache License 2.0](/LICENSE)
