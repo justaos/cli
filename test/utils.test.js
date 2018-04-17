@@ -1,9 +1,5 @@
-const mocha = require('mocha');
-const chai = require('chai');
+const { assert } = require('chai');
 const utils = require('../utils');
-let describe = mocha.describe;
-let it = mocha.it;
-let assert = chai.assert;
 
 describe('Utils', function() {
   it('validPassword to compare password with hashed password', function() {
