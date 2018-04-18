@@ -1,7 +1,6 @@
 [![Anysols](assets/img/logo-color.png "Anysols" )](https://anysols.com)
 
 ### Anysols
-##### Your Problem Solved With Our Solution
 
 Sleek and powerful platform for faster and easier application development.
 
