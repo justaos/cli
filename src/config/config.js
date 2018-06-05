@@ -1,9 +1,9 @@
 const path = require('path');
-const fileUtils = require('../src/utils/file-utils');
+const fileUtils = require('../utils/file-utils');
 const _ = require('lodash');
 const dotEnv = require('dotenv');
 
-const rootPath = path.normalize(__dirname + '/..');
+const rootPath = path.normalize(__dirname + '/../..');
 
 let cwdPath;
 let configs;
@@ -53,6 +53,7 @@ function logBox(str) {
 console.log(_.padStart('', size + 4, '*'));
 logBox('program : ' + programName);
 logBox('environment : ' + config.env);
+logBox('logger level : ' + config.loggerLevel);
 logBox('port : ' + config.app.port);
 logBox('current working directory : ' + config.cwd);
 console.log(_.padStart('', size + 4, '*'));

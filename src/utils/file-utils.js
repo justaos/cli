@@ -1,14 +1,28 @@
 const fs = require('fs');
+const glob = require('glob');
 const jsonfile = require('jsonfile');
 
-exports.readJsonFileSync = function(file, options) {
+let fileUtils = {};
+
+fileUtils.readJsonFileSync = function(file, options) {
   return jsonfile.readFileSync(file, options);
 };
 
-exports.writeJsonFileSync = function(file, obj) {
+fileUtils.readJsonFilesFromPathSync = function(path, options) {
+  let result = [];
+  glob.sync(path).forEach(function(file) {
+    let data = fileUtils.readJsonFileSync(file);
+    result.push(data);
+  });
+  return result;
+};
+
+fileUtils.writeJsonFileSync = function(file, obj) {
   return jsonfile.writeFileSync(file, obj, {spaces: 2});
 };
 
-exports.writeFileSync = function(file, str) {
+fileUtils.writeFileSync = function(file, str) {
   return fs.writeFileSync(file, str);
 };
+
+module.exports = fileUtils;

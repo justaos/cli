@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const engine = require('express-ejs-layouts');
 const compression = require('compression');
 const expressWinston = require('express-winston');
-const logger = require('./logger');
-const config = require('./config');
+const logger = require('../config/logger');
+const config = require('../config/config');
 
 module.exports = function(app, router) {
 

@@ -1,7 +1,7 @@
 {
-  "name": "sys_user",
+  "name": "p_user",
   "label": "User",
-  "columns": [
+  "fields": [
     {
       "name": "first_name",
       "type": "STRING",

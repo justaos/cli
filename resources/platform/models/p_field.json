@@ -1,7 +1,7 @@
 {
-  "name": "sys_column",
-  "label": "Column",
-  "columns": [
+  "name": "p_field",
+  "label": "Field",
+  "fields": [
     {
       "name": "name",
       "type": "STRING"

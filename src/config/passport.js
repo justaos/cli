@@ -1,17 +1,18 @@
 const passport = require('passport');
-const hashUtils = require('../src/utils/hash-utils');
+const hashUtils = require('../utils/hash-utils');
 
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
+const Model = require('../model');
 
-module.exports = function(app, userModel) {
+module.exports = function(app) {
   passport.use(new LocalStrategy(
       function(username, password, done) {
 
         //Assume there is a DB module pproviding a global UserModel
-        userModel.findOne({where: {username: username}}).then(function(user) {
-          if (!user)
+        new Model('p_user').where({username: username}).findOne(function(err, user) {
+          if (err)
             return done(null, false, {
               found: false,
               message: 'Username does not exist'
@@ -21,11 +22,8 @@ module.exports = function(app, userModel) {
             return done(null, false,
                 {found: true, message: 'Incorrect password.'});
 
-          return done(null, user.get(), {message: 'Logged In Successfully'});
+          return done(null, user.toObject(), {message: 'Logged In Successfully'});
 
-        }).catch(function(err) {
-          console.log('Error:', err);
-          return done(null, false, {});
         });
       }));
 
@@ -41,10 +39,8 @@ module.exports = function(app, userModel) {
       function(jwtPayload, cb) {
 
         //find the user in db if needed
-        return userModel.findById(jwtPayload.id).then(user => {
+        return new Model('p_user').findById(jwtPayload.id).exec((err, user) => {
           return cb(null, user);
-        }).catch(err => {
-          return cb(err);
         });
       }
   ));

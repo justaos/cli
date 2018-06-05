@@ -2,11 +2,11 @@
   "loggerLevel": "info",
   "db": {
 	"host": "localhost",
-	"port": "3306",
+	"port": "27017",
 	"name": "anysols",
 	"user": "root",
 	"password": "root",
-	"dialect": "mysql"
+	"dialect": "mongodb"
   },
   "app": {
 	"name": "Anysols - Platform for Business applications",

@@ -5,28 +5,33 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "mongod": "mongod",
     "test": "nyc mocha --recursive",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
-	"check-coverage": false,
-	"all": true,
-	"extension": [
-	  ".js"
-	],
-	"include": [
-	  "**/!(*.spec.*).js"
-	],
-	"exclude": [
-	  "assets/", "docs/", "bin/", "**/gulpfile.js", "test/"
-	],
-	"reporter": [
-	  "html",
-	  "lcov",
-	  "text",
-	  "text-summary"
-	],
-	"report-dir": "docs/reports/coverage"
+    "check-coverage": false,
+    "all": true,
+    "extension": [
+      ".js"
+    ],
+    "include": [
+      "**/!(*.spec.*).js"
+    ],
+    "exclude": [
+      "assets/",
+      "docs/",
+      "bin/",
+      "**/gulpfile.js",
+      "test/"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "docs/reports/coverage"
   },
   "repository": {
     "type": "git",
@@ -58,6 +63,8 @@
     "jsonfile": "^4.0.0",
     "jsonwebtoken": "^8.2.0",
     "lodash": "^4.17.5",
+    "mongoose": "^5.0.15",
+    "mongoose-schema-extend": "^0.2.2",
     "mysql2": "^1.5.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",

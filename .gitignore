@@ -132,3 +132,4 @@ lib-cov
 .env
 .nyc_output
 docs/reports/coverage/
+playground.js

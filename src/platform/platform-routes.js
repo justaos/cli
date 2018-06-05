@@ -1,35 +1,35 @@
 const Sequelize = require('sequelize');
 const authenticate = require('../config/authenticate');
-const utils = require('../utils');
+const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
+const Model = require('../model');
 
-module.exports = function(database, router, platform) {
+module.exports = function(platform) {
+
+  let router = platform.router;
 
   router.get('/', authenticate, function(req, res, next) {
-    database.getModel('sys_menu').findAll({
-      order: Sequelize.col('order')
-    }).then(menus => {
+    new Model('p_menu').find({}).then(menus => {
       res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
   });
 
   router.get('/dev-tools', authenticate, function(req, res, next) {
-    req.url = '/menu/8377670d-c09b-400c-886c-83b9ddc6366d';
+    req.url = '/menu/5b15588ef362641220dfebc1';
     next();
   });
 
   router.get('/store', authenticate, function(req, res, next) {
-    database.getModel('sys_application').findAll({
-      order: Sequelize.col('order')
-    }).then(applications => {
+    new Model('p_application').find({
+
+    }).then(applications => { //order: Sequelize.col('order')
       res.render('pages/store',
           {applications: applications, layout: 'layouts/layout'});
     });
   });
 
   router.get('/store/:id', authenticate, function(req, res, next) {
-    database.getModel('sys_application').
-        findById(req.params.id).
+    new Model('p_application').findById(req.params.id).
         then(function(application) {
           res.render('pages/store-app',
               {application: application, layout: 'layouts/layout'});
@@ -45,15 +45,16 @@ module.exports = function(database, router, platform) {
   router.get('/menu/:id', authenticate, function(req, res, next) {
     let menuId = req.params.id;
     let promises = [];
-    promises.push(database.getModel('sys_menu').findById(menuId));
-    promises.push(database.getModel('sys_module').findAll({
-      where: {menu: menuId},
-      order: [Sequelize.col('order'), Sequelize.col('name')]
-    }));
+    promises.push(new Model('p_menu').findById(menuId));
+    promises.push(new Model('p_module').find({menu: menuId})); // order: [Sequelize.col('order'), Sequelize.col('name')]
+
     Q.all(promises).then(function(responses) {
       if (responses[0] && responses[1]) {
         let menu = responses[0];
         let modules = responses[1];
+        modules = modules.map(function(module) {
+          return module.toObject();
+        });
         modules.forEach(function(module) {
           if (module.type === 'list') {
             module.url = '/p/' + module.table + '/list';
@@ -61,7 +62,7 @@ module.exports = function(database, router, platform) {
             module.url = '/p/' + module.table + '/new';
           }
         });
-        modules = utils.flatToHierarchy(modules);
+        modules = dsUtils.flatToHierarchy(modules);
         res.render('pages/menu', {
           menu: menu,
           url: req.query.url,
@@ -74,7 +75,7 @@ module.exports = function(database, router, platform) {
   });
 
   router.get('/menu/:id/home', authenticate, function(req, res, next) {
-    database.getModel('sys_menu').findById(req.params.id).then(menu => {
+    new Model('p_menu').findById(req.params.id).then(menu => {
       res.render('pages/home', {
         menu: menu,
         layout: 'layouts/layout'
@@ -82,39 +83,36 @@ module.exports = function(database, router, platform) {
     });
   });
 
-  router.get('/p/:table/list', authenticate, function(req, res, next) {
-    let condition = {where: {name: req.params.table}};
-    database.getModel('sys_table').findOne(condition).then(function(table) {
-      let schema = database.getModel(req.params.table);
-      if (schema)
-        database.getModel('sys_column').
-            findAll({where: {table: table.id}}).
-            then(function(cols) {
-              schema.findAll().then(function(data) {
-                res.render('pages/list', {
-                  table: {label: table.label, name: table.name},
-                  data: data,
-                  cols: cols,
-                  layout: 'layouts/no-header-layout'
+  router.get('/p/:collection/list', authenticate, function(req, res, next) {
+    new Model('p_collection').findOne({name: req.params.collection}).
+        then(function(collection) {
+          let schema = new Model(req.params.collection);
+          if (schema)
+            new Model('p_field').find({table: collection.id}).
+                then(function(cols) {
+                  schema.find({}).then(function(data) {
+                    res.render('pages/list', {
+                      table: {label: collection.label, name: collection.name},
+                      data: data,
+                      cols: cols,
+                      layout: 'layouts/no-header-layout'
+                    });
+                  });
                 });
-              });
-            });
-      else
-        res.render('404');
-    });
+          else
+            res.render('404');
+        });
   });
 
-  router.get('/p/:table/new', authenticate, function(req, res, next) {
-    database.getModel('sys_table').
-        findOne({where: {name: req.params.table}}).
-        then(function(table) {
-          let schema = database.getModel(req.params.table);
+  router.get('/p/:collection/new', authenticate, function(req, res, next) {
+    new Model('p_collection').findOne({name: req.params.collection}).
+        then(function(collection) {
+          let schema = new Model(req.params.collection);
           if (schema)
-            database.getModel('sys_column').
-                findAll({where: {table: table.id}}).
+            new Model('p_field').find({table: collection.id}).
                 then(function(cols) {
                   res.render('pages/form', {
-                    table: {label: table.label, name: table.name},
+                    table: {label: collection.label, name: collection.name},
                     cols: cols,
                     layout: 'layouts/no-header-layout'
                   });
@@ -125,7 +123,7 @@ module.exports = function(database, router, platform) {
   });
 
   router.post('/p/:table', authenticate, function(req, res, next) {
-    let schema = database.getModel(req.params.table);
+    let schema = new Model(req.params.table);
     if (schema)
       schema.upsert(req.body).then(function() {
         res.send({});

@@ -1,7 +1,7 @@
 {
-  "name": "sys_menu",
+  "name": "p_menu",
   "label": "Menu",
-  "columns": [
+  "fields": [
     {
       "name": "name",
       "type": "STRING"

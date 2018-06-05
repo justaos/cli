@@ -1,7 +1,7 @@
 {
-  "name": "sys_application",
+  "name": "p_application",
   "label": "Application",
-  "columns": [
+  "fields": [
     {
       "name": "name",
       "type": "STRING",

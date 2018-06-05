@@ -1,6 +1,6 @@
-const config = require('./config');
+const config = require('../src/config/config');
 const Q = require('q');
-const logger = require('./logger');
+const logger = require('../src/config/logger');
 const Sequelize = require('sequelize');
 
 module.exports = function() {

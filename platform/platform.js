@@ -2,8 +2,8 @@
 const glob = require('glob');
 const Q = require('q');
 const platformUtils = require('./platform-utils');
-const platformRoutes = require('./platform-routes');
-const logger = require('../config/logger');
+const platformRoutes = require('../src/platform/platform-routes');
+const logger = require('../src/config/logger');
 const config = require('../config/config');
 
 const utils = require('../utils');
@@ -17,7 +17,7 @@ module.exports = function(database, router) {
     }
 
     static createColumn(col, tableId) {
-      return database.getModel('sys_column').create({
+      return database.getModel('p_field').create({
         name: col.name,
         label: col.label ? col.label : utils.underscoreToCamelCase(col.name),
         type: col.type,
@@ -51,11 +51,11 @@ module.exports = function(database, router) {
     populateSysData(tableJson) {
       let that = this;
       let dfd = Q.defer();
-      database.getModel('sys_table').
+      database.getModel('p_collection').
           findOne({where: {name: tableJson.name}}).
           then(function(table) {
             if (!table)
-              database.getModel('sys_table').create({
+              database.getModel('p_collection').create({
                 name: tableJson.name,
                 label: tableJson.label
               }).then(function(tableRecord) {
@@ -68,7 +68,7 @@ module.exports = function(database, router) {
                 });
               });
             else {
-              database.getModel('sys_column').destroy({
+              database.getModel('p_field').destroy({
                 where: {
                   table: table.id
                 }
@@ -104,11 +104,11 @@ module.exports = function(database, router) {
       that.loadSchemas().then(function() {
         that.scanApplications();
         platformRoutes(database, router, that);
-        database.getModel('sys_user').count({
+        database.getModel('p_user').count({
           username: 'admin'
         }).then((count) => {
           if (!count)
-            database.getModel('sys_user').create({
+            database.getModel('p_user').create({
               username: 'admin',
               password: hashUtils.generateHash('admin')
             }).then(function() {
@@ -177,46 +177,7 @@ module.exports = function(database, router) {
       });
     }
 
-    loadSchemasFromDB() {
-      let dfd = Q.defer();
-      database.getModel('sys_table').findAll().then(function(tables) {
-        if (tables.length) {
-          let promises = [];
-          tables.forEach(function(table) {
-            if (!database.getModel(table.name)) {
-              let tableJson = {
-                'name': table.name,
-                'label': table.label,
-                'columns': []
-              };
-              let colDfd = Q.defer();
-              database.getModel('sys_column').
-                  findAll({where: {table: table.id}}).
-                  then(function(columns) {
-                    columns.forEach(function(col) {
-                      tableJson.columns.push({
-                        name: col.name,
-                        type: col.type
-                      });
-                    });
-                    let tableSchemaDef = platformUtils.convertToScheme(
-                        tableJson);
-                    database.setModel(tableJson.name, database.getConnection().
-                        define(tableJson.name, tableSchemaDef));
-                    colDfd.resolve();
-                  });
-              promises.push(colDfd.promise);
-            }
-          });
-          Q.all(promises).then(function() {
-            dfd.resolve();
-          });
-        }
-        else
-          dfd.resolve();
-      });
-      return dfd.promise;
-    }
+
 
     scanApplications() {
       logger.info('Scanning for apps');

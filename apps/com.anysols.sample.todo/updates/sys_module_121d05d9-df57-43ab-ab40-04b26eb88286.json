@@ -1,5 +1,5 @@
 {
-  "table": "sys_module",
+  "table": "p_module",
   "record": {
     "id": "121d05d9-df57-43ab-ab40-04b26eb88286",
     "name": "Todo",

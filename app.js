@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const config = require('./config/config');
-const logger = require('./config/logger');
+const config = require('./src/config/config');
+const logger = require('./src/config/logger');
 const passportConfig = require('./config/passport');
 
 const app = express();
@@ -20,7 +20,7 @@ database.validateConnection().then(startUp, function() {
 
 function startUp() {
   platform.startUp().then(function() {
-    passportConfig(app, database.getModel('sys_user'));
+    passportConfig(app, database.getModel('p_user'));
     router.use('/auth', require('./routes/auth'));
     platform.appStarting = false;
   });

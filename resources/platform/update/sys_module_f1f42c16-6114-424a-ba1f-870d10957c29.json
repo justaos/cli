@@ -1,0 +1,11 @@
+{
+  "collection": "p_module",
+  "record": {
+    "id": "5b15588ef362641220dfebc6",
+    "name": "User",
+    "order": 100,
+    "type": "list",
+    "table": "p_user",
+    "menu": "5b15588ef362641220dfebc0"
+  }
+}

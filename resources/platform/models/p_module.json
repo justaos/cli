@@ -1,7 +1,7 @@
 {
-  "name": "sys_module",
+  "name": "p_module",
   "label": "Module",
-  "columns": [
+  "fields": [
     {
       "name": "name",
       "type": "STRING"

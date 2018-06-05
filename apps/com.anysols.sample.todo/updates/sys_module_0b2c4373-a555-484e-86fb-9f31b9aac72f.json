@@ -1,5 +1,5 @@
 {
-  "table": "sys_module",
+  "table": "p_module",
   "record": {
     "id": "0b2c4373-a555-484e-86fb-9f31b9aac72f",
     "name": "Create New",
