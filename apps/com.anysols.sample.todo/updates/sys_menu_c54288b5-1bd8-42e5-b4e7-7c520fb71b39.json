@@ -1,7 +1,7 @@
 {
-  "table": "p_menu",
+  "collection": "p_menu",
   "record": {
-    "id": "c54288b5-1bd8-42e5-b4e7-7c520fb71b39",
+    "id": "5b16e0bfe02440982a000001",
     "label": "Todo",
     "description": "Menu item for Sample todo application"
   }

@@ -122,34 +122,12 @@ module.exports = function(database, router) {
       return dfd.promise;
     }
 
-    installApplication(appId) {
-      let that = this;
-      let dfd = Q.defer();
-      logger.info('STARTED INSTALLING');
-      database.getModel('sys_application').
-          findById(appId).
-          then(function(application) {
-            let modelPath = 'apps/' + application.package + '/models/**.json';
-            that.loadSchemasFromPath(modelPath, true);
-            that.loadData('apps/' + application.package + '/updates/**.json');
-            let promises = [];
-            glob.sync(modelPath).forEach((file) => {
-              let tableJson = fileUtils.readJsonFileSync(file);
-              promises.push(that.populateSysData(tableJson));
-            });
-            promises.push(application.updateAttributes(
-                {installed_version: application.version}));
-            Q.all(promises).then(function() {
-              dfd.resolve();
-            });
-          });
-      return dfd.promise;
-    }
+
 
     loadSchemas() {
       let that = this;
       that.loadSchemasFromPath(config.root + '/platform/models/**.json', true);
-      that.loadData(config.root + '/platform/update/**.json', true);
+      that.loadData(config.root + '/platform/updates/**.json', true);
       return that.loadSchemasFromDB();
     }
 

@@ -6,20 +6,25 @@ const logger = require('./config/logger');
 const config = require('./config/config');
 const passportConfig = require('./config/passport');
 
-let clean = true;
+let clean = false;
 const app = express();
 require('./config/express')(app, router);
 
 let platform = new Platform(router);
 
-platform.initialize().then(function(checkDatabase) {
+platform.initialize().then(function(db) {
   if (clean) {
-    let promise = platform.cleanInstall();
-    promise.then(function() {
+    platform.cleanInstall().then(function() {
       platform.boot();
     });
   } else {
-    platform.boot();
+    db.checkDatabase().then(function(){
+      platform.boot();
+    }, function(){
+      platform.cleanInstall().then(function() {
+        platform.boot();
+      });
+    });
   }
 }, function() {
   process.exit(0);

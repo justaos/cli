@@ -4,6 +4,7 @@ const DatabaseConnector = require('../config/database-connector');
 const Q = require('q');
 const logger = require('../config/logger');
 const config = require('../config/config');
+const mongoose = require('mongoose');
 
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
@@ -29,29 +30,33 @@ class Platform {
     const db = new DatabaseConnector();
     db.connect().then(function() {
       Model.setDatabase(db);
-      dfd.resolve();
+      dfd.resolve(db);
     }, dfd.reject);
     return dfd.promise;
   }
 
   boot() {
+    let that = this;
     let collectionDef = fileUtils.readJsonFilesFromPathSync(P_COLLECTION_PATH);
     let fieldDef = fileUtils.readJsonFilesFromPathSync(P_FIELD_PATH);
     Model.loadSchemasIntoStore(collectionDef);
     Model.loadSchemasIntoStore(fieldDef);
-    Model.loadSchemasFromDB();
-    this.loadData(config.root + '/resources/platform/update/**.json');
-    platformRoutes(this);
-    let p_user = new Model('p_user');
-    p_user.where({
-      username: 'admin'
-    }).count(function (err, count) {
-      if (!count)
-        p_user.create({
-          username: 'admin',
-          password: hashUtils.generateHash('admin')
-        });
+    Model.loadSchemasFromDB().then(function(){
+      that.loadData(config.root + '/resources/platform/updates/**.json');
+      platformRoutes(that);
+      let p_user = new Model('p_user');
+      p_user.where({
+        username: 'admin'
+      }).count(function (err, count) {
+        if (!count)
+          p_user.create({
+            username: 'admin',
+            password: hashUtils.generateHash('admin')
+          });
+      });
+      that.scanApplications();
     });
+
   }
 
   populateSysData(collectionDef) {
@@ -86,12 +91,43 @@ class Platform {
       let data = fileUtils.readJsonFileSync(file);
       let model = new Model(data.collection);
       if (data.record)
-        model.upsert(data.record);
+        model.upsert({_id: mongoose.Types.ObjectId(data.record.id)}, data.record);
       else if (data.records)
         data.records.forEach(function(record) {
-          model.upsert(record);
+          model.upsert({_id: mongoose.Types.ObjectId(record.id)}, record);
         });
     });
+  }
+
+  scanApplications() {
+    logger.info('Scanning for apps');
+    glob.sync(config.cwd + '/apps/**/config.json').forEach(function(file) {
+      let config = fileUtils.readJsonFileSync(file);
+      new Model('p_application').upsert({package: config.package}, config);
+    });
+  }
+
+  installApplication(appId) {
+    let that = this;
+    let dfd = Q.defer();
+    logger.info('STARTED INSTALLING');
+    new Model('p_application').
+        findById(appId).
+        then(function(application) {
+          let modelDef = fileUtils.readJsonFilesFromPathSync(config.cwd +'/apps/' + application.package + '/models/**.json');
+          Model.loadSchemasIntoStore(modelDef);
+          that.loadData(config.cwd +'/apps/' + application.package + '/updates/**.json');
+          let promises = [];
+          modelDef.forEach((model) => {
+            promises.push(that.populateSysData(model));
+          });
+          application.installed_version = application.version;
+          promises.push(application.save());
+          Q.all(promises).then(function() {
+            dfd.resolve();
+          });
+        });
+    return dfd.promise;
   }
 
   cleanInstall() {

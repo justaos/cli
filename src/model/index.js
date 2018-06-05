@@ -1,7 +1,6 @@
 const Q = require('q');
 const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
-const mongoose = require('mongoose');
 
 let database;
 
@@ -35,9 +34,12 @@ class Model {
     return privateData.get(this).model.create(obj);
   }
 
-  upsert(obj){
-    obj._id =  mongoose.Types.ObjectId(obj.id);
-    return privateData.get(this).model.findOneAndUpdate({_id: obj._id}, obj, {upsert:true}).exec();
+  upsert(condition, obj){
+    return privateData.get(this).model.findOneAndUpdate(condition, obj, {upsert:true}).exec();
+  }
+
+  update(condition, obj){
+    return privateData.get(this).model.update(condition, obj).exec();
   }
 
   findOne(obj){

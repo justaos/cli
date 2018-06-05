@@ -4,10 +4,11 @@
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "mongod": "mongod",
     "test": "nyc mocha --recursive",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "objectid": "node bin/objectid.js"
   },
   "nyc": {
     "check-coverage": false,
@@ -77,6 +78,8 @@
     "chai": "^4.1.2",
     "mocha": "^5.1.0",
     "nyc": "^11.6.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "objectid": "^3.2.1",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "uuid": "^3.2.1"
   }
 }
