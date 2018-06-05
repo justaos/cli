@@ -1,7 +1,7 @@
 const {assert} = require('chai');
 const hashUtils = require('../../../src/utils/hash-utils');
 
-describe('Hash Utility Unit Tests', function() {
+describe('hash-utils', function() {
 
   it('#validateHash()', function() {
     assert.isTrue(hashUtils.validateHash('admin',

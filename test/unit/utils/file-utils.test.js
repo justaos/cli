@@ -2,7 +2,7 @@ const {assert} = require('chai');
 const fs = require('fs');
 const fileUtils = require('../../../src/utils/file-utils.js');
 
-describe('File Utility Unit Tests', function() {
+describe('file-utils', function() {
 
   it('#readJsonFileSync()', function() {
     let obj = fileUtils.readJsonFileSync('test/resources/sample.json');
@@ -19,6 +19,12 @@ describe('File Utility Unit Tests', function() {
     fileUtils.writeFileSync('test/resources/write.txt', 'Write');
     let str = fs.readFileSync('test/resources/write.txt');
     assert.equal(str, 'Write');
+  });
+
+  it('#readJsonFilesFromPathSync()', function() {
+    let objs = fileUtils.readJsonFilesFromPathSync('test/resources/path/**.json');
+    assert.equal(objs[0].title, 'a');
+    assert.equal(objs[1].title, 'b');
   });
 
   after(function() {
