@@ -18,6 +18,8 @@ let PLATFORM_MODELS_PATH = config.root + '/resources/platform/models/**.json';
 let P_COLLECTION_PATH = config.root +
     '/resources/platform/models/p_collection.json';
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
+let PROD_APPS_CONFIG_PATH = config.cwd + '/resources/apps/prod/**/config.json';
+let PROD_PATH = config.cwd + '/resources/apps/prod/';
 
 class Platform {
 
@@ -101,7 +103,7 @@ class Platform {
 
   scanApplications() {
     logger.info('Scanning for apps');
-    glob.sync(config.cwd + '/apps/**/config.json').forEach(function(file) {
+    glob.sync(PROD_APPS_CONFIG_PATH).forEach(function(file) {
       let config = fileUtils.readJsonFileSync(file);
       new Model('p_application').findOneAndUpdate({package: config.package},
           config);
@@ -115,10 +117,10 @@ class Platform {
     new Model('p_application').
         findById(appId).
         then(function(application) {
-          let modelDef = fileUtils.readJsonFilesFromPathSync(config.cwd +
-              '/apps/' + application.package + '/models/**.json');
+          let modelDef = fileUtils.readJsonFilesFromPathSync(PROD_PATH +
+              application.package + '/models/**.json');
           Model.loadSchemasIntoStore(modelDef);
-          that.loadData(config.cwd + '/apps/' + application.package +
+          that.loadData(PROD_PATH + application.package +
               '/updates/**.json');
           let promises = [];
           modelDef.forEach((model) => {
