@@ -29,6 +29,7 @@
     <script src="/assets/js/bootstrap.min.js"></script>
     <script defer src="/assets/js/fontawesome.min.js"></script>
 
+
 </head>
 
 <body>
@@ -42,6 +43,21 @@
     if (!Cookies.get('x-authenticated'))
       window.location.reload();
   }
+
+</script>
+<script>
+  (function() {
+    if ('registerElement' in document
+        && 'import' in document.createElement('link')
+        && 'content' in document.createElement('template')) {
+      // platform is good!
+    } else {
+      // polyfill the platform!
+      var e = document.createElement('script');
+      e.src = ' https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-lite.js';
+      document.body.appendChild(e);
+    }
+  })();
 </script>
 </body>
 </html>

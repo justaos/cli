@@ -41,13 +41,13 @@ class Platform {
     let fieldDef = fileUtils.readJsonFilesFromPathSync(P_FIELD_PATH);
     Model.loadSchemasIntoStore(collectionDef);
     Model.loadSchemasIntoStore(fieldDef);
-    Model.loadSchemasFromDB().then(function(){
+    Model.loadSchemasFromDB().then(function() {
       that.loadData(config.root + '/resources/platform/updates/**.json');
       platformRoutes(that);
       let p_user = new Model('p_user');
       p_user.where({
         username: 'admin'
-      }).count(function (err, count) {
+      }).count(function(err, count) {
         if (!count)
           p_user.create({
             username: 'admin',
@@ -91,10 +91,10 @@ class Platform {
       let data = fileUtils.readJsonFileSync(file);
       let model = new Model(data.collection);
       if (data.record)
-        model.upsert({_id: mongoose.Types.ObjectId(data.record.id)}, data.record);
+        model.findByIdAndUpdate(data.record.id, data.record);
       else if (data.records)
         data.records.forEach(function(record) {
-          model.upsert({_id: mongoose.Types.ObjectId(record.id)}, record);
+          model.findByIdAndUpdate(record.id, record);
         });
     });
   }
@@ -103,7 +103,8 @@ class Platform {
     logger.info('Scanning for apps');
     glob.sync(config.cwd + '/apps/**/config.json').forEach(function(file) {
       let config = fileUtils.readJsonFileSync(file);
-      new Model('p_application').upsert({package: config.package}, config);
+      new Model('p_application').findOneAndUpdate({package: config.package},
+          config);
     });
   }
 
@@ -114,9 +115,11 @@ class Platform {
     new Model('p_application').
         findById(appId).
         then(function(application) {
-          let modelDef = fileUtils.readJsonFilesFromPathSync(config.cwd +'/apps/' + application.package + '/models/**.json');
+          let modelDef = fileUtils.readJsonFilesFromPathSync(config.cwd +
+              '/apps/' + application.package + '/models/**.json');
           Model.loadSchemasIntoStore(modelDef);
-          that.loadData(config.cwd +'/apps/' + application.package + '/updates/**.json');
+          that.loadData(config.cwd + '/apps/' + application.package +
+              '/updates/**.json');
           let promises = [];
           modelDef.forEach((model) => {
             promises.push(that.populateSysData(model));

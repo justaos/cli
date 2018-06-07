@@ -125,7 +125,7 @@ module.exports = function(platform) {
   router.post('/p/:table', authenticate, function(req, res, next) {
     let schema = new Model(req.params.table);
     if (schema)
-      schema.upsert(req.body).then(function() {
+      schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
         res.send({});
       }, function(err) {
         res.status(400);
@@ -136,13 +136,9 @@ module.exports = function(platform) {
   });
 
   router.post('/p/:table/action', authenticate, function(req, res, next) {
-    let schema = database.getModel(req.params.table);
+    let schema = new Model(req.params.table);
     if (schema)
-      schema.destroy({
-        where: {
-          id: req.body.items
-        }
-      }).then(function() {
+      schema.remove({_id: req.body.items}).then(function() {
         res.send({});
       }, function(err) {
         res.status(400);

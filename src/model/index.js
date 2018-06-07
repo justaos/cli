@@ -1,6 +1,7 @@
 const Q = require('q');
 const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
+const mongoose = require('mongoose');
 
 let database;
 
@@ -22,11 +23,11 @@ class Model {
   /**
    * START - mongoose methods wrapping
    */
-  findById(id){
+  findById(id) {
     return privateData.get(this).model.findById(id);
   }
 
-  find(obj){
+  find(obj) {
     return privateData.get(this).model.find(obj);
   }
 
@@ -34,21 +35,48 @@ class Model {
     return privateData.get(this).model.create(obj);
   }
 
-  upsert(condition, obj){
-    return privateData.get(this).model.findOneAndUpdate(condition, obj, {upsert:true}).exec();
+  remove(condition){
+    return privateData.get(this).model.remove(condition).exec();
   }
 
-  update(condition, obj){
+  removeById(id){
+    let condition = {_id: mongoose.Types.ObjectId(id)};
+    return this.remove(condition);
+  }
+
+  findOneAndUpdate(condition, obj) {
+    return privateData.get(this).
+        model.
+        findOneAndUpdate(condition, obj, {upsert: true}).
+        exec();
+  }
+
+  findByIdAndUpdate(id, obj) {
+    let condition = {_id: mongoose.Types.ObjectId(id)};
+    return this.findOneAndUpdate(condition, obj);
+  }
+
+  upsert(values, condition) {
+    return model.findOne({where: condition}).then(function(obj) {
+      if (obj) // update
+        return obj.update(values);
+      else  // insert
+        return model.create(values);
+    });
+  }
+
+  update(condition, obj) {
     return privateData.get(this).model.update(condition, obj).exec();
   }
 
-  findOne(obj){
+  findOne(obj) {
     return privateData.get(this).model.findOne(obj).exec();
   }
 
-  where(obj){
+  where(obj) {
     return privateData.get(this).model.where(obj);
   }
+
   /**
    * END - mongoose methods wrapping
    */

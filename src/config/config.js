@@ -34,7 +34,7 @@ if (programName === 'anysols.js' || programName === 'anysols') {
 else {
   cwdPath = rootPath;
   dotEnv.config();
-  defaultConfig = fileUtils.readJsonFileSync(rootPath + '/config.json'); // load from default config.
+  defaultConfig = fileUtils.readJsonFileSync(rootPath + '/resources/config.json'); // load from default config.
 }
 
 const env = process.env.NODE_ENV || 'development';
