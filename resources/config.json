@@ -1,0 +1,18 @@
+{
+  "loggerLevel": "info",
+  "db": {
+	"host": "localhost",
+	"port": "27017",
+	"name": "anysols",
+	"user": "root",
+	"password": "root",
+	"dialect": "mongodb"
+  },
+  "app": {
+	"name": "Anysols - Platform for Business applications",
+	"port": 8080,
+	"cookieName": "myCookie",
+	"cookieSecret": "boom",
+	"tokenExpiration": 7200000
+  }
+}

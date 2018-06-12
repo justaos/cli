@@ -1,0 +1,7 @@
+{
+  "package": "com.anysols.sample.todo",
+  "name": "Todo App",
+  "version": "1.0.0",
+  "description": "Sample application demonstrating the capabilities of the platform.",
+  "dependencies": []
+}

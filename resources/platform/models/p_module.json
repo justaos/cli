@@ -1,0 +1,39 @@
+{
+  "name": "p_module",
+  "label": "Module",
+  "fields": [
+    {
+      "name": "name",
+      "type": "STRING"
+    },
+    {
+      "name": "label",
+      "type": "STRING",
+      "displayValue": true
+    },
+    {
+      "name": "parent",
+      "type": "UUID"
+    },
+    {
+      "name": "menu",
+      "type": "UUID"
+    },
+    {
+      "name": "type",
+      "type": "STRING"
+    },
+    {
+      "name": "table",
+      "type": "STRING"
+    },
+    {
+      "name": "order",
+      "type": "INTEGER"
+    },
+    {
+      "name": "hidden",
+      "type": "BOOLEAN"
+    }
+  ]
+}

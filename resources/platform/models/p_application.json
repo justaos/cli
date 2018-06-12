@@ -1,0 +1,31 @@
+{
+  "name": "p_application",
+  "label": "Application",
+  "fields": [
+    {
+      "name": "name",
+      "type": "STRING",
+      "displayValue": true
+    },
+    {
+      "name": "description",
+      "type": "TEXT"
+    },
+    {
+      "name": "order",
+      "type": "INTEGER"
+    },
+    {
+      "name": "version",
+      "type": "STRING"
+    },
+    {
+      "name": "installed_version",
+      "type": "STRING"
+    },
+    {
+      "name": "package",
+      "type": "STRING"
+    }
+  ]
+}

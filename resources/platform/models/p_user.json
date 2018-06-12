@@ -1,0 +1,27 @@
+{
+  "name": "p_user",
+  "label": "User",
+  "fields": [
+    {
+      "name": "first_name",
+      "type": "STRING",
+      "displayValue": true
+    },
+    {
+      "name": "last_name",
+      "type": "STRING"
+    },
+    {
+      "name": "username",
+      "type": "TEXT"
+    },
+    {
+      "name": "password",
+      "type": "TEXT"
+    },
+    {
+      "name": "email",
+      "type": "TEXT"
+    }
+  ]
+}

@@ -1,15 +1,43 @@
 {
   "name": "anysols",
-  "version": "0.0.3",
+  "version": "1.0.1",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "mocha --recursive test"
+    "start": "node src/app.js",
+    "mongod": "bin\\mongod.cmd",
+    "test": "nyc mocha --recursive",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "objectid": "node bin/objectid.js"
+  },
+  "nyc": {
+    "check-coverage": false,
+    "all": true,
+    "extension": [
+      ".js"
+    ],
+    "include": [
+      "**/!(*.spec.*).js"
+    ],
+    "exclude": [
+      "assets/",
+      "docs/",
+      "bin/",
+      "**/gulpfile.js",
+      "test/",
+      "playground.js"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "docs/reports/coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/anysols/anysols.git"
+    "url": "https://github.com/anysols/anysols.git"
   },
   "bin": {
     "anysols": "./bin/anysols.js"
@@ -20,20 +48,25 @@
   "bugs": {
     "url": "https://gitlab.com/anysols/anysols/issues"
   },
-  "homepage": "https://gitlab.com/anysols/anysols#README",
+  "homepage": "https://anysols.com",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
+    "copy-dir": "^0.3.0",
     "dotenv": "^5.0.1",
-    "ejs-locals": "^1.0.2",
+    "ejs": "^2.5.8",
     "express": "^4.16.2",
+    "express-ejs-layouts": "^2.4.0",
     "express-winston": "^2.5.0",
     "glob": "^7.1.2",
+    "istanbul": "^0.4.5",
     "jsonfile": "^4.0.0",
     "jsonwebtoken": "^8.2.0",
     "lodash": "^4.17.5",
+    "mongoose": "^5.0.15",
+    "mongoose-schema-extend": "^0.2.2",
     "mysql2": "^1.5.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
@@ -46,6 +79,8 @@
     "chai": "^4.1.2",
     "mocha": "^5.1.0",
     "nyc": "^11.6.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "objectid": "^3.2.1",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "uuid": "^3.2.1"
   }
 }

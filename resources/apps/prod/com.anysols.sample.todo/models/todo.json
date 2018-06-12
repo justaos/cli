@@ -1,0 +1,14 @@
+{
+  "name": "todo",
+  "label": "Todo",
+  "fields": [
+	{
+	  "name": "value",
+	  "type": "STRING"
+	},
+	{
+	  "name": "status",
+	  "type": "STRING"
+	}
+  ]
+}
