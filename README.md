@@ -20,8 +20,8 @@ https://nodejs.org/en/download/
 
 * Install npm
 
-* Install mysql  
-https://www.mysql.com/downloads/
+* Install mongodb  
+https://www.mongodb.com/download-center?#community
 
 ## Setup
 ```cmd 
