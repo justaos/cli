@@ -8,6 +8,7 @@ Sleek and powerful platform for faster and easier application development.
 **Master**  
 [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols) 
 [![Coverage Status](https://coveralls.io/repos/github/anysols/anysols/badge.svg?branch=master)](https://coveralls.io/github/anysols/anysols?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/anysols/anysols/badge)](https://www.codefactor.io/repository/github/anysols/anysols)
 
 **Dev**  
 [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=platform)](https://travis-ci.org/anysols/anysols) 
