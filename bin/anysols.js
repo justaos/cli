@@ -26,8 +26,8 @@ if (name === 'init') {
   fileUtils.writeFileSync(process.cwd() + '/.env', 'NODE_ENV=development');
 
 
-  copydir.sync(__dirname + '/../apps', process.cwd() + '/apps');
+  copydir.sync(__dirname + '/../resources/apps/prod', process.cwd() + '/apps');
   console.log("Project setup complete.");
   console.log("Modify the anysols-config.js file.");
 } else
-  require('../app');
+  require('../src/app');

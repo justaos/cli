@@ -6,7 +6,8 @@
         </h4>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                     Actions
                 </a>
                 <div class="dropdown-menu" aria-labelledby="actionsDD">
@@ -89,7 +90,10 @@
             contentType: 'application/json',
             type: 'POST'
           }).then(function(data) {
-            window.location.reload();
+            if (data.redirect)
+              window.location.href = data.redirect;
+            else
+              window.location.reload();
           }, function(err) {
             alert(err.responseJSON.original.sqlMessage);
           });

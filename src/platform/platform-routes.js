@@ -3,6 +3,7 @@ const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
 const Model = require('../model');
+const url = require('url');
 
 module.exports = function(platform) {
 
@@ -126,6 +127,9 @@ module.exports = function(platform) {
     let schema = new Model(req.params.table);
     if (schema)
       schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
+        let referer = req.header('Referer');
+        let refererUrl = new url.URL(referer);
+        console.log(refererUrl.searchParams.get('test'));
         res.send({});
       }, function(err) {
         res.status(400);

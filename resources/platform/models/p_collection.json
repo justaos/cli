@@ -4,11 +4,11 @@
   "fields": [
     {
       "name": "name",
-      "type": "string"
+      "type": "STRING"
     },
     {
       "name": "label",
-      "type": "string",
+      "type": "STRING",
       "displayValue": true
     }
   ]

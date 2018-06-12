@@ -4,13 +4,13 @@ const DatabaseConnector = require('../config/database-connector');
 const Q = require('q');
 const logger = require('../config/logger');
 const config = require('../config/config');
-const mongoose = require('mongoose');
 
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 const hashUtils = require('../utils/hash-utils');
 const cleanInstall = require('./cleanInstall');
 const Model = require('../model');
+const modelUtils = require('../model/model-utils');
 const glob = require('glob');
 const platformRoutes = require('./platform-routes');
 
@@ -30,7 +30,7 @@ class Platform {
   initialize() {
     let dfd = Q.defer();
     const db = new DatabaseConnector();
-    db.connect().then(function() {
+    db.connect().then(() => {
       Model.setDatabase(db);
       dfd.resolve(db);
     }, dfd.reject);
@@ -41,15 +41,16 @@ class Platform {
     let that = this;
     let collectionDef = fileUtils.readJsonFilesFromPathSync(P_COLLECTION_PATH);
     let fieldDef = fileUtils.readJsonFilesFromPathSync(P_FIELD_PATH);
-    Model.loadSchemasIntoStore(collectionDef);
-    Model.loadSchemasIntoStore(fieldDef);
-    Model.loadSchemasFromDB().then(function() {
-      that.loadData(config.root + '/resources/platform/updates/**.json');
+    modelUtils.loadSchemasIntoStore(collectionDef);
+    modelUtils.loadSchemasIntoStore(fieldDef);
+    modelUtils.loadSchemasFromDB().then(() => {
+      modelUtils.loadDataFromPath(config.root +
+          '/resources/platform/updates/**.json');
       platformRoutes(that);
       let p_user = new Model('p_user');
       p_user.where({
         username: 'admin'
-      }).count(function(err, count) {
+      }).count((err, count) => {
         if (!count)
           p_user.create({
             username: 'admin',
@@ -88,22 +89,9 @@ class Platform {
     return dfd.promise;
   }
 
-  loadData(path) {
-    glob.sync(path).forEach(function(file) {
-      let data = fileUtils.readJsonFileSync(file);
-      let model = new Model(data.collection);
-      if (data.record)
-        model.findByIdAndUpdate(data.record.id, data.record);
-      else if (data.records)
-        data.records.forEach(function(record) {
-          model.findByIdAndUpdate(record.id, record);
-        });
-    });
-  }
-
   scanApplications() {
     logger.info('Scanning for apps');
-    glob.sync(PROD_APPS_CONFIG_PATH).forEach(function(file) {
+    glob.sync(PROD_APPS_CONFIG_PATH).forEach(file => {
       let config = fileUtils.readJsonFileSync(file);
       new Model('p_application').findOneAndUpdate({package: config.package},
           config);
@@ -114,24 +102,18 @@ class Platform {
     let that = this;
     let dfd = Q.defer();
     logger.info('STARTED INSTALLING');
-    new Model('p_application').
-        findById(appId).
-        then(function(application) {
-          let modelDef = fileUtils.readJsonFilesFromPathSync(PROD_PATH +
-              application.package + '/models/**.json');
-          Model.loadSchemasIntoStore(modelDef);
-          that.loadData(PROD_PATH + application.package +
-              '/updates/**.json');
-          let promises = [];
-          modelDef.forEach((model) => {
-            promises.push(that.populateSysData(model));
-          });
-          application.installed_version = application.version;
-          promises.push(application.save());
-          Q.all(promises).then(function() {
-            dfd.resolve();
-          });
-        });
+    new Model('p_application').findById(appId).then((application) => {
+      let modelDef = Platform.readModelsForPackage(application.package);
+      modelUtils.loadSchemasIntoStore(modelDef);
+      Platform.loadDataForPackage(application.package);
+      let promises = [];
+      modelDef.forEach((model) => {
+        promises.push(that.populateSysData(model));
+      });
+      application.installed_version = application.version;
+      promises.push(application.save());
+      Q.all(promises).then(dfd.resolve);
+    });
     return dfd.promise;
   }
 
@@ -139,6 +121,15 @@ class Platform {
     return cleanInstall(this, PLATFORM_MODELS_PATH);
   }
 
+  /** helper functions **/
+  static readModelsForPackage(pkg) {
+    return fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
+        '/models/**.json');
+  }
+
+  static loadDataForPackage(pkg) {
+    return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/updates/**.json');
+  }
 }
 
 module.exports = Platform;

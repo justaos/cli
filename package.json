@@ -1,6 +1,6 @@
 {
   "name": "anysols",
-  "version": "0.0.12",
+  "version": "1.0.1",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "main": "app.js",
   "scripts": {
@@ -24,7 +24,8 @@
       "docs/",
       "bin/",
       "**/gulpfile.js",
-      "test/"
+      "test/",
+      "playground.js"
     ],
     "reporter": [
       "html",
