@@ -137,6 +137,7 @@ body {
 
 .nav-sidebar li.active > a {
   color: #393982;
+  font-weight: 600;
 }
 
 .nav-sidebar li.link.active > a {
@@ -146,10 +147,6 @@ body {
 .sidebar-top-level-items > li.active > a {
   margin-left: 4px;
   padding-left: 11px;
-}
-
-.nav-sidebar li.active > a {
-  font-weight: 600;
 }
 
 .sidebar-sub-level-items > li.active a, .sidebar-sub-level-items > li.active a:hover, .sidebar-sub-level-items > li.active a:focus {
