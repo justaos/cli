@@ -3,6 +3,7 @@ const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
 const Model = require('../model');
 const url = require('url');
+const vm = require('vm');
 
 module.exports = function(platform) {
 
@@ -20,9 +21,7 @@ module.exports = function(platform) {
   });
 
   router.get('/store', authenticate, function(req, res) {
-    new Model('p_application').find({
-
-    }).then(applications => { //order: Sequelize.col('order')
+    new Model('p_application').find({}).then(applications => { //order: Sequelize.col('order')
       res.render('pages/store',
           {applications: applications, layout: 'layouts/layout'});
     });
@@ -148,7 +147,18 @@ module.exports = function(platform) {
         res.send(err);
       });
     else
-      res.render('404');
+      res.status(404).render('404');
+  });
+
+  router.all('/api/*', authenticate, function(req, res) {
+    let restApiModel = new Model('p_rest_api');
+    restApiModel.findOne({url: req.url}).then(function(restApiRecord) {
+      if(restApiRecord){
+        let ctx = vm.createContext({req, res});
+        vm.runInContext(restApiRecord.script, ctx);
+      } else
+        res.status(404).render('404');
+    });
   });
 
   return router;
