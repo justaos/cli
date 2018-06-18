@@ -7,8 +7,13 @@
 	  "type": "string"
 	},
 	{
-	  "name": "label",
+	  "name": "url",
 	  "type": "string",
+	  "displayValue": true
+	},
+	{
+	  "name": "script",
+	  "type": "script",
 	  "displayValue": true
 	}
   ]
