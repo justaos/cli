@@ -1,6 +1,6 @@
 {
-  "name": "p_view",
-  "label": "View",
+  "name": "p_rest_api",
+  "label": "Rest API",
   "fields": [
 	{
 	  "name": "name",

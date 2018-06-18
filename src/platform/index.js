@@ -1,6 +1,6 @@
 'use strict';
 const DatabaseConnector = require('../config/database-connector');
-
+const express = require('express');
 const Q = require('q');
 const logger = require('../config/logger');
 const config = require('../config/config');
@@ -59,7 +59,6 @@ class Platform {
       });
       that.scanApplications();
     });
-
   }
 
   populateSysData(collectionDef) {
@@ -113,8 +112,14 @@ class Platform {
       application.installed_version = application.version;
       promises.push(application.save());
       Q.all(promises).then(dfd.resolve);
+      that.serveStaticFiles(application.package);
     });
     return dfd.promise;
+  }
+
+  serveStaticFiles(pkg) {
+    this.router.use('/ui/' + pkg,
+        express.static(config.root + '/resources/apps/prod/' + pkg + '/ui'));
   }
 
   cleanInstall() {

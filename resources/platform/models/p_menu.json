@@ -4,11 +4,11 @@
   "fields": [
     {
       "name": "name",
-      "type": "STRING"
+      "type": "string"
     },
     {
       "name": "label",
-      "type": "STRING",
+      "type": "string",
       "displayValue": true
     },
     {
@@ -17,19 +17,19 @@
     },
     {
       "name": "order",
-      "type": "INTEGER"
+      "type": "integer"
     },
     {
       "name": "description",
-      "type": "STRING"
+      "type": "string"
     },
     {
       "name": "icon",
-      "type": "STRING"
+      "type": "string"
     },
     {
       "name": "hidden",
-      "type": "BOOLEAN"
+      "type": "boolean"
     }
   ]
 }

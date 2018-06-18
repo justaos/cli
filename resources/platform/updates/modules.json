@@ -1,0 +1,45 @@
+{
+  "collection": "p_module",
+  "records": [
+	{
+	  "id": "5b15588ef362641220dfebc2",
+	  "name": "Menu",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_menu",
+	  "menu": "5b15588ef362641220dfebc1"
+	},
+	{
+	  "id": "5b15588ef362641220dfebc3",
+	  "name": "Column",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_field",
+	  "menu": "5b15588ef362641220dfebc1"
+	},
+	{
+	  "id": "5b15588ef362641220dfebc4",
+	  "name": "Module",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_module",
+	  "menu": "5b15588ef362641220dfebc1"
+	},
+	{
+	  "id": "5b15588ef362641220dfebc5",
+	  "name": "Table",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_collection",
+	  "menu": "5b15588ef362641220dfebc1"
+	},
+	{
+	  "id": "5b15588ef362641220dfebc6",
+	  "name": "User",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_user",
+	  "menu": "5b15588ef362641220dfebc0"
+	}
+  ]
+}

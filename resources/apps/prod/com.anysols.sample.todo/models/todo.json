@@ -4,11 +4,15 @@
   "fields": [
 	{
 	  "name": "value",
-	  "type": "STRING"
+	  "type": "string"
 	},
 	{
 	  "name": "status",
-	  "type": "STRING"
+	  "type": "integer"
+	},
+	{
+	  "name": "script",
+	  "type": "script"
 	}
   ]
 }

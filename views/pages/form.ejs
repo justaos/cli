@@ -1,4 +1,6 @@
 <link href="/views/styles/form.css" rel="stylesheet">
+<link rel="stylesheet" data-name="vs/editor/editor.main"
+      href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.css">
 <div class="form-page">
     <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
         <h4 class="navbar-brand py-2 m-0 float-left">
@@ -40,15 +42,18 @@
         <div class="container-fluid">
             <form id="view-form" class="needs-validation row mt-4" novalidate>
                 <% cols.forEach(function(col){ if(col.name != 'id'){ %>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group row no-gutters">
                         <label for="form-<%= col.name %>"
                                class="col-sm-2 col-form-label col-form-label"><%= col.label %></label>
                         <div class="col-sm-8">
-                            <% if(col.type == 'INTEGER'){ %>
+                            <% if(col.type == 'integer'){ %>
                             <input type="number" class="form-control form-control" id="form-<%= col.name %>"
                                    name="<%= col.name %>"
                                    placeholder="<%= col.label %>">
+                            <% } else if(col.type == 'script'){ %>
+                            <div class="script-editor" id="form-<%= col.name %>" data-col-name="<%= col.name %>"
+                                 style="height: 500px;border:1px solid grey;"></div>
                             <% } else { %>
                             <input type="text" class="form-control form-control" id="<%= col.name %>"
                                    name="<%= col.name %>"
@@ -78,12 +83,18 @@
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       let form = document.getElementById('view-form');
       form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
         if (form.checkValidity() === true) {
           let formObj = {};
           let inputs = $(form).serializeArray();
           $.each(inputs, function(i, input) {
             formObj[input.name] = input.value ? input.value : null;
           });
+          Object.keys(window.editors).forEach(function(key) {
+            formObj[key] = window.editors[key].getValue();
+          });
+
           $.ajax({
             url: "/p/<%= table.name %>",
             data: JSON.stringify(formObj),
@@ -99,9 +110,38 @@
           });
         }
         form.classList.add('was-validated');
-        event.preventDefault();
-        event.stopPropagation();
+
       }, false);
     }, false);
   })();
+</script>
+
+<script>var require = {paths: {'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
+
+<script>
+  monaco.languages.typescript.javascriptDefaults.addExtraLib([
+    'declare class Facts {',
+    '    /**',
+    '     * Returns the next fact',
+    '     */',
+    '    static next():string',
+    '}'
+  ].join('\n'));
+  window.editors = [];
+  document.querySelectorAll('.script-editor').forEach(function(element) {
+    window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
+      value: [
+        'function x() {',
+        '\tconsole.log("Hello world!");',
+        '}'
+      ].join('\n'),
+      language: 'javascript',
+      theme: 'vs-dark'
+    });
+  });
+
+  //console.log(editor.getValue());
 </script>
