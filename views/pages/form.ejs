@@ -57,6 +57,7 @@
                             <% } else { %>
                             <input type="text" class="form-control form-control" id="<%= col.name %>"
                                    name="<%= col.name %>"
+                                   value="<%= item[col.name] %>"
                                    placeholder="<%= col.label %>">
                             <% } %>
                             <div class="invalid-feedback">

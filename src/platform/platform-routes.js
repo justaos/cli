@@ -113,6 +113,7 @@ module.exports = function(platform) {
                   res.render('pages/form', {
                     table: {label: collection.label, name: collection.name},
                     cols: cols,
+                    item: {},
                     layout: 'layouts/no-header-layout'
                   });
                 });
@@ -121,8 +122,33 @@ module.exports = function(platform) {
         });
   });
 
+  router.get('/p/:collection/edit/:id', authenticate, function(req, res) {
+    new Model('p_collection').findOne({name: req.params.collection}).
+        then(function(collection) {
+          let schema = new Model(req.params.collection);
+          if (schema) {
+            let promises = [];
+            promises.push(new Model('p_field').find({table: collection.id}));
+            promises.push(schema.findById(req.params.id));
+            Q.all(promises).
+                then(function(result) {
+                  res.render('pages/form', {
+                    table: {label: collection.label, name: collection.name},
+                    cols: result[0],
+                    item: result[1].toObject(),
+                    layout: 'layouts/no-header-layout'
+                  });
+                });
+          }
+          else
+            res.render('404');
+        });
+  });
+
   router.post('/p/:table', authenticate, function(req, res) {
     let schema = new Model(req.params.table);
+    delete req.body.created_at;
+    delete req.body.updated_at;
     if (schema)
       schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
         let referer = req.header('Referer');

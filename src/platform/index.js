@@ -78,9 +78,25 @@ class Platform {
               field.label :
               stringUtils.underscoreToCamelCase(field.name),
           type: field.type,
+          display_value: field.display_value,
           table: tableRecord.id
         }));
       });
+      promises.push(p_field.create({
+        name: "created_at",
+        label: stringUtils.underscoreToCamelCase("created_at"),
+        type: "date",
+        display_value: false,
+        table: tableRecord.id
+      }));
+      promises.push(p_field.create({
+        name: "updated_at",
+        label: stringUtils.underscoreToCamelCase("updated_at"),
+        type: "date",
+        display_value: false,
+        table: tableRecord.id
+      }));
+
       Q.all(promises).then(function() {
         dfd.resolve();
       });

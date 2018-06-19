@@ -4,31 +4,30 @@ const mongoose = require('mongoose');
 function converter(collectionDef) {
   let schema = {};
   collectionDef.fields.forEach(function(fieldDef) {
-    let property;
+    let property = {};
+    if(fieldDef.name === 'created_at' || fieldDef.name === 'updated_at'){
+      return;
+    }
     switch (fieldDef.type) {
-      case 'string' :
-        property = stringConverter(fieldDef);
+      case dataTypes.STRING :
+        property.type = dataTypes.STRING.getType();
         break;
       case 'number' :
-        property = stringConverter(fieldDef);
+        property.type = dataTypes.INTEGER.getType();
+        break;
+      case 'boolean' :
+        property.type = Boolean;
         break;
       default:
-        property = {};
-        property.type = String;
+        property.type = dataTypes.STRING.getType();
     }
     schema[fieldDef.name] = property;
   });
-  let mongooseSchema = new mongoose.Schema(schema, { toObject: { virtuals: true }});
+  let mongooseSchema = new mongoose.Schema(schema, { toObject: { virtuals: true },  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }});
   mongooseSchema.virtual('id').set(id => {
    this._id = new ObjectId(id);
   });
   return mongooseSchema;
-}
-
-function stringConverter(propertyDef) {
-  let property = {};
-  property.type = String;
-  return property;
 }
 
 module.exports = converter;

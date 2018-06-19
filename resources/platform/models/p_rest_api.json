@@ -4,17 +4,20 @@
   "fields": [
 	{
 	  "name": "name",
-	  "type": "string"
-	},
-	{
-	  "name": "url",
 	  "type": "string",
 	  "displayValue": true
 	},
 	{
+	  "name": "url",
+	  "type": "string"
+	},
+	{
+	  "name": "method",
+	  "type": "string"
+	},
+	{
 	  "name": "script",
-	  "type": "script",
-	  "displayValue": true
+	  "type": "script"
 	}
   ]
 }

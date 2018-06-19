@@ -9,7 +9,7 @@
     {
       "name": "label",
       "type": "string",
-      "displayValue": true
+      "display_value": true
     },
     {
       "name": "table",
@@ -18,6 +18,10 @@
     {
       "name": "type",
       "type": "string"
+    },
+    {
+      "name": "display_value",
+      "type": "boolean"
     }
   ]
 }
