@@ -1,6 +1,6 @@
 'use strict';
 const DatabaseConnector = require('../config/database-connector');
-
+const express = require('express');
 const Q = require('q');
 const logger = require('../config/logger');
 const config = require('../config/config');
@@ -59,7 +59,6 @@ class Platform {
       });
       that.scanApplications();
     });
-
   }
 
   populateSysData(collectionDef) {
@@ -79,9 +78,25 @@ class Platform {
               field.label :
               stringUtils.underscoreToCamelCase(field.name),
           type: field.type,
+          display_value: field.display_value,
           table: tableRecord.id
         }));
       });
+      promises.push(p_field.create({
+        name: "created_at",
+        label: stringUtils.underscoreToCamelCase("created_at"),
+        type: "date",
+        display_value: false,
+        table: tableRecord.id
+      }));
+      promises.push(p_field.create({
+        name: "updated_at",
+        label: stringUtils.underscoreToCamelCase("updated_at"),
+        type: "date",
+        display_value: false,
+        table: tableRecord.id
+      }));
+
       Q.all(promises).then(function() {
         dfd.resolve();
       });
@@ -113,8 +128,14 @@ class Platform {
       application.installed_version = application.version;
       promises.push(application.save());
       Q.all(promises).then(dfd.resolve);
+      that.serveStaticFiles(application.package);
     });
     return dfd.promise;
+  }
+
+  serveStaticFiles(pkg) {
+    this.router.use('/ui/' + pkg,
+        express.static(config.root + '/resources/apps/prod/' + pkg + '/ui'));
   }
 
   cleanInstall() {

@@ -4,24 +4,24 @@
   "fields": [
     {
       "name": "first_name",
-      "type": "STRING",
+      "type": "string",
       "displayValue": true
     },
     {
       "name": "last_name",
-      "type": "STRING"
+      "type": "string"
     },
     {
       "name": "username",
-      "type": "TEXT"
+      "type": "text"
     },
     {
       "name": "password",
-      "type": "TEXT"
+      "type": "text"
     },
     {
       "name": "email",
-      "type": "TEXT"
+      "type": "text"
     }
   ]
 }

@@ -11,7 +11,8 @@
         </form>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                     Actions
                 </a>
                 <div class="dropdown-menu actions-dropdown" aria-labelledby="actionsDD">
@@ -22,7 +23,9 @@
         <form class="form-inline">
             <div class="input-group  input-group-sm">
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Dropdown
+                    </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
@@ -95,13 +98,20 @@
                     <tr>
                         <td class="item">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input item-checkbox" value="<%= item.id %>" id="checkbox-<%= item.id %>">
+                                <input type="checkbox" class="custom-control-input item-checkbox" value="<%= item.id %>"
+                                       id="checkbox-<%= item.id %>">
                                 <label class="custom-control-label" for="checkbox-<%= item.id %>"><span
                                             class="sr-only"></span></label>
                             </div>
                         </td>
                         <% cols.forEach(function(col){ %>
-                        <td><%= item[col.name] %></td>
+                        <td>
+                            <% if(col.display_value) { %>
+                                <a href="/p/<%= table.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
+                            <% } else { %>
+                                <%= item[col.name] %>
+                            <% } %>
+                        </td>
                         <% }); %>
                     </tr>
                     <% }); %>
@@ -128,7 +138,7 @@
     $tbody.width($tbody.width());
     $tbody.find('tr:first-child').find('td').each(function(i, el) {
       $(el).width($(el).width());
-    })
+    });
     $(window).scroll(function(e) {
       if (header.offset().top > 50) {
         if (!$tbody.hasClass('shadow')) {
@@ -142,16 +152,16 @@
         $('.table-area').css('margin-top', '0px');
       }
     });
-    $('.actions-dropdown .dropdown-item').on('click', function(event){
+    $('.actions-dropdown .dropdown-item').on('click', function(event) {
       event.preventDefault();
       let action = $(this).attr('data-action-name');
       let selectedItems = [];
-      $.each($(".item-checkbox:checked"), function(){
+      $.each($('.item-checkbox:checked'), function() {
         selectedItems.push($(this).val());
       });
       $.ajax({
         url: "/p/<%= table.name %>/action",
-        data: JSON.stringify({items:selectedItems}),
+        data: JSON.stringify({items: selectedItems}),
         contentType: 'application/json',
         type: 'POST'
       }).then(function(data) {
@@ -159,11 +169,11 @@
       }, function(err) {
         alert(err.responseJSON.original.sqlMessage);
       });
-    })
-    $('#select-all-checkbox').on('click', function(){
-      if($(".item-checkbox:checked").length){
+    });
+    $('#select-all-checkbox').on('click', function() {
+      if ($('.item-checkbox:checked').length) {
 
       }
-    })
+    });
   });
 </script>

@@ -4,11 +4,12 @@
   "fields": [
 	{
 	  "name": "value",
-	  "type": "STRING"
+	  "type": "string",
+	  "display_value": true
 	},
 	{
 	  "name": "status",
-	  "type": "STRING"
+	  "type": "integer"
 	}
   ]
 }
