@@ -5,9 +5,9 @@ const jsonToSchemaConverter = require('../../../src/model/json-to-schema-convert
 
 describe('data-types', function() {
 
-  it('#empty', function() {
+  it('#instanceof check', function() {
     let schema = jsonToSchemaConverter({});
-    assert.equal((typeof schema), mongoose.Schema);
+    assert.isTrue(schema instanceof mongoose.Schema);
   });
 
 });
