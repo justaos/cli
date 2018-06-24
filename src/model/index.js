@@ -54,11 +54,12 @@ class Model {
   }
 
   upsert(values, condition) {
-    return model.findOne({where: condition}).then(function(obj) {
+    let that = this;
+    return this.findOne({where: condition}).then(function(obj) {
       if (obj) // update
         return obj.update(values);
       else  // insert
-        return model.create(values);
+        return that.create(values);
     });
   }
 

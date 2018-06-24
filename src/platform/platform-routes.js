@@ -180,7 +180,7 @@ module.exports = function(platform) {
     let restApiModel = new Model('p_rest_api');
     restApiModel.findOne({url: req.url}).then(function(restApiRecord) {
       if(restApiRecord){
-        let ctx = vm.createContext({req, res});
+        let ctx = vm.createContext({req, res, Model});
         vm.runInContext(restApiRecord.script, ctx);
       } else
         res.status(404).render('404');

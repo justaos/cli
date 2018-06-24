@@ -5,7 +5,7 @@
     {
       "name": "first_name",
       "type": "string",
-      "displayValue": true
+      "display_value": true
     },
     {
       "name": "last_name",

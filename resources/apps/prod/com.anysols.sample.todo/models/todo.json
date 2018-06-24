@@ -3,13 +3,13 @@
   "label": "Todo",
   "fields": [
 	{
-	  "name": "value",
+	  "name": "todoText",
 	  "type": "string",
 	  "display_value": true
 	},
 	{
 	  "name": "status",
-	  "type": "integer"
+	  "type": "string"
 	}
   ]
 }

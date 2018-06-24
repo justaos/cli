@@ -66,10 +66,10 @@ class Platform {
     let dfd = Q.defer();
     let p_collection = new Model('p_collection');
     let p_field = new Model('p_field');
-    p_collection.create({
+    p_collection.upsert({
       name: collectionDef.name,
       label: collectionDef.label
-    }).then(function(tableRecord) {
+    }, {name: collectionDef.name}).then(function(tableRecord) {
       let promises = [];
       collectionDef.fields.forEach(function(field) {
         promises.push(p_field.create({
@@ -83,16 +83,16 @@ class Platform {
         }));
       });
       promises.push(p_field.create({
-        name: "created_at",
-        label: stringUtils.underscoreToCamelCase("created_at"),
-        type: "date",
+        name: 'created_at',
+        label: stringUtils.underscoreToCamelCase('created_at'),
+        type: 'date',
         display_value: false,
         table: tableRecord.id
       }));
       promises.push(p_field.create({
-        name: "updated_at",
-        label: stringUtils.underscoreToCamelCase("updated_at"),
-        type: "date",
+        name: 'updated_at',
+        label: stringUtils.underscoreToCamelCase('updated_at'),
+        type: 'date',
         display_value: false,
         table: tableRecord.id
       }));
@@ -105,11 +105,13 @@ class Platform {
   }
 
   scanApplications() {
+    let that = this;
     logger.info('Scanning for apps');
     glob.sync(PROD_APPS_CONFIG_PATH).forEach(file => {
       let config = fileUtils.readJsonFileSync(file);
       new Model('p_application').findOneAndUpdate({package: config.package},
           config);
+      that.serveStaticFiles(config.package);
     });
   }
 

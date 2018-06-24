@@ -89,12 +89,18 @@
         if (form.checkValidity() === true) {
           let formObj = {};
           let inputs = $(form).serializeArray();
+
           $.each(inputs, function(i, input) {
             formObj[input.name] = input.value ? input.value : null;
           });
+
           Object.keys(window.editors).forEach(function(key) {
             formObj[key] = window.editors[key].getValue();
           });
+
+          <% if(item.id) {%>
+          formObj.id = <%- JSON.stringify(item.id)%>;
+          <% } %>
 
           $.ajax({
             url: "/p/<%= table.name %>",
@@ -132,12 +138,14 @@
     '}'
   ].join('\n'));
   window.editors = [];
+  var item = <%- JSON.stringify(item)%>;
   document.querySelectorAll('.script-editor').forEach(function(element) {
+
     window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
-      value: [
-        'function x() {',
-        '\tconsole.log("Hello world!");',
-        '}'
+      value: item[element.getAttribute('data-col-name')]?item[element.getAttribute('data-col-name')]: [
+        '(function(req, res) {',
+        '\t //write you code here;',
+        '})(req, res)'
       ].join('\n'),
       language: 'javascript',
       theme: 'vs-dark'

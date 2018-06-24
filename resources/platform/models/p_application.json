@@ -5,7 +5,7 @@
     {
       "name": "name",
       "type": "string",
-      "displayValue": true
+      "display_value": true
     },
     {
       "name": "description",
