@@ -5,7 +5,7 @@ const Model = require('../model');
 const modelUtils = require('../model/model-utils');
 const Q = require('q');
 
-function cleanInstall(platform, PLATFORM_MODELS_PATH) {
+let cleanInstall = (platform, PLATFORM_MODELS_PATH) => {
   let db = Model.getDatabase();
   let dfd = Q.defer();
   logger.info('platform', 'clean installing...');
