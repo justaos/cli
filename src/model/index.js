@@ -16,20 +16,48 @@ class Model {
   set(obj) {
     return privateData.get(this).model(obj);
   }
+  
+  getName() {
+    return privateData.get(this).modelName;
+  }
+
+  static setDatabase(db) {
+    database = db;
+  }
+
+  static getDatabase() {
+    return database;
+  }
 
   /**
    * START - mongoose methods wrapping
    */
+  create(obj) {
+    return privateData.get(this).model.create(obj);
+  }
+
+  find(conditions, projection, options) {
+    return privateData.get(this).model.find(conditions);
+  }
+
   findById(id) {
     return privateData.get(this).model.findById(id);
   }
-
-  find(obj) {
-    return privateData.get(this).model.find(obj);
+  
+  findByIdAndUpdate(id, obj) {
+    let condition = {_id: mongoose.Types.ObjectId(id)};
+    return this.findOneAndUpdate(condition, obj);
   }
-
-  create(obj) {
-    return privateData.get(this).model.create(obj);
+  
+  findOne(obj) {
+    return privateData.get(this).model.findOne(obj).exec();
+  }
+  
+  findOneAndUpdate(condition, obj) {
+    return privateData.get(this).
+        model.
+        findOneAndUpdate(condition, obj, {upsert: true}).
+        exec();
   }
 
   remove(condition) {
@@ -39,18 +67,6 @@ class Model {
   removeById(id) {
     let condition = {_id: mongoose.Types.ObjectId(id)};
     return this.remove(condition);
-  }
-
-  findOneAndUpdate(condition, obj) {
-    return privateData.get(this).
-        model.
-        findOneAndUpdate(condition, obj, {upsert: true}).
-        exec();
-  }
-
-  findByIdAndUpdate(id, obj) {
-    let condition = {_id: mongoose.Types.ObjectId(id)};
-    return this.findOneAndUpdate(condition, obj);
   }
 
   upsert(values, condition) {
@@ -67,10 +83,6 @@ class Model {
     return privateData.get(this).model.update(condition, obj).exec();
   }
 
-  findOne(obj) {
-    return privateData.get(this).model.findOne(obj).exec();
-  }
-
   where(obj) {
     return privateData.get(this).model.where(obj);
   }
@@ -79,17 +91,7 @@ class Model {
    * END - mongoose methods wrapping
    */
 
-  getName() {
-    return privateData.get(this).modelName;
-  }
-
-  static setDatabase(db) {
-    database = db;
-  }
-
-  static getDatabase() {
-    return database;
-  }
+  
 }
 
 module.exports = Model;
