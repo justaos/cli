@@ -32,8 +32,13 @@ class Model {
   /**
    * START - mongoose methods wrapping
    */
-  create(obj) {
-    return privateData.get(this).model.create(obj);
+  
+  count(conditions) {
+    return privateData.get(this).model.count(conditions);
+  }
+  
+  create(docs) {
+    return privateData.get(docs).model.create(obj);
   }
 
   find(conditions, projection, options) {
