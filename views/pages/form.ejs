@@ -47,7 +47,9 @@
                         <label for="form-<%= col.name %>"
                                class="col-sm-2 col-form-label col-form-label"><%= col.label %></label>
                         <div class="col-sm-8">
-                            <% if(col.type == 'integer'){ %>
+                            <% if(col.type == 'password'){ %>
+                              <!-- skipped <%= col.name %> -->
+                            <% else if(col.type == 'integer'){ %>
                             <input type="number" class="form-control form-control" id="form-<%= col.name %>"
                                    name="<%= col.name %>"
                                    placeholder="<%= col.label %>">
