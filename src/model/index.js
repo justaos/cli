@@ -38,7 +38,7 @@ class Model {
   }
   
   create(docs) {
-    return privateData.get(docs).model.create(docs);
+    return privateData.get(this).model.create(docs);
   }
 
   find(conditions, projection, options) {
