@@ -1,0 +1,10 @@
+{
+  "collection": "p_role",
+  "records": [
+	{
+	  "id": "5b31d9d67454bd08144f520b",
+	  "name": "admin",
+    "label": "admin"
+	}
+  ]
+}
