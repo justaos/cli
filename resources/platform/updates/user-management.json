@@ -2,11 +2,19 @@
   "collection": "p_module",
   "records": [
 	{
-	  "id": "5b15588ef362641220dfebc6",
+	  "id": "5b31b5a8b1493609e4d50e14",
 	  "name": "User",
 	  "order": 100,
 	  "type": "list",
 	  "table": "p_user",
+	  "menu": "5b15588ef362641220dfebc0"
+	},
+	{
+	  "id": "5b325a0f7763833884702efc",
+	  "name": "Role",
+	  "order": 100,
+	  "type": "list",
+	  "table": "p_role",
 	  "menu": "5b15588ef362641220dfebc0"
 	}
   ]

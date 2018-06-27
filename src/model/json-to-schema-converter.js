@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 
 function converter(collectionDef) {
   let schema = {};
-  if(collectionDef.fields)
+  if (collectionDef.fields) {
     collectionDef.fields.forEach(function(fieldDef) {
       let property = {};
-      if(fieldDef.name === 'created_at' || fieldDef.name === 'updated_at'){
+      if (fieldDef.name === 'created_at' || fieldDef.name === 'updated_at') {
         return;
       }
       switch (fieldDef.type) {
@@ -24,9 +24,13 @@ function converter(collectionDef) {
       }
       schema[fieldDef.name] = property;
     });
-  let mongooseSchema = new mongoose.Schema(schema, { toObject: { virtuals: true },  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }});
+  }
+  let mongooseSchema = new mongoose.Schema(schema, {
+    toObject: {virtuals: true},
+    timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}
+  });
   mongooseSchema.virtual('id').set(id => {
-   this._id = new ObjectId(id);
+    this._id = new ObjectId(id);
   });
   return mongooseSchema;
 }

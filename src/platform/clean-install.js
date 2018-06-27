@@ -1,6 +1,6 @@
 const logger = require('../config/logger');
 const fileUtils = require('../utils/file-utils');
-const Model = require('../model');
+const Model = require('../model')();
 
 const modelUtils = require('../model/model-utils');
 const Q = require('q');

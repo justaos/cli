@@ -89,8 +89,11 @@
                             </div>
                         </th>
                         <% cols.forEach(function(col){ %>
+                        <% if(col.type == 'password'){ %>
+                        <!-- skipped <%= col.name %> -->
+                        <% } else { %>
                         <th><%= col.label %></th>
-                        <% }); %>
+                        <% }}); %>
                     </tr>
                     </thead>
                     <tbody>
@@ -105,14 +108,17 @@
                             </div>
                         </td>
                         <% cols.forEach(function(col){ %>
+                        <% if(col.type == 'password'){ %>
+                        <!-- skipped <%= col.name %> -->
+                        <% } else { %>
                         <td>
                             <% if(col.display_value) { %>
-                                <a href="/p/<%= table.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
+                            <a href="/p/<%= table.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
                             <% } else { %>
-                                <%= item[col.name] %>
+                            <%= item[col.name] %>
                             <% } %>
                         </td>
-                        <% }); %>
+                        <% }}); %>
                     </tr>
                     <% }); %>
 

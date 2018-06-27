@@ -34,14 +34,6 @@
 	  "menu": "5b15588ef362641220dfebc1"
 	},
 	{
-	  "id": "5b15588ef362641220dfebc6",
-	  "name": "User",
-	  "order": 100,
-	  "type": "list",
-	  "table": "p_user",
-	  "menu": "5b15588ef362641220dfebc0"
-	},
-	{
 	  "id": "5b273a6fd24fdf2fb4f0aa77",
 	  "name": "Rest API",
 	  "order": 100,

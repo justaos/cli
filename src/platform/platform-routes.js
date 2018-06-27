@@ -1,7 +1,8 @@
 const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
-const Model = require('../model');
+const Model = require('../model')();
+const getModel = require('../model');
 const url = require('url');
 const vm = require('vm');
 
@@ -146,14 +147,15 @@ module.exports = function(platform) {
   });
 
   router.post('/p/:table', authenticate, function(req, res) {
+    let Model = getModel(req.user.username);
     let schema = new Model(req.params.table);
     delete req.body.created_at;
     delete req.body.updated_at;
     if (schema)
       schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
-        let referer = req.header('Referer');
+        /*let referer = req.header('Referer');
         let refererUrl = new url.URL(referer);
-        console.log(refererUrl.searchParams.get('test'));
+        console.log(refererUrl.searchParams.get('test'));*/
         res.send({});
       }, function(err) {
         res.status(400);

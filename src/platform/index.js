@@ -9,7 +9,7 @@ const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 const hashUtils = require('../utils/hash-utils');
 const cleanInstall = require('./clean-install');
-const Model = require('../model');
+const getModel = require('../model');
 const modelUtils = require('../model/model-utils');
 const glob = require('glob');
 const platformRoutes = require('./platform-routes');
@@ -20,6 +20,7 @@ let P_COLLECTION_PATH = config.root +
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
 let PROD_APPS_CONFIG_PATH = config.cwd + '/resources/apps/prod/**/config.json';
 let PROD_PATH = config.cwd + '/resources/apps/prod/';
+let Model;
 
 class Platform {
 
@@ -31,7 +32,7 @@ class Platform {
     let dfd = Q.defer();
     const db = new DatabaseConnector();
     db.connect().then(() => {
-      Model.setDatabase(db);
+      Model = getModel('admin', db);
       dfd.resolve(db);
     }, dfd.reject);
     return dfd.promise;
@@ -82,20 +83,6 @@ class Platform {
           table: tableRecord.id
         }));
       });
-      promises.push(p_field.create({
-        name: 'created_at',
-        label: stringUtils.underscoreToCamelCase('created_at'),
-        type: 'date',
-        display_value: false,
-        table: tableRecord.id
-      }));
-      promises.push(p_field.create({
-        name: 'updated_at',
-        label: stringUtils.underscoreToCamelCase('updated_at'),
-        type: 'date',
-        display_value: false,
-        table: tableRecord.id
-      }));
 
       Q.all(promises).then(function() {
         dfd.resolve();
@@ -146,8 +133,28 @@ class Platform {
 
   /** helper functions **/
   static readModelsForPackage(pkg) {
-    return fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
+    let modelDefs = fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
         '/models/**.json');
+
+    modelDefs.forEach(function(modelDef) {
+      modelDef.fields.push({
+        name: 'created_at',
+        type: 'date'
+      });
+      modelDef.fields.push({
+        name: 'updated_at',
+        type: 'date'
+      });
+      modelDef.fields.push({
+        name: 'created_by',
+        type: 'string'
+      });
+      modelDef.fields.push({
+        name: 'updated_by',
+        type: 'string'
+      });
+    });
+    return modelDefs;
   }
 
   static loadDataForPackage(pkg) {

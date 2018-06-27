@@ -41,15 +41,13 @@
     <main>
         <div class="container-fluid">
             <form id="view-form" class="needs-validation row mt-4" novalidate>
-                <% cols.forEach(function(col){ if(col.name != 'id'){ %>
+                <% cols.forEach(function(col){ if(col.name != 'id' && col.type != 'password'){ %>
                 <div class="col-md-12">
                     <div class="form-group row no-gutters">
                         <label for="form-<%= col.name %>"
                                class="col-sm-2 col-form-label col-form-label"><%= col.label %></label>
                         <div class="col-sm-8">
-                            <% if(col.type == 'password'){ %>
-                              <!-- skipped <%= col.name %> -->
-                            <% else if(col.type == 'integer'){ %>
+                            <% if(col.type == 'integer'){ %>
                             <input type="number" class="form-control form-control" id="form-<%= col.name %>"
                                    name="<%= col.name %>"
                                    placeholder="<%= col.label %>">

@@ -6,6 +6,7 @@ module.exports = function(req, res, next) {
       return next(err);
     if (!user)
       return res.redirect('/auth/login?redirect=' + req.originalUrl);
+    req.user = user;
     next();
     return null;
   })(req, res, next);

@@ -4,7 +4,7 @@ const hashUtils = require('../utils/hash-utils');
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
-const Model = require('../model');
+const Model = require('../model')();
 
 module.exports = function(app) {
   passport.use(new LocalStrategy(

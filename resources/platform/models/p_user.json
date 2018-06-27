@@ -4,8 +4,7 @@
   "fields": [
     {
       "name": "first_name",
-      "type": "string",
-      "display_value": true
+      "type": "string"
     },
     {
       "name": "last_name",
@@ -13,11 +12,12 @@
     },
     {
       "name": "username",
-      "type": "text"
+      "type": "text",
+      "display_value": true
     },
     {
       "name": "password",
-      "type": "text"
+      "type": "password"
     },
     {
       "name": "email",
