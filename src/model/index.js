@@ -42,10 +42,10 @@ module.exports = function(loggedInUser, db) {
       if (loggedInUser) {
         if (docs instanceof Array)
           docs.forEach(function(doc) {
-            doc.created_by = loggedInUser;
+            doc.created_by = loggedInUser.id;
           });
         else
-          docs.created_by = loggedInUser;
+          docs.created_by = loggedInUser.id;
       }
       return privateData.get(this).model.create(docs);
     }
@@ -59,12 +59,6 @@ module.exports = function(loggedInUser, db) {
     }
 
     findByIdAndUpdate(id, obj) {
-      if (loggedInUser){
-        obj.updated_by = loggedInUser;
-        if(!id){
-          obj.created_by = loggedInUser;
-        }
-      }
       let condition = {_id: mongoose.Types.ObjectId(id)};
       return this.findOneAndUpdate(condition, obj);
     }
@@ -74,6 +68,12 @@ module.exports = function(loggedInUser, db) {
     }
 
     findOneAndUpdate(condition, obj) {
+      if (loggedInUser){
+        obj.updated_by = loggedInUser.id;
+        if(!id){
+          obj.created_by = loggedInUser.id;
+        }
+      }
       return privateData.get(this).
           model.
           findOneAndUpdate(condition, obj, {upsert: true}).
