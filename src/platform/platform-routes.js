@@ -10,7 +10,7 @@ module.exports = function(platform) {
   let router = platform.router;
 
   router.get('/', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_menu').find({}).then(menus => {
       res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
@@ -22,7 +22,7 @@ module.exports = function(platform) {
   });
 
   router.get('/store', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_application').find({}).then(applications => { //order: Sequelize.col('order')
       res.render('pages/store',
           {applications: applications, layout: 'layouts/layout'});
@@ -30,7 +30,7 @@ module.exports = function(platform) {
   });
 
   router.get('/store/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_application').findById(req.params.id).
         then(function(application) {
           res.render('pages/store-app',
@@ -45,7 +45,7 @@ module.exports = function(platform) {
   });
 
   router.get('/menu/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     let menuId = req.params.id;
     let promises = [];
     promises.push(new Model('p_menu').findById(menuId));
@@ -78,7 +78,7 @@ module.exports = function(platform) {
   });
 
   router.get('/menu/:id/home', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_menu').findById(req.params.id).then(menu => {
       res.render('pages/home', {
         menu: menu,
@@ -88,7 +88,7 @@ module.exports = function(platform) {
   });
 
   router.get('/p/:collection/list', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
           let schema = new Model(req.params.collection);
@@ -110,7 +110,7 @@ module.exports = function(platform) {
   });
 
   router.get('/p/:collection/new', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
           let schema = new Model(req.params.collection);
@@ -130,7 +130,7 @@ module.exports = function(platform) {
   });
 
   router.get('/p/:collection/edit/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
           let schema = new Model(req.params.collection);
@@ -154,7 +154,7 @@ module.exports = function(platform) {
   });
 
   router.post('/p/:table', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     let schema = new Model(req.params.table);
     delete req.body.created_at;
     delete req.body.updated_at;
@@ -173,7 +173,7 @@ module.exports = function(platform) {
   });
 
   router.post('/p/:table/action', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     let schema = new Model(req.params.table);
     if (schema)
       schema.remove({_id: req.body.items}).then(function() {
@@ -187,7 +187,7 @@ module.exports = function(platform) {
   });
 
   router.all('/api/*', authenticate, function(req, res) {
-    let Model = getModel(req.user.username);
+    let Model = getModel(req.user);
     let restApiModel = new Model('p_rest_api');
     restApiModel.findOne({url: req.url}).then(function(restApiRecord) {
       if(restApiRecord){
