@@ -3,7 +3,7 @@
   "records": [
 	{
 	  "id": "5b2e3e808ba38928749da7eb",
-	  "script": "(function(req, res) {\n\t let todoModel = new Model('todo');\n\t todoModel.find({}).then(function(todos){\n\t\tres.send(todos);\n\t });\n})(req, res)",
+	  "script": "(function(req, res) {\n\t let todoModel = new Model('todo');\n\t todoModel.find({created_by: req.user.id}).then(function(todos){\n\t\tres.send(todos);\n\t });\n})(req, res)",
 	  "method": "GET",
 	  "url": "/api/todo/list",
 	  "name": "todo"
