@@ -43,6 +43,14 @@ anysols init
 anysols
 ```
 
+## Steps to install sample 'TODO' application on platform
+
+1. login into system using 'admin' user credentials.
+2. Click on menu icon on the header -> navigate to 'store'.
+3. In the store you will find TODO application, open it.
+4. Click install.
+5. Once installation is done, go to home page. there you can see installed TODO application.
+
 browser [http://localhost:8080](http://localhost:8080)
 
 ## Code of Conduct
