@@ -189,7 +189,7 @@ module.exports = function(platform) {
   router.all('/api/*', authenticate, function(req, res) {
     let Model = getModel(req.user);
     let restApiModel = new Model('p_rest_api');
-    restApiModel.findOne({url: req.url}).then(function(restApiRecord) {
+    restApiModel.findOne({url: req.url, method: req.method}).then(function(restApiRecord) {
       if(restApiRecord){
         let ctx = vm.createContext({req, res, Model});
         vm.runInContext(restApiRecord.script, ctx);

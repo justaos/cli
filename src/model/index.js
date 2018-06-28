@@ -60,17 +60,17 @@ module.exports = function(loggedInUser, db) {
 
     findByIdAndUpdate(id, obj) {
       let condition = {_id: mongoose.Types.ObjectId(id)};
-      return this.findOneAndUpdate(condition, obj);
+      return this.findOneAndUpdate(condition, obj, !id);
     }
 
     findOne(obj) {
       return privateData.get(this).model.findOne(obj).exec();
     }
 
-    findOneAndUpdate(condition, obj) {
+    findOneAndUpdate(condition, obj, create) {
       if (loggedInUser){
         obj.updated_by = loggedInUser.id;
-        if(!id){
+        if(create){
           obj.created_by = loggedInUser.id;
         }
       }

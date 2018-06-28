@@ -6,7 +6,7 @@ const logger = require('./config/logger');
 const config = require('./config/config');
 const passportConfig = require('./config/passport');
 
-let clean = true;
+let clean = false;
 const app = express();
 require('./config/express')(app, router);
 

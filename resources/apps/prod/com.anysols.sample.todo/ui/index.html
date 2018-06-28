@@ -73,7 +73,7 @@
 
 	<a href="#" ng-click="toggle()" ng-if="(todoList.length - result.length) !== 0">{{(todoList.length - result.length)}} Completed</a>
 
-	<div ng-repeat="item in todoList | filter: {status: 'done'}" ng-show="openCompleted">
+	<div ng-repeat="item in todoList | filter: doneQuery track by item.id" ng-show="openCompleted">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<div class="input-group-text">
@@ -86,6 +86,9 @@
 				</div>
 			</div>
 			<input style="text-decoration: line-through;" type="text" class="form-control" ng-model="item.todoText" disabled>
+			<div class="input-group-append">
+				<button class="btn btn-danger" ng-click="remove(item)">Remove</button>
+			</div>
 		</div>
 	</div>
 
@@ -102,50 +105,82 @@
 
     $scope.openCompleted = false;
 
-    $scope.toggle = function(){
-      $scope.openCompleted = !$scope.openCompleted;
-	};
-
     $http({
       method: 'GET',
       url: '/api/todo/list'
     }).then(function(response) {
       $scope.todoList = response.data;
+      $scope.todoList.forEach(function(item){
+        item.$$done = (item.status === 'done');
+	  });
     });
 
-    $scope.query = function(item){
+    $scope.remove = function(item) {
+      $http({
+        method: 'POST',
+        url: '/api/todo/actions',
+        data: {
+          action: 'remove',
+          items: [item.id]
+        }
+      }).then(function() {
+        $scope.todoList = $scope.todoList.filter(function(obj) {
+          return obj.id !== item.id;
+        });
+      });
+    };
+
+    $scope.query = function(item) {
       return item.status !== 'done';
-	};
+    };
+
+    $scope.doneQuery =  function(item) {
+      return item.status === 'done';
+    };
 
     $scope.todoAdd = function() {
       $http({
         method: 'POST',
         url: '/api/todo/actions',
-		data: {
+        data: {
           action: 'create',
-		  record: {
+          record: {
             todoText: $scope.todoInput
-		  }
-		}
+          }
+        }
       }).then(function(response) {
-        $scope.todoList = response.data;
+        $scope.todoList.push(response.data);
+        $scope.todoInput = '';
       });
-      $scope.todoList.push({todoText: $scope.todoInput, done: false});
-      $scope.todoInput = '';
     };
 
-    $scope.toggleCompleted = function(item){
-      if(item.status !== 'done')
-      	item.status = 'done';
+    $scope.toggleCompleted = function(item) {
+      if (item.status !== 'done')
+        item.status = 'done';
       else
-        delete item.status;
-	};
+        item.status = 'undone';
+
+      $http({
+        method: 'POST',
+        url: '/api/todo/actions',
+        data: {
+          action: item.status,
+          item: item.id
+        }
+      });
+    };
+
     $scope.markAllComplete = function(list) {
       angular.forEach(list, function(item) {
         item.$$done = true;
         $scope.toggleCompleted(item);
       });
     };
+
+    $scope.toggle = function() {
+      $scope.openCompleted = !$scope.openCompleted;
+    };
+
   });
 </script>
 

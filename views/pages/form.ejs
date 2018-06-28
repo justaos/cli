@@ -41,7 +41,7 @@
     <main>
         <div class="container-fluid">
             <form id="view-form" class="needs-validation row mt-4" novalidate>
-                <% cols.forEach(function(col){ if(col.name != 'id' && col.type != 'password'){ %>
+                <% cols.forEach(function(col){ if(col.name != 'id'){ %>
                 <div class="col-md-12">
                     <div class="form-group row no-gutters">
                         <label for="form-<%= col.name %>"
