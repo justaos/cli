@@ -18,8 +18,13 @@ let PLATFORM_MODELS_PATH = config.root + '/resources/platform/models/**.json';
 let P_COLLECTION_PATH = config.root +
     '/resources/platform/models/p_collection.json';
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
-let PROD_APPS_CONFIG_PATH = config.cwd + '/resources/apps/prod/**/config.json';
-let PROD_PATH = config.cwd + '/resources/apps/prod/';
+
+let PROD_PATH;
+if (config.mode === 'internal')
+  PROD_PATH = config.cwd + '/resources/apps/prod/';
+else
+  PROD_PATH = config.cwd + '/apps/';
+
 let Model;
 
 class Platform {
@@ -94,7 +99,7 @@ class Platform {
   scanApplications() {
     let that = this;
     logger.info('Scanning for apps');
-    glob.sync(PROD_APPS_CONFIG_PATH).forEach(file => {
+    glob.sync(PROD_PATH + '**/config.json').forEach(file => {
       let config = fileUtils.readJsonFileSync(file);
       new Model('p_application').findOneAndUpdate({package: config.package},
           config);
