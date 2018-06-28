@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const mongoose = require('mongoose');
 
 const STRING = {

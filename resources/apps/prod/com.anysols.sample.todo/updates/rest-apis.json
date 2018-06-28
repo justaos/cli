@@ -1,0 +1,19 @@
+{
+  "collection": "p_rest_api",
+  "records": [
+	{
+	  "id": "5b2e3e808ba38928749da7eb",
+	  "script": "(function(req, res) {\n\t let todoModel = new Model('todo');\n\t todoModel.find({created_by: req.user.id}).then(function(todos){\n\t\tres.send(todos);\n\t });\n})(req, res)",
+	  "method": "GET",
+	  "url": "/api/todo/list",
+	  "name": "todo"
+	},
+	{
+	  "id": "5b2f0b5be3f67132ccc7b291",
+	  "script" : "(function(req, res) {\n\tif(req.body && req.body.action){\n\t\tlet todoModel = new Model('todo');\n\t\tif(req.body.action === 'create'){\n\t\t\ttodoModel.create(req.body.record).then(function(response){\n\t\t\t\tres.send(response);\n\t\t\t});\n\t\t} else if(req.body.action === 'remove'){\n\t\t\treq.body.items.forEach(function(id){\n\t\t\t\ttodoModel.removeById(id);\n\t\t\t});\n\t\t\tres.send(\"success\");\n\t\t} else if(req.body.action === 'done'){\n\t\t\ttodoModel.update({_id: req.body.item}, {$set: {status: 'done'}}); \n\t\t\tres.send(\"success\");\n\t\t} else if(req.body.action === 'undone'){\n\t\t\ttodoModel.update({_id: req.body.item}, {$set: {status: 'undone'}}); \n\t\t\tres.send(\"success\");\n\t\t} else\n\t\t\tres.status(500).send(\"action is required parameter\");\n\t} else\n\t\tres.status(500).send(\"action is required parameter\");\n})(req, res)",
+	  "method": "POST",
+	  "url": "/api/todo/actions",
+	  "name": "todo"
+	}
+  ]
+}

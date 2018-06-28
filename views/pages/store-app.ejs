@@ -50,9 +50,13 @@
                     <p id="app-description">
 
                     </p>
-                    <p>
+                    <div>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="sample-data">
+                          <label class="form-check-label" for="sample-data">Sample Data</label>
+                        </div>
                         <button class="btn btn-primary" id="btn-install">Install</button>
-                    </p>
+                    </div>
                     <p>Current Version : <%= application.version %></p>
                     <% if(application.installed_version) { %>
                     <p>Installed Version : <%= application.installed_version %></p>

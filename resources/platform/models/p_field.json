@@ -4,12 +4,12 @@
   "fields": [
     {
       "name": "name",
-      "type": "STRING"
+      "type": "string"
     },
     {
       "name": "label",
-      "type": "STRING",
-      "displayValue": true
+      "type": "string",
+      "display_value": true
     },
     {
       "name": "table",
@@ -17,7 +17,11 @@
     },
     {
       "name": "type",
-      "type": "STRING"
+      "type": "string"
+    },
+    {
+      "name": "display_value",
+      "type": "boolean"
     }
   ]
 }

@@ -1,0 +1,23 @@
+{
+  "name": "p_rest_api",
+  "label": "Rest API",
+  "fields": [
+	{
+	  "name": "name",
+	  "type": "string",
+	  "display_value": true
+	},
+	{
+	  "name": "url",
+	  "type": "string"
+	},
+	{
+	  "name": "method",
+	  "type": "string"
+	},
+	{
+	  "name": "script",
+	  "type": "script"
+	}
+  ]
+}

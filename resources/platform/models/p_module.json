@@ -2,38 +2,42 @@
   "name": "p_module",
   "label": "Module",
   "fields": [
-    {
-      "name": "name",
-      "type": "STRING"
-    },
-    {
-      "name": "label",
-      "type": "STRING",
-      "displayValue": true
-    },
-    {
-      "name": "parent",
-      "type": "UUID"
-    },
-    {
-      "name": "menu",
-      "type": "UUID"
-    },
-    {
-      "name": "type",
-      "type": "STRING"
-    },
-    {
-      "name": "table",
-      "type": "STRING"
-    },
-    {
-      "name": "order",
-      "type": "INTEGER"
-    },
-    {
-      "name": "hidden",
-      "type": "BOOLEAN"
-    }
+	{
+	  "name": "name",
+	  "type": "string"
+	},
+	{
+	  "name": "label",
+	  "type": "string",
+	  "display_value": true
+	},
+	{
+	  "name": "parent",
+	  "type": "uuid"
+	},
+	{
+	  "name": "menu",
+	  "type": "uuid"
+	},
+	{
+	  "name": "url",
+	  "type": "string"
+	},
+	{
+	  "name": "type",
+	  "type": "string"
+	},
+	{
+	  "name": "table",
+	  "type": "string"
+	},
+	{
+	  "name": "order",
+	  "type": "integer"
+	},
+	{
+	  "name": "hidden",
+	  "type": "boolean"
+	}
   ]
 }

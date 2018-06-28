@@ -1,6 +1,6 @@
 'use strict';
 const DatabaseConnector = require('../config/database-connector');
-
+const express = require('express');
 const Q = require('q');
 const logger = require('../config/logger');
 const config = require('../config/config');
@@ -9,7 +9,7 @@ const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 const hashUtils = require('../utils/hash-utils');
 const cleanInstall = require('./clean-install');
-const Model = require('../model');
+const getModel = require('../model');
 const modelUtils = require('../model/model-utils');
 const glob = require('glob');
 const platformRoutes = require('./platform-routes');
@@ -18,8 +18,14 @@ let PLATFORM_MODELS_PATH = config.root + '/resources/platform/models/**.json';
 let P_COLLECTION_PATH = config.root +
     '/resources/platform/models/p_collection.json';
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
-let PROD_APPS_CONFIG_PATH = config.cwd + '/resources/apps/prod/**/config.json';
-let PROD_PATH = config.cwd + '/resources/apps/prod/';
+
+let PROD_PATH;
+if (config.mode === 'internal')
+  PROD_PATH = config.cwd + '/resources/apps/prod/';
+else
+  PROD_PATH = config.cwd + '/apps/';
+
+let Model;
 
 class Platform {
 
@@ -31,7 +37,7 @@ class Platform {
     let dfd = Q.defer();
     const db = new DatabaseConnector();
     db.connect().then(() => {
-      Model.setDatabase(db);
+      Model = getModel('admin', db);
       dfd.resolve(db);
     }, dfd.reject);
     return dfd.promise;
@@ -59,7 +65,6 @@ class Platform {
       });
       that.scanApplications();
     });
-
   }
 
   populateSysData(collectionDef) {
@@ -67,10 +72,10 @@ class Platform {
     let dfd = Q.defer();
     let p_collection = new Model('p_collection');
     let p_field = new Model('p_field');
-    p_collection.create({
+    p_collection.upsert({
       name: collectionDef.name,
       label: collectionDef.label
-    }).then(function(tableRecord) {
+    }, {name: collectionDef.name}).then(function(tableRecord) {
       let promises = [];
       collectionDef.fields.forEach(function(field) {
         promises.push(p_field.create({
@@ -79,9 +84,11 @@ class Platform {
               field.label :
               stringUtils.underscoreToCamelCase(field.name),
           type: field.type,
+          display_value: field.display_value,
           table: tableRecord.id
         }));
       });
+
       Q.all(promises).then(function() {
         dfd.resolve();
       });
@@ -90,11 +97,13 @@ class Platform {
   }
 
   scanApplications() {
+    let that = this;
     logger.info('Scanning for apps');
-    glob.sync(PROD_APPS_CONFIG_PATH).forEach(file => {
+    glob.sync(PROD_PATH + '**/config.json').forEach(file => {
       let config = fileUtils.readJsonFileSync(file);
       new Model('p_application').findOneAndUpdate({package: config.package},
           config);
+      that.serveStaticFiles(config.package);
     });
   }
 
@@ -113,8 +122,14 @@ class Platform {
       application.installed_version = application.version;
       promises.push(application.save());
       Q.all(promises).then(dfd.resolve);
+      that.serveStaticFiles(application.package);
     });
     return dfd.promise;
+  }
+
+  serveStaticFiles(pkg) {
+    this.router.use('/ui/' + pkg,
+        express.static(config.root + '/resources/apps/prod/' + pkg + '/ui'));
   }
 
   cleanInstall() {
@@ -123,8 +138,28 @@ class Platform {
 
   /** helper functions **/
   static readModelsForPackage(pkg) {
-    return fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
+    let modelDefs = fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
         '/models/**.json');
+
+    modelDefs.forEach(function(modelDef) {
+      modelDef.fields.push({
+        name: 'created_at',
+        type: 'date'
+      });
+      modelDef.fields.push({
+        name: 'updated_at',
+        type: 'date'
+      });
+      modelDef.fields.push({
+        name: 'created_by',
+        type: 'string'
+      });
+      modelDef.fields.push({
+        name: 'updated_by',
+        type: 'string'
+      });
+    });
+    return modelDefs;
   }
 
   static loadDataForPackage(pkg) {

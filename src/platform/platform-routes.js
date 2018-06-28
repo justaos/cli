@@ -1,15 +1,16 @@
-const Sequelize = require('sequelize');
 const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
-const Model = require('../model');
+const getModel = require('../model');
 const url = require('url');
+const vm = require('vm');
 
 module.exports = function(platform) {
 
   let router = platform.router;
 
-  router.get('/', authenticate, function(req, res, next) {
+  router.get('/', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     new Model('p_menu').find({}).then(menus => {
       res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
@@ -20,16 +21,16 @@ module.exports = function(platform) {
     next();
   });
 
-  router.get('/store', authenticate, function(req, res, next) {
-    new Model('p_application').find({
-
-    }).then(applications => { //order: Sequelize.col('order')
+  router.get('/store', authenticate, function(req, res) {
+    let Model = getModel(req.user);
+    new Model('p_application').find({}).then(applications => { //order: Sequelize.col('order')
       res.render('pages/store',
           {applications: applications, layout: 'layouts/layout'});
     });
   });
 
-  router.get('/store/:id', authenticate, function(req, res, next) {
+  router.get('/store/:id', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     new Model('p_application').findById(req.params.id).
         then(function(application) {
           res.render('pages/store-app',
@@ -37,13 +38,14 @@ module.exports = function(platform) {
         });
   });
 
-  router.post('/store/:id/install', authenticate, function(req, res, next) {
+  router.post('/store/:id/install', authenticate, function(req, res) {
     platform.installApplication(req.params.id).then(function() {
       res.send({});
     });
   });
 
-  router.get('/menu/:id', authenticate, function(req, res, next) {
+  router.get('/menu/:id', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     let menuId = req.params.id;
     let promises = [];
     promises.push(new Model('p_menu').findById(menuId));
@@ -75,7 +77,8 @@ module.exports = function(platform) {
     });
   });
 
-  router.get('/menu/:id/home', authenticate, function(req, res, next) {
+  router.get('/menu/:id/home', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     new Model('p_menu').findById(req.params.id).then(menu => {
       res.render('pages/home', {
         menu: menu,
@@ -84,7 +87,8 @@ module.exports = function(platform) {
     });
   });
 
-  router.get('/p/:collection/list', authenticate, function(req, res, next) {
+  router.get('/p/:collection/list', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
           let schema = new Model(req.params.collection);
@@ -105,7 +109,8 @@ module.exports = function(platform) {
         });
   });
 
-  router.get('/p/:collection/new', authenticate, function(req, res, next) {
+  router.get('/p/:collection/new', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
           let schema = new Model(req.params.collection);
@@ -115,6 +120,7 @@ module.exports = function(platform) {
                   res.render('pages/form', {
                     table: {label: collection.label, name: collection.name},
                     cols: cols,
+                    item: {},
                     layout: 'layouts/no-header-layout'
                   });
                 });
@@ -123,13 +129,40 @@ module.exports = function(platform) {
         });
   });
 
-  router.post('/p/:table', authenticate, function(req, res, next) {
+  router.get('/p/:collection/edit/:id', authenticate, function(req, res) {
+    let Model = getModel(req.user);
+    new Model('p_collection').findOne({name: req.params.collection}).
+        then(function(collection) {
+          let schema = new Model(req.params.collection);
+          if (schema) {
+            let promises = [];
+            promises.push(new Model('p_field').find({table: collection.id}));
+            promises.push(schema.findById(req.params.id));
+            Q.all(promises).
+                then(function(result) {
+                  res.render('pages/form', {
+                    table: {label: collection.label, name: collection.name},
+                    cols: result[0],
+                    item: result[1].toObject(),
+                    layout: 'layouts/no-header-layout'
+                  });
+                });
+          }
+          else
+            res.render('404');
+        });
+  });
+
+  router.post('/p/:table', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     let schema = new Model(req.params.table);
+    delete req.body.created_at;
+    delete req.body.updated_at;
     if (schema)
       schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
-        let referer = req.header('Referer');
+        /*let referer = req.header('Referer');
         let refererUrl = new url.URL(referer);
-        console.log(refererUrl.searchParams.get('test'));
+        console.log(refererUrl.searchParams.get('test'));*/
         res.send({});
       }, function(err) {
         res.status(400);
@@ -139,7 +172,8 @@ module.exports = function(platform) {
       res.render('404');
   });
 
-  router.post('/p/:table/action', authenticate, function(req, res, next) {
+  router.post('/p/:table/action', authenticate, function(req, res) {
+    let Model = getModel(req.user);
     let schema = new Model(req.params.table);
     if (schema)
       schema.remove({_id: req.body.items}).then(function() {
@@ -149,7 +183,19 @@ module.exports = function(platform) {
         res.send(err);
       });
     else
-      res.render('404');
+      res.status(404).render('404');
+  });
+
+  router.all('/api/*', authenticate, function(req, res) {
+    let Model = getModel(req.user);
+    let restApiModel = new Model('p_rest_api');
+    restApiModel.findOne({url: req.url, method: req.method}).then(function(restApiRecord) {
+      if(restApiRecord){
+        let ctx = vm.createContext({req, res, Model});
+        vm.runInContext(restApiRecord.script, ctx);
+      } else
+        res.status(404).render('404');
+    });
   });
 
   return router;

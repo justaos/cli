@@ -1,19 +1,25 @@
+<p align="center">
+  <a href="https://anysols.com">
+    <img src="https://anysols.com/assets/img/logo-small.png" alt="Anysols" height=72>
+  </a>
 
-[![Anysols](http://anysols.com/assets/img/logo-small.png "Anysols" )](https://anysols.com)  
+  <h3 align="center">Anysols</h3>
 
-### Anysols
-
-Sleek and powerful platform for faster and easier application development.
+  <p align="center">
+    Sleek and powerful platform for faster and easier application development.
+  </p>
+</p>
 
 **Master**  
 [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=master)](https://travis-ci.org/anysols/anysols) 
 [![Coverage Status](https://coveralls.io/repos/github/anysols/anysols/badge.svg?branch=master)](https://coveralls.io/github/anysols/anysols?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/anysols/anysols/badge)](https://www.codefactor.io/repository/github/anysols/anysols)
 
 **Dev**  
 [![Build Status](https://travis-ci.org/anysols/anysols.svg?branch=platform)](https://travis-ci.org/anysols/anysols) 
 [![Coverage Status](https://coveralls.io/repos/github/anysols/anysols/badge.svg?branch=platform)](https://coveralls.io/github/anysols/anysols?branch=platform)
 
-## Setup
+## Prerequisites
 * Install nodejs  (version 8.9.4)  
 https://nodejs.org/en/download/
 

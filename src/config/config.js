@@ -35,6 +35,7 @@ else {
   cwdPath = rootPath;
   dotEnv.config();
   defaultConfig = fileUtils.readJsonFileSync(rootPath + '/resources/config.json'); // load from default config.
+  defaultConfig.mode = 'internal';
 }
 
 const env = process.env.NODE_ENV || 'development';

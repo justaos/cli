@@ -1,6 +1,6 @@
 {
-  "name": "p_view",
-  "label": "View",
+  "name": "p_role",
+  "label": "Role",
   "fields": [
 	{
 	  "name": "name",

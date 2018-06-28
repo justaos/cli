@@ -1,5 +1,5 @@
 {
-  "table": "todo",
+  "collection": "todo",
   "records": [
 	{
 	  "id": "5ad1976b6738033cd943a92b",
