@@ -30,7 +30,7 @@ platform.initialize().then(function(db) {
   process.exit(0);
 });
 
-passportConfig(app);
+passportConfig();
 router.use('/auth', require('./routes/auth'));
 platform.appStarting = false;
 
