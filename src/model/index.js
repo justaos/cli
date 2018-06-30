@@ -51,7 +51,7 @@ module.exports = function(loggedInUser, db) {
     }
 
     find(conditions, projection, options) {
-      return privateData.get(this).model.find(conditions);
+      return privateData.get(this).model.find(conditions, projection, options);
     }
 
     findById(id) {

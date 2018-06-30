@@ -13,7 +13,7 @@
 	},
 	{
 	  "name": "method",
-	  "type": "string"
+	  "type": "option"
 	},
 	{
 	  "name": "script",

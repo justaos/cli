@@ -2,7 +2,6 @@ const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
 const Q = require('q');
 const getModel = require('../model');
-const url = require('url');
 const vm = require('vm');
 
 module.exports = function(platform) {
@@ -49,7 +48,8 @@ module.exports = function(platform) {
     let menuId = req.params.id;
     let promises = [];
     promises.push(new Model('p_menu').findById(menuId));
-    promises.push(new Model('p_module').find({menu: menuId})); // order: [Sequelize.col('order'), Sequelize.col('name')]
+    promises.push(
+        new Model('p_module').find({menu: menuId}, null, {sort: {order: 1}})); // order: [Sequelize.col('order'), Sequelize.col('name')]
 
     Q.all(promises).then(function(responses) {
       if (responses[0] && responses[1]) {
@@ -97,7 +97,10 @@ module.exports = function(platform) {
                 then(function(cols) {
                   schema.find({}).then(function(data) {
                     res.render('pages/list', {
-                      collection: {label: collection.label, name: collection.name},
+                      collection: {
+                        label: collection.label,
+                        name: collection.name
+                      },
                       data: data,
                       cols: cols,
                       layout: 'layouts/no-header-layout'
@@ -117,12 +120,39 @@ module.exports = function(platform) {
           if (schema)
             new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
-                  res.render('pages/form', {
-                    collection: {label: collection.label, name: collection.name},
-                    cols: cols,
-                    item: {},
-                    layout: 'layouts/no-header-layout'
+                  cols = cols.map(function(model) {
+                    return model.toObject();
                   });
+
+                  let promises = [];
+                  let optionModel = new Model('p_option');
+                  cols.forEach(function(field) {
+                    if (field.type === 'option') {
+                      let dfd = Q.defer();
+                      promises.push(dfd.promise);
+                      optionModel.find(
+                          {ref_collection: collection.id, field: field.name}).
+                          then(function(options) {
+                            field.options = options.map(function(model) {
+                              return model.toObject();
+                            });
+                            dfd.resolve();
+                          });
+                    }
+                  });
+
+                  Q.all(promises).then(function() {
+                    res.render('pages/form', {
+                      collection: {
+                        label: collection.label,
+                        name: collection.name
+                      },
+                      cols: cols,
+                      item: {},
+                      layout: 'layouts/no-header-layout'
+                    });
+                  });
+
                 });
           else
             res.render('404');
@@ -136,12 +166,16 @@ module.exports = function(platform) {
           let schema = new Model(req.params.collection);
           if (schema) {
             let promises = [];
-            promises.push(new Model('p_field').find({ref_collection: collection.id}));
+            promises.push(
+                new Model('p_field').find({ref_collection: collection.id}));
             promises.push(schema.findById(req.params.id));
             Q.all(promises).
                 then(function(result) {
                   res.render('pages/form', {
-                    collection: {label: collection.label, name: collection.name},
+                    collection: {
+                      label: collection.label,
+                      name: collection.name
+                    },
                     cols: result[0],
                     item: result[1].toObject(),
                     layout: 'layouts/no-header-layout'
@@ -160,7 +194,9 @@ module.exports = function(platform) {
     delete req.body.updated_at;
     if (schema)
       schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
-        /*let referer = req.header('Referer');
+        /*
+        const url = require('url');
+        let referer = req.header('Referer');
         let refererUrl = new url.URL(referer);
         console.log(refererUrl.searchParams.get('test'));*/
         res.send({});
@@ -189,13 +225,14 @@ module.exports = function(platform) {
   router.all('/api/*', authenticate, function(req, res) {
     let Model = getModel(req.user);
     let restApiModel = new Model('p_rest_api');
-    restApiModel.findOne({url: req.url, method: req.method}).then(function(restApiRecord) {
-      if(restApiRecord){
-        let ctx = vm.createContext({req, res, Model});
-        vm.runInContext(restApiRecord.script, ctx);
-      } else
-        res.status(404).render('404');
-    });
+    restApiModel.findOne({url: req.url, method: req.method}).
+        then(function(restApiRecord) {
+          if (restApiRecord) {
+            let ctx = vm.createContext({req, res, Model});
+            vm.runInContext(restApiRecord.script, ctx);
+          } else
+            res.status(404).render('404');
+        });
   });
 
   return router;

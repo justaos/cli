@@ -1,0 +1,45 @@
+{
+  "collection": "p_option",
+  "records": [
+	{
+	  "id": "5b37521d28e7c20a1cbfc8e4",
+	  "hint": null,
+	  "order": "100",
+	  "language": "en",
+	  "label": "GET",
+	  "field": "method",
+	  "value": "GET",
+	  "ref_collection": "5b373277a758de17540c6a6a"
+	},
+	{
+	  "id": "5b3757b360a2c90b44433d1a",
+	  "hint": null,
+	  "order": "200",
+	  "language": "en",
+	  "label": "POST",
+	  "field": "method",
+	  "value": "POST",
+	  "ref_collection": "5b373277a758de17540c6a6a"
+	},
+	{
+	  "id": "5b3757c8c1bb5827d0259072",
+	  "hint": null,
+	  "order": "300",
+	  "language": "en",
+	  "label": "PUT",
+	  "field": "method",
+	  "value": "PUT",
+	  "ref_collection": "5b373277a758de17540c6a6a"
+	},
+	{
+	  "id": "5b3757dbac212f3a50dbede0",
+	  "hint": null,
+	  "order": "100",
+	  "language": "en",
+	  "label": "DELETE",
+	  "field": "method",
+	  "value": "DELETE",
+	  "ref_collection": "5b373277a758de17540c6a6a"
+	}
+  ]
+}
