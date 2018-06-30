@@ -1,7 +1,7 @@
 <link href="/views/styles/form.css" rel="stylesheet">
 <link rel="stylesheet" data-name="vs/editor/editor.main"
       href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.css">
-<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <div class="form-page">
     <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
@@ -38,6 +38,12 @@
                     <i class="fas fa-angle-right"></i>
                 </button>
             </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" target="_blank" class="btn btn-link btn-sm open-new-window" data-toggle="tooltip" data-placement="top"
+                        data-container="body" title="Open New Window">
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </li>
         </ul>
     </nav>
     <main>
@@ -49,19 +55,32 @@
                         <label for="form-<%= col.name %>"
                                class="col-sm-2 col-form-label col-form-label"><%= col.label %></label>
                         <div class="col-sm-8">
+
+                            <!-- integer field -->
                             <% if(col.type == 'integer'){ %>
                             <input type="number" class="form-control" id="form-<%= col.name %>"
                                    name="<%= col.name %>"
                                    placeholder="<%= col.label %>">
+
+                            <!-- integer field -->
+                            <% } else if(col.type == 'password'){ %>
+                            <input type="password" class="form-control form-control" id="<%= col.name %>"
+                                   name="<%= col.name %>"
+                                   value=""
+                                   placeholder="<%= col.label %>">
+
+                            <!-- script field -->
                             <% } else if(col.type == 'script'){ %>
                             <div class="script-editor" id="form-<%= col.name %>" data-col-name="<%= col.name %>"
                                  style="height: 500px;border:1px solid grey;"></div>
 
 
+                            <!-- option field -->
                             <% } else if(col.type == 'option'){ %>
-                            <select class="form-control select-2" data-live-search="true" id="form-<%= col.name %>" data-col-name="<%= col.name %>" name="<%= col.name %>">
+                            <select class="form-control select-2" data-live-search="true" id="form-<%= col.name %>"
+                                    data-col-name="<%= col.name %>" name="<%= col.name %>">
 
-                                <% col.options.forEach(function(option){ %>
+                                <% if(col.options) col.options.forEach(function(option){ %>
                                 <option value="<%= option.value %>"><%= option.label %></option>
                                 <% }); %>
                             </select>
@@ -111,9 +130,9 @@
             formObj[key] = window.editors[key].getValue();
           });
 
-          <% if(item.id) {%>
-          formObj.id = <%- JSON.stringify(item.id)%>;
-          <% } %>
+            <% if(item.id) { %>
+          formObj.id = <%- JSON.stringify(item.id) %>;
+            <% } %>
 
           $.ajax({
             url: "/p/<%= collection.name %>",
@@ -150,11 +169,11 @@
     '}'
   ].join('\n'));
   window.editors = [];
-  var item = <%- JSON.stringify(item)%>;
+  var item = <%- JSON.stringify(item) %>;
   document.querySelectorAll('.script-editor').forEach(function(element) {
 
     window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
-      value: item[element.getAttribute('data-col-name')]?item[element.getAttribute('data-col-name')]: [
+      value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : [
         '(function(req, res) {',
         '\t //write you code here;',
         '})(req, res)'
@@ -166,10 +185,14 @@
 
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function() {
-    $('select').each(function () {
+    $('select').each(function() {
       $(this).selectpicker();
     });
   });
+
+  $('.open-new-window').on('click', function(){
+    window.open(window.location.href, '_blank');
+  })
 
   //console.log(editor.getValue());
 </script>

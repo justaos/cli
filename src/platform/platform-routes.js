@@ -1,8 +1,10 @@
 const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
+const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const getModel = require('../model');
 const vm = require('vm');
+const js2xmlparser  = require('js2xmlparser');
 
 module.exports = function(platform) {
 
@@ -91,11 +93,11 @@ module.exports = function(platform) {
     let Model = getModel(req.user);
     new Model('p_collection').findOne({name: req.params.collection}).
         then(function(collection) {
-          let schema = new Model(req.params.collection);
-          if (schema)
+          let collectionModel = new Model(req.params.collection);
+          if (collectionModel)
             new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
-                  schema.find({}).then(function(data) {
+                  collectionModel.find({}).then(function(data) {
                     res.render('pages/list', {
                       collection: {
                         label: collection.label,
@@ -169,17 +171,46 @@ module.exports = function(platform) {
             promises.push(
                 new Model('p_field').find({ref_collection: collection.id}));
             promises.push(schema.findById(req.params.id));
+
+
+
             Q.all(promises).
                 then(function(result) {
-                  res.render('pages/form', {
-                    collection: {
-                      label: collection.label,
-                      name: collection.name
-                    },
-                    cols: result[0],
-                    item: result[1].toObject(),
-                    layout: 'layouts/no-header-layout'
+
+                  promises = [];
+                  let cols = result[0].map(function(model) {
+                    return model.toObject();
                   });
+
+                  let optionModel = new Model('p_option');
+                  cols.forEach(function(field) {
+                    if (field.type === 'option') {
+                      let dfd = Q.defer();
+                      promises.push(dfd.promise);
+                      optionModel.find(
+                          {ref_collection: collection.id, field: field.name}).
+                          then(function(options) {
+                            field.options = options.map(function(model) {
+                              return model.toObject();
+                            });
+                            dfd.resolve();
+                          });
+                    }
+                  });
+
+                  Q.all(promises).
+                      then(function(){
+                        res.render('pages/form', {
+                          collection: {
+                            label: collection.label,
+                            name: collection.name
+                          },
+                          cols: cols,
+                          item: result[1].toObject(),
+                          layout: 'layouts/no-header-layout'
+                        });
+                      });
+
                 });
           }
           else
@@ -189,11 +220,16 @@ module.exports = function(platform) {
 
   router.post('/p/:collection', authenticate, function(req, res) {
     let Model = getModel(req.user);
-    let schema = new Model(req.params.collection);
+    let collectionModel = new Model(req.params.collection);
     delete req.body.created_at;
     delete req.body.updated_at;
-    if (schema)
-      schema.findByIdAndUpdate(req.body.id, req.body).then(function() {
+    collectionModel.getSchemaDef().fields.forEach(function(field) {
+      if (field.type === 'password' && req.body[field.type]) {
+        req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
+      }
+    });
+    if (collectionModel)
+      collectionModel.findByIdAndUpdate(req.body.id, req.body).then(function() {
         /*
         const url = require('url');
         let referer = req.header('Referer');
@@ -228,7 +264,7 @@ module.exports = function(platform) {
     restApiModel.findOne({url: req.url, method: req.method}).
         then(function(restApiRecord) {
           if (restApiRecord) {
-            let ctx = vm.createContext({req, res, Model});
+            let ctx = vm.createContext({req, res, Model, js2xmlparser , JSON});
             vm.runInContext(restApiRecord.script, ctx);
           } else
             res.status(404).render('404');

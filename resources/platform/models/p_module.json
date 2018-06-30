@@ -28,6 +28,7 @@
 	  "type": "string"
 	},
 	{
+	  "label": "Collection",
 	  "name": "ref_collection",
 	  "type": "reference"
 	},

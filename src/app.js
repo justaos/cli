@@ -23,6 +23,7 @@ platform.initialize().then(function(db) {
     }, function(){
       platform.cleanInstall().then(function() {
         platform.boot();
+        logger.info('Scanning for apps');
       });
     });
   }

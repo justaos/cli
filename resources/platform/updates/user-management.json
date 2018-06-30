@@ -12,7 +12,7 @@
 	{
 	  "id": "5b325a0f7763833884702efc",
 	  "name": "Role",
-	  "order": 100,
+	  "order": 200,
 	  "type": "list",
 	  "ref_collection": "p_role",
 	  "menu": "5b15588ef362641220dfebc0"

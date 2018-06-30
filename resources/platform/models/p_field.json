@@ -12,6 +12,7 @@
       "display_value": true
     },
     {
+      "label": "Collection",
       "name": "ref_collection",
       "type": "reference"
     },

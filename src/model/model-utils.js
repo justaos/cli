@@ -82,6 +82,7 @@ function loadSchemaFactory(conn, backlog) {
     if (!def.extends) {
       if (!conn.models[def.name]) {
         conn.model(def.name, schema, def.name);
+        conn.models[def.name].def = def;
       } else {
         logger.info('Model already loaded : ' + def.name);
       }

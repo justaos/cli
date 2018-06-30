@@ -12,6 +12,7 @@
       "display_value": true
     },
     {
+      "label": "Application",
       "name": "ref_application",
       "type": "reference"
     },
