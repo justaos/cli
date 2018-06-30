@@ -12,8 +12,8 @@
       "display_value": true
     },
     {
-      "name": "application",
-      "type": "UUID"
+      "name": "ref_application",
+      "type": "reference"
     },
     {
       "name": "order",

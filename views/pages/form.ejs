@@ -4,7 +4,7 @@
 <div class="form-page">
     <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
         <h4 class="navbar-brand py-2 m-0 float-left">
-            <%= table.label %>
+            <%= collection.label %>
         </h4>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
@@ -103,7 +103,7 @@
           <% } %>
 
           $.ajax({
-            url: "/p/<%= table.name %>",
+            url: "/p/<%= collection.name %>",
             data: JSON.stringify(formObj),
             contentType: 'application/json',
             type: 'POST'

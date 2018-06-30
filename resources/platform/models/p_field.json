@@ -12,8 +12,8 @@
       "display_value": true
     },
     {
-      "name": "table",
-      "type": "UUID"
+      "name": "ref_collection",
+      "type": "reference"
     },
     {
       "name": "type",

@@ -75,7 +75,7 @@ class Platform {
     p_collection.upsert({
       name: collectionDef.name,
       label: collectionDef.label
-    }, {name: collectionDef.name}).then(function(tableRecord) {
+    }, {name: collectionDef.name}).then(function(collectionRecord) {
       let promises = [];
       collectionDef.fields.forEach(function(field) {
         promises.push(p_field.create({
@@ -85,7 +85,7 @@ class Platform {
               stringUtils.underscoreToCamelCase(field.name),
           type: field.type,
           display_value: field.display_value,
-          table: tableRecord.id
+          ref_collection: collectionRecord.id
         }));
       });
 

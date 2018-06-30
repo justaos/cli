@@ -2,10 +2,10 @@
 <div class="list-page">
     <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
         <h4 class="navbar-brand py-2 m-0 float-left">
-            <%= table.label %>
+            <%= collection.label %>
         </h4>
         <form class="form-inline">
-            <a href="/p/<%= table.name %>/new" class="btn btn-sm btn-link">
+            <a href="/p/<%= collection.name %>/new" class="btn btn-sm btn-link">
                 <i class="fas fa-plus"></i>
             </a>
         </form>
@@ -113,7 +113,7 @@
                         <% } else { %>
                         <td>
                             <% if(col.display_value) { %>
-                            <a href="/p/<%= table.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
                             <% } else { %>
                             <%= item[col.name] %>
                             <% } %>
@@ -166,7 +166,7 @@
         selectedItems.push($(this).val());
       });
       $.ajax({
-        url: "/p/<%= table.name %>/action",
+        url: "/p/<%= collection.name %>/action",
         data: JSON.stringify({items: selectedItems}),
         contentType: 'application/json',
         type: 'POST'

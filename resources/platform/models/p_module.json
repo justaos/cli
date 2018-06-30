@@ -28,8 +28,8 @@
 	  "type": "string"
 	},
 	{
-	  "name": "table",
-	  "type": "string"
+	  "name": "ref_collection",
+	  "type": "reference"
 	},
 	{
 	  "name": "order",

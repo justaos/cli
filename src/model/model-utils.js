@@ -55,7 +55,7 @@ let ModelUtils = {
           };
           let fieldDfd = Q.defer();
           promises.push(fieldDfd.promise);
-          p_field.find({table: collection.id}).then(function(fields) {
+          p_field.find({ref_collection: collection.id}).then(function(fields) {
             fields.forEach(function(field) {
               collectionDef.fields.push({
                 name: field.name,

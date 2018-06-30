@@ -60,9 +60,9 @@ module.exports = function(platform) {
         });
         modules.forEach(function(module) {
           if (module.type === 'list') {
-            module.url = '/p/' + module.table + '/list';
+            module.url = '/p/' + module.ref_collection + '/list';
           } else if (module.type === 'new') {
-            module.url = '/p/' + module.table + '/new';
+            module.url = '/p/' + module.ref_collection + '/new';
           }
         });
         modules = dsUtils.flatToHierarchy(modules);
@@ -93,11 +93,11 @@ module.exports = function(platform) {
         then(function(collection) {
           let schema = new Model(req.params.collection);
           if (schema)
-            new Model('p_field').find({table: collection.id}).
+            new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
                   schema.find({}).then(function(data) {
                     res.render('pages/list', {
-                      table: {label: collection.label, name: collection.name},
+                      collection: {label: collection.label, name: collection.name},
                       data: data,
                       cols: cols,
                       layout: 'layouts/no-header-layout'
@@ -115,10 +115,10 @@ module.exports = function(platform) {
         then(function(collection) {
           let schema = new Model(req.params.collection);
           if (schema)
-            new Model('p_field').find({table: collection.id}).
+            new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
                   res.render('pages/form', {
-                    table: {label: collection.label, name: collection.name},
+                    collection: {label: collection.label, name: collection.name},
                     cols: cols,
                     item: {},
                     layout: 'layouts/no-header-layout'
@@ -136,12 +136,12 @@ module.exports = function(platform) {
           let schema = new Model(req.params.collection);
           if (schema) {
             let promises = [];
-            promises.push(new Model('p_field').find({table: collection.id}));
+            promises.push(new Model('p_field').find({ref_collection: collection.id}));
             promises.push(schema.findById(req.params.id));
             Q.all(promises).
                 then(function(result) {
                   res.render('pages/form', {
-                    table: {label: collection.label, name: collection.name},
+                    collection: {label: collection.label, name: collection.name},
                     cols: result[0],
                     item: result[1].toObject(),
                     layout: 'layouts/no-header-layout'
@@ -153,9 +153,9 @@ module.exports = function(platform) {
         });
   });
 
-  router.post('/p/:table', authenticate, function(req, res) {
+  router.post('/p/:collection', authenticate, function(req, res) {
     let Model = getModel(req.user);
-    let schema = new Model(req.params.table);
+    let schema = new Model(req.params.collection);
     delete req.body.created_at;
     delete req.body.updated_at;
     if (schema)
@@ -172,9 +172,9 @@ module.exports = function(platform) {
       res.render('404');
   });
 
-  router.post('/p/:table/action', authenticate, function(req, res) {
+  router.post('/p/:collection/action', authenticate, function(req, res) {
     let Model = getModel(req.user);
-    let schema = new Model(req.params.table);
+    let schema = new Model(req.params.collection);
     if (schema)
       schema.remove({_id: req.body.items}).then(function() {
         res.send({});

@@ -6,7 +6,7 @@
 	  "name": "User",
 	  "order": 100,
 	  "type": "list",
-	  "table": "p_user",
+	  "ref_collection": "p_user",
 	  "menu": "5b15588ef362641220dfebc0"
 	},
 	{
@@ -14,7 +14,7 @@
 	  "name": "Role",
 	  "order": 100,
 	  "type": "list",
-	  "table": "p_role",
+	  "ref_collection": "p_role",
 	  "menu": "5b15588ef362641220dfebc0"
 	}
   ]
