@@ -60,6 +60,7 @@
                             <% if(col.type == 'integer'){ %>
                             <input type="number" class="form-control" id="form-<%= col.name %>"
                                    name="<%= col.name %>"
+                                   value="<%= item[col.name] %>"
                                    placeholder="<%= col.label %>">
 
                             <!-- integer field -->
@@ -77,11 +78,11 @@
 
                             <!-- option field -->
                             <% } else if(col.type == 'option'){ %>
-                            <select class="form-control select-2" data-live-search="true" id="form-<%= col.name %>"
+                            <select class="form-control select-2" data-live-search="true" id="form-<%= col.name %>" title="Choose one of the following..."
                                     data-col-name="<%= col.name %>" name="<%= col.name %>">
 
                                 <% if(col.options) col.options.forEach(function(option){ %>
-                                <option value="<%= option.value %>"><%= option.label %></option>
+                                <option value="<%= option.value %>"  <% if(option.value === item[col.name]){%>selected="selected"<%}%>><%= option.label %></option>
                                 <% }); %>
                             </select>
 
