@@ -1,42 +1,49 @@
 <link href="/views/styles/base.css" rel="stylesheet">
 <link href="/views/styles/menu.css" rel="stylesheet">
 <script>
-  window.MENU = <%- JSON.stringify(menu) %>;
+    <% if (!url && menu) {
+        url = "/menu/" + menu.id + "/home";
+    } %>
 
-  function onLoadFrame(obj, resize) {
-    if (window.history.pushState) {
-      let frameUrl = new URL(obj.contentWindow.location.href);
-      let newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?url=' +
-          frameUrl.pathname;
-      window.history.pushState({path: newUrl}, '', newUrl);
+    <% if (menu) { %>
+    window.MENU = <%- JSON.stringify(menu) %>;
+    <% } %>
+
+    function onLoadFrame(obj, resize) {
+      if (window.history.pushState) {
+        let frameUrl = new URL(obj.contentWindow.location.href);
+        let newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?url=' +
+            frameUrl.pathname;
+        window.history.pushState({path: newUrl}, '', newUrl);
+      }
+      if (resize)
+        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
     }
-    if (resize)
-      obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-  }
 
-  $(document).ready(function() {
-    $('.shortcuts-tree').on('click', function() {
-      $(this).parent().toggleClass('active');
-      $(this).find('.svg-inline--fa').toggleClass('fa-chevron-right fa-chevron-down');
+    $(document).ready(function() {
+      $('.shortcuts-tree').on('click', function() {
+        $(this).parent().toggleClass('active');
+        $(this).find('.svg-inline--fa').toggleClass('fa-chevron-right fa-chevron-down');
+      });
+      $('.link a').on('click', function() {
+        $('.link').removeClass('active');
+        $(this).closest('.link').addClass('active');
+        setIframeUrl($(this).attr('data-url'));
+      });
+      $('.context-header').on('click', function() {
+        setIframeUrl('/menu/' + window.MENU.id + '/home');
+      });
     });
-    $('.link a').on('click', function() {
-      $('.link').removeClass('active');
-      $(this).closest('.link').addClass('active');
-      setIframeUrl($(this).attr('data-url'));
-    });
-    $('.context-header').on('click', function() {
-      setIframeUrl('/menu/' + window.MENU.id + '/home');
-    });
-  });
 
-  function setIframeUrl(url) {
-    $('#main-iframe').attr('src', url);
-  }
+    function setIframeUrl(url) {
+      $('#main-iframe').attr('src', url);
+    }
 </script>
 
 <%- include('../partials/header-navigation') %>
 
-<main role="main">
+<main role="main" class="<% if(menu){ %>with-menu<% } %>">
+    <% if(menu){ %>
     <div class="nav-sidebar bg-light">
         <div class="nav-sidebar-inner-scroll">
             <div class="context-header">
@@ -55,12 +62,8 @@
 
         </div>
     </div>
-    <%
-    if (!url) {
-        url = "/menu/" + menu.id + "/home";
-    }
-    %>
-    <iframe id="main-iframe"  src="<%= url %>" frameBorder="0" scrolling="yes"
+    <% } %>
+    <iframe id="main-iframe" src="<%= url %>" frameBorder="0" scrolling="yes"
             onload="onLoadFrame(this);"></iframe>
 </main>
 

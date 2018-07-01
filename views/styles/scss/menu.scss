@@ -1,11 +1,13 @@
 $nav-sidebar-width: 250px;
 body {
   main {
-    margin-left: $nav-sidebar-width;
     #main-iframe {
       width: 100%;
       min-height: calc(100vh - 38.8px);
       display: block;
+    }
+    &.with-menu{
+      margin-left: $nav-sidebar-width;
     }
   }
 

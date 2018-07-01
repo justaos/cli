@@ -1,0 +1,36 @@
+{
+  "name": "p_option",
+  "label": "Option",
+  "fields": [
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "reference"
+    },
+    {
+      "name": "field",
+      "type": "string"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "value",
+      "type": "string"
+    },
+    {
+      "name": "language",
+      "type": "string"
+    },
+    {
+      "name": "order",
+      "type": "integer"
+    },
+    {
+      "name": "hint",
+      "type": "string"
+    }
+  ]
+}

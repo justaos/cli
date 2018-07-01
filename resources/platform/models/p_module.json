@@ -28,8 +28,9 @@
 	  "type": "string"
 	},
 	{
-	  "name": "table",
-	  "type": "string"
+	  "label": "Collection",
+	  "name": "ref_collection",
+	  "type": "reference"
 	},
 	{
 	  "name": "order",

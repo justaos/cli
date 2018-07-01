@@ -2,43 +2,51 @@
   "collection": "p_module",
   "records": [
 	{
-	  "id": "5b15588ef362641220dfebc2",
-	  "name": "Menu",
+	  "id": "5b15588ef362641220dfebc5",
+	  "name": "Collection",
 	  "order": 100,
 	  "type": "list",
-	  "table": "p_menu",
+	  "ref_collection": "p_collection",
 	  "menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b15588ef362641220dfebc3",
-	  "name": "Column",
-	  "order": 100,
+	  "name": "Field",
+	  "order": 200,
 	  "type": "list",
-	  "table": "p_field",
+	  "ref_collection": "p_field",
+	  "menu": "5b15588ef362641220dfebc1"
+	},
+	{
+	  "id": "5b15588ef362641220dfebc2",
+	  "name": "Menu",
+	  "order": 300,
+	  "type": "list",
+	  "ref_collection": "p_menu",
 	  "menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b15588ef362641220dfebc4",
 	  "name": "Module",
-	  "order": 100,
+	  "order": 400,
 	  "type": "list",
-	  "table": "p_module",
+	  "ref_collection": "p_module",
 	  "menu": "5b15588ef362641220dfebc1"
 	},
 	{
-	  "id": "5b15588ef362641220dfebc5",
-	  "name": "Table",
-	  "order": 100,
+	  "id": "5b372b99fe7f152d70825f4a",
+	  "name": "Option",
+	  "order": 500,
 	  "type": "list",
-	  "table": "p_collection",
+	  "ref_collection": "p_option",
 	  "menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b273a6fd24fdf2fb4f0aa77",
 	  "name": "Rest API",
-	  "order": 100,
+	  "order": 600,
 	  "type": "list",
-	  "table": "p_rest_api",
+	  "ref_collection": "p_rest_api",
 	  "menu": "5b15588ef362641220dfebc1"
 	}
   ]

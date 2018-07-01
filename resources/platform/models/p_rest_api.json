@@ -13,7 +13,33 @@
 	},
 	{
 	  "name": "method",
-	  "type": "string"
+	  "type": "option",
+	  "options": [
+		{
+		  "order": "100",
+		  "language": "en",
+		  "label": "GET",
+		  "value": "GET"
+		},
+		{
+		  "order": "200",
+		  "language": "en",
+		  "label": "POST",
+		  "value": "POST"
+		},
+		{
+		  "order": "300",
+		  "language": "en",
+		  "label": "PUT",
+		  "value": "PUT"
+		},
+		{
+		  "order": "400",
+		  "language": "en",
+		  "label": "DELETE",
+		  "value": "DELETE"
+		}
+	  ]
 	},
 	{
 	  "name": "script",

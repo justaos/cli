@@ -23,6 +23,7 @@ platform.initialize().then(function(db) {
     }, function(){
       platform.cleanInstall().then(function() {
         platform.boot();
+        logger.info('Scanning for apps');
       });
     });
   }
@@ -30,7 +31,7 @@ platform.initialize().then(function(db) {
   process.exit(0);
 });
 
-passportConfig(app);
+passportConfig();
 router.use('/auth', require('./routes/auth'));
 platform.appStarting = false;
 

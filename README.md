@@ -29,12 +29,7 @@ https://nodejs.org/en/download/
 https://www.mongodb.com/download-center?#community
 
 ## Setup
-```cmd 
-npm i -g anysols
-mkdir new-project
-cd new-project
-anysols init 
-```
+![Set up](./resources/carbon.png)
 
 ## Run
 `Note: Check db config in anysols-config.js before running the application.`

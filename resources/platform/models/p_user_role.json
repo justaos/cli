@@ -1,0 +1,14 @@
+{
+  "name": "p_user_role",
+  "label": "User Role",
+  "fields": [
+    {
+      "name": "ref_user",
+      "type": "reference"
+    },
+    {
+      "name": "ref_role",
+      "type": "reference"
+    }
+  ]
+}

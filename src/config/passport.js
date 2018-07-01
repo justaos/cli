@@ -6,7 +6,7 @@ const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const Model = require('../model')();
 
-module.exports = function(app) {
+module.exports = function() {
   passport.use(new LocalStrategy(
       function(username, password, done) {
 
