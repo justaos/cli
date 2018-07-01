@@ -110,7 +110,7 @@ class Platform {
     });
   }
 
-  installApplication(appId) {
+  installApplication(appId, loadSampleData) {
     let that = this;
     let dfd = Q.defer();
     logger.info('STARTED INSTALLING');
@@ -118,6 +118,8 @@ class Platform {
       let modelDef = Platform.readModelsForPackage(application.package);
       modelUtils.loadSchemasIntoStore(modelDef);
       Platform.loadDataForPackage(application.package);
+      if (loadSampleData)
+        Platform.loadSampleDataForPackage(application.package);
       let promises = [];
       modelDef.forEach((model) => {
         promises.push(that.populateSysData(model));
@@ -167,6 +169,10 @@ class Platform {
 
   static loadDataForPackage(pkg) {
     return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/updates/**.json');
+  }
+
+  static loadSampleDataForPackage(pkg) {
+    return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/samples/**.json');
   }
 }
 

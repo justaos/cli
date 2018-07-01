@@ -9,7 +9,27 @@
 	},
 	{
 	  "name": "status",
-	  "type": "string"
+	  "type": "option",
+	  "options": [
+		{
+		  "order": "100",
+		  "language": "en",
+		  "label": "New",
+		  "value": "new"
+		},
+		{
+		  "order": "100",
+		  "language": "en",
+		  "label": "DONE",
+		  "value": "done"
+		},
+		{
+		  "order": "200",
+		  "language": "en",
+		  "label": "UNDONE",
+		  "value": "undone"
+		}
+	  ]
 	}
   ]
 }

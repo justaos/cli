@@ -3,23 +3,28 @@
   "records": [
 	{
 	  "id": "5ad1976b6738033cd943a92b",
-	  "value": "Hit the gym"
+	  "todoText": "Hit the gym",
+	  "created_by": "5b37598359a01c43346f8632"
 	},
 	{
 	  "id": "5ad1976b1980d1e6bc222b7b",
-	  "value": "Meet the george"
+	  "todoText": "Meet the george",
+	  "created_by": "5b37598359a01c43346f8632"
 	},
 	{
 	  "id": "5ad1976bece284c675aebca4",
-	  "value": "Buy Eggs"
+	  "todoText": "Buy Eggs",
+	  "created_by": "5b37598359a01c43346f8632"
 	},
 	{
 	  "id": "5ad1976b732e7c31f9862894",
-	  "value": "Read a book"
+	  "todoText": "Read a book",
+	  "created_by": "5b37598359a01c43346f8632"
 	},
 	{
 	  "id": "5ad1976babfd333dcfd7addb",
-	  "value": "Organize office"
+	  "todoText": "Organize office",
+	  "created_by": "5b37598359a01c43346f8632"
 	}
   ]
 }

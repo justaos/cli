@@ -77,7 +77,7 @@
         </div>
 
         <section class="content-area">
-            <div class="table-area">
+            <div class="select-all-checkbox-area">
                 <table class="responsive-table table table-hover">
                     <thead>
                     <tr>
@@ -177,9 +177,7 @@
       });
     });
     $('#select-all-checkbox').on('click', function() {
-      if ($('.item-checkbox:checked').length) {
-
-      }
+        $('.item-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
     });
   });
 </script>

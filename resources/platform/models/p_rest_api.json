@@ -25,21 +25,18 @@
 		  "order": "200",
 		  "language": "en",
 		  "label": "POST",
-		  "field": "method",
 		  "value": "POST"
 		},
 		{
 		  "order": "300",
 		  "language": "en",
 		  "label": "PUT",
-		  "field": "method",
 		  "value": "PUT"
 		},
 		{
 		  "order": "400",
 		  "language": "en",
 		  "label": "DELETE",
-		  "field": "method",
 		  "value": "DELETE"
 		}
 	  ]

@@ -4,7 +4,7 @@ const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const getModel = require('../model');
 const vm = require('vm');
-const js2xmlparser  = require('js2xmlparser');
+const js2xmlparser = require('js2xmlparser');
 
 module.exports = function(platform) {
 
@@ -15,6 +15,10 @@ module.exports = function(platform) {
     new Model('p_menu').find({}).then(menus => {
       res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
+  });
+
+  router.get('/profile', authenticate, function(req, res) {
+    res.redirect('/no-menu?url=/p/p_user/edit/'+req.user.id);
   });
 
   router.get('/dev-tools', authenticate, function(req, res, next) {
@@ -40,9 +44,10 @@ module.exports = function(platform) {
   });
 
   router.post('/store/:id/install', authenticate, function(req, res) {
-    platform.installApplication(req.params.id).then(function() {
-      res.send({});
-    });
+    platform.installApplication(req.params.id, req.body.sample).
+        then(function() {
+          res.send({});
+        });
   });
 
   router.get('/menu/:id', authenticate, function(req, res) {
@@ -76,6 +81,14 @@ module.exports = function(platform) {
         });
       } else
         res.render('404');
+    });
+  });
+
+  router.get('/no-menu', authenticate, function(req, res) {
+    res.render('pages/menu', {
+      menu: undefined,
+      url: req.query.url,
+      layout: 'layouts/layout'
     });
   });
 
@@ -172,8 +185,6 @@ module.exports = function(platform) {
                 new Model('p_field').find({ref_collection: collection.id}));
             promises.push(schema.findById(req.params.id));
 
-
-
             Q.all(promises).
                 then(function(result) {
 
@@ -199,7 +210,7 @@ module.exports = function(platform) {
                   });
 
                   Q.all(promises).
-                      then(function(){
+                      then(function() {
                         res.render('pages/form', {
                           collection: {
                             label: collection.label,
@@ -264,7 +275,7 @@ module.exports = function(platform) {
     restApiModel.findOne({url: req.url, method: req.method}).
         then(function(restApiRecord) {
           if (restApiRecord) {
-            let ctx = vm.createContext({req, res, Model, js2xmlparser , JSON});
+            let ctx = vm.createContext({req, res, Model, js2xmlparser, JSON});
             vm.runInContext(restApiRecord.script, ctx);
           } else
             res.status(404).render('404');

@@ -22,13 +22,21 @@
       let that = this;
       $(that).prop('disabled', true);
       $('.load-bar').removeClass('d-none');
-      $.post('/store/' + window.APPLICATION.id + '/install').then(function() {
-        swal({
-          title: "Success",
-          text: "Installation completed",
-          icon: "success",
-          button: "Ok",
-        });
+      var data = {sample: $('#sample-data').prop('checked')};
+      $.ajax({
+        url: '/store/' + window.APPLICATION.id + '/install',
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+          swal({
+            title: 'Success',
+            text: 'Installation completed',
+            icon: 'success',
+            button: 'Ok'
+          });
+        },
+        data: JSON.stringify(data)
       }).always(function() {
         $(that).prop('disabled', false);
         $('.load-bar').addClass('d-none');
@@ -47,20 +55,24 @@
                 </div>
                 <div class="col-md-9">
                     <h1 class="display-4"><%= application.name %></h1>
-                    <p id="app-description">
-
-                    </p>
+                    <p id="app-description"></p>
                     <div>
                         <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="sample-data">
-                          <label class="form-check-label" for="sample-data">Sample Data</label>
+                            <input type="checkbox" class="form-check-input" id="sample-data">
+                            <label class="form-check-label" for="sample-data">Sample Data</label>
                         </div>
+                        <br/>
                         <button class="btn btn-primary" id="btn-install">Install</button>
+                        <br/>
                     </div>
+
                     <p>Current Version : <%= application.version %></p>
+
                     <% if(application.installed_version) { %>
+
                     <p>Installed Version : <%= application.installed_version %></p>
                     <% } %>
+
                     <div class="load-bar d-none">
                         <div class="bar"></div>
                         <div class="bar"></div>
