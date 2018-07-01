@@ -7,7 +7,6 @@ const config = require('../config/config');
 
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
-const hashUtils = require('../utils/hash-utils');
 const cleanInstall = require('./clean-install');
 const getModel = require('../model');
 const modelUtils = require('../model/model-utils');
@@ -64,7 +63,6 @@ class Platform {
   }
 
   populateSysData(collectionDef) {
-    let that = this;
     let dfd = Q.defer();
     let p_collection = new Model('p_collection');
     let p_field = new Model('p_field');
