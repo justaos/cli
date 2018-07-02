@@ -3,7 +3,7 @@
   "label": "Todo",
   "fields": [
 	{
-	  "name": "todoText",
+	  "name": "todo_text",
 	  "type": "string",
 	  "display_value": true
 	},

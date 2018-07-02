@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 
-let database;
+const DatabaseConnector = require('../config/database-connector');
 
-module.exports = function(loggedInUser, db) {
-
-  if (db)
-    database = db;
+module.exports = function(loggedInUser) {
 
   let privateData = new WeakMap();
 
@@ -14,7 +11,7 @@ module.exports = function(loggedInUser, db) {
     constructor(modelName) {
       privateData.set(this, {});
       privateData.get(this).modelName = modelName;
-      let conn = database.getConnection();
+      let conn = DatabaseConnector.getInstance().getConnection();
       privateData.get(this).model = conn.model(modelName);
     }
 
@@ -28,10 +25,6 @@ module.exports = function(loggedInUser, db) {
 
     getSchemaDef(){
       return privateData.get(this).model.def;
-    }
-
-    static getDatabase() {
-      return database;
     }
 
     /**

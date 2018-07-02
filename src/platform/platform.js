@@ -18,6 +18,7 @@ let P_COLLECTION_PATH = config.root +
     '/resources/platform/models/p_collection.json';
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
 let P_OPTION_PATH = config.root + '/resources/platform/models/p_option.json';
+let P_DEFAULT_FIELDS_PATH = config.root + '/resources/platform/default-fields.json';
 
 let PROD_PATH;
 if (config.mode === 'internal')
@@ -37,7 +38,8 @@ class Platform {
     let dfd = Q.defer();
     const db = new DatabaseConnector();
     db.connect().then(() => {
-      Model = getModel('admin', db);
+      DatabaseConnector.setInstance(db);
+      Model = getModel('admin');
       dfd.resolve(db);
     }, dfd.reject);
     return dfd.promise;
@@ -144,23 +146,10 @@ class Platform {
     let modelDefs = fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg +
         '/models/**.json');
 
+    let defaultFields = fileUtils.readJsonFileSync(P_DEFAULT_FIELDS_PATH);
+
     modelDefs.forEach(function(modelDef) {
-      modelDef.fields.push({
-        name: 'created_at',
-        type: 'date'
-      });
-      modelDef.fields.push({
-        name: 'updated_at',
-        type: 'date'
-      });
-      modelDef.fields.push({
-        name: 'created_by',
-        type: 'string'
-      });
-      modelDef.fields.push({
-        name: 'updated_by',
-        type: 'string'
-      });
+      modelDef.fields = modelDef.fields.concat(defaultFields);
     });
     return modelDefs;
   }

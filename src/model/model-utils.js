@@ -2,6 +2,7 @@ const Q = require('q');
 const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
 const Model = require('./index')();
+const DatabaseConnector = require('../config/database-connector');
 const mongoose = require('mongoose');
 const glob = require('glob');
 const fileUtils = require('../utils/file-utils');
@@ -9,7 +10,7 @@ const fileUtils = require('../utils/file-utils');
 let ModelUtils = {
 
   loadSchemasIntoStore(defs) {
-    let conn = Model.getDatabase().getConnection();
+    let conn = DatabaseConnector.getInstance().getConnection();
     let backlog = {};
     let loadSchemaFn = loadSchemaFactory(conn, backlog);
     defs.forEach(loadSchemaFn);
@@ -38,7 +39,7 @@ let ModelUtils = {
 
   loadSchemasFromDB() {
     let dfd = Q.defer();
-    let conn = Model.getDatabase().getConnection();
+    let conn = DatabaseConnector.getInstance().getConnection();
     let backlog = {};
     let loadSchemaFn = loadSchemaFactory(conn, backlog);
     let p_collection = new Model('p_collection');

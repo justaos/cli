@@ -6,6 +6,8 @@ const _ = require('lodash');
 const Admin = mongoose.mongo.Admin;
 mongoose.Promise = Promise;
 
+let db;
+
 class DatabaseConnector {
   constructor() {
   }
@@ -65,6 +67,15 @@ class DatabaseConnector {
   getConnection() {
     return this._connection;
   }
+
+  static setInstance(databaseInstance){
+    db = databaseInstance;
+  }
+
+  static getInstance(){
+    return db;
+  }
+
 }
 
 module.exports = DatabaseConnector;

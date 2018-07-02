@@ -1,12 +1,12 @@
 const logger = require('../config/logger');
 const fileUtils = require('../utils/file-utils');
-const Model = require('../model')();
+const DatabaseConnector = require('../config/database-connector');
 
 const modelUtils = require('../model/model-utils');
 const Q = require('q');
 
 let cleanInstall = (platform, PLATFORM_MODELS_PATH) => {
-  let db = Model.getDatabase();
+  let db = DatabaseConnector.getInstance();
   let dfd = Q.defer();
   logger.info('platform', 'clean installing...');
   db.dropDatabase().then(function() {
@@ -27,6 +27,6 @@ let cleanInstall = (platform, PLATFORM_MODELS_PATH) => {
 
   });
   return dfd.promise;
-}
+};
 
 module.exports = cleanInstall;

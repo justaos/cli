@@ -64,7 +64,6 @@
     "istanbul": "^0.4.5",
     "js2xmlparser": "^3.0.0",
     "jsonfile": "^4.0.0",
-    "jsontoxml": "^1.0.0",
     "jsonwebtoken": "^8.2.0",
     "lodash": "^4.17.5",
     "mongoose": "^5.0.15",
@@ -74,8 +73,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "q": "^1.5.1",
-    "winston": "^2.4.1",
-    "xml": "^1.0.1"
+    "winston": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
