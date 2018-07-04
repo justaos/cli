@@ -60,7 +60,7 @@
 					</div>
 				</div>
 			</div>
-			<input type="text" class="form-control" ng-model="item.todoText" disabled>
+			<input type="text" class="form-control" ng-model="item.todo_text" disabled>
 			<div class="input-group-append">
 				<button class="btn btn-danger" ng-click="remove(item)">Remove</button>
 			</div>
@@ -85,7 +85,7 @@
 					</div>
 				</div>
 			</div>
-			<input style="text-decoration: line-through;" type="text" class="form-control" ng-model="item.todoText" disabled>
+			<input style="text-decoration: line-through;" type="text" class="form-control" ng-model="item.todo_text" disabled>
 			<div class="input-group-append">
 				<button class="btn btn-danger" ng-click="remove(item)">Remove</button>
 			</div>
@@ -145,7 +145,7 @@
         data: {
           action: 'create',
           record: {
-            todoText: $scope.todoInput
+            todo_text: $scope.todoInput
           }
         }
       }).then(function(response) {
