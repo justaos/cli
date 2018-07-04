@@ -56,7 +56,7 @@ module.exports = function(platform) {
     let promises = [];
     promises.push(new Model('p_menu').findById(menuId));
     promises.push(
-        new Model('p_module').find({menu: menuId}, null, {sort: {order: 1}})); // order: [Sequelize.col('order'), Sequelize.col('name')]
+        new Model('p_module').find({menu: menuId}, null, {sort: {order: 1}}));
 
     Q.all(promises).then(function(responses) {
       if (responses[0] && responses[1]) {
@@ -110,7 +110,12 @@ module.exports = function(platform) {
           if (collectionModel)
             new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
-                  collectionModel.find({}).then(function(data) {
+                  let options;
+                  if(req.query.sort){
+                    options = {};
+                    options.sort = JSON.parse(req.query.sort);
+                  }
+                  collectionModel.find({}, null, options).then(function(data) {
                     res.render('pages/list', {
                       collection: {
                         label: collection.label,
