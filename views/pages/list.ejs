@@ -92,7 +92,7 @@
                         <% if(col.type == 'password'){ %>
                         <!-- skipped <%= col.name %> -->
                         <% } else { %>
-                        <th><%= col.label %></th>
+                        <th id="col-header-<%= col.name %>" class="col-header" data-col="<%= col.name %>"><span class="col-title"><%= col.label %></span> <i class="fas sort-icon float-right d-none"></i></th>
                         <% }}); %>
                     </tr>
                     </thead>
@@ -110,6 +110,10 @@
                         <% cols.forEach(function(col){ %>
                         <% if(col.type == 'password'){ %>
                         <!-- skipped <%= col.name %> -->
+                        <% } else if(col.type == 'date'){ %>
+                        <td>
+                            <%= item[col.name] ? new Date(item[col.name]).toISOString() : ''%>
+                        </td>
                         <% } else { %>
                         <td>
                             <% if(col.display_value) { %>
@@ -179,5 +183,31 @@
     $('#select-all-checkbox').on('click', function() {
         $('.item-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
     });
+
+    let currentUrl = new URL(window.location.href);
+    let sortQuery = currentUrl.searchParams.get('sort');
+
+    if(sortQuery){
+      sortQuery = JSON.parse(sortQuery);
+      setTimeout(function(){
+        var field = Object.keys(sortQuery)[0];
+        var $sortIcon = $('#col-header-'+field).find('.sort-icon');
+        $sortIcon.removeClass('d-none');
+        if(sortQuery[field] === 1)
+          $sortIcon.addClass('fa-sort-down').addClass('mb-2');
+        else
+          $sortIcon.addClass('fa-sort-up').addClass('mt-2');
+      }, 100);
+
+    }
+
+    $('.col-header').on('click', function(e){
+      var field = $(this).data('col');
+      if(sortQuery && sortQuery[field] === 1){
+        window.location.href = currentUrl.pathname + '?sort={"'+field+'": -1}';
+      } else
+        window.location.href = currentUrl.pathname + '?sort={"'+field+'": 1}';
+    })
+
   });
 </script>
