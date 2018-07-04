@@ -110,12 +110,15 @@ module.exports = function(platform) {
           if (collectionModel)
             new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
-                  let options;
+                  let conditions = {}, options;
                   if(req.query.sort){
                     options = {};
                     options.sort = JSON.parse(req.query.sort);
                   }
-                  collectionModel.find({}, null, options).then(function(data) {
+                  if(req.query.conditions) {
+                    conditions = JSON.parse(req.query.conditions);
+                  }
+                  collectionModel.find(conditions, null, options).then(function(data) {
                     res.render('pages/list', {
                       collection: {
                         label: collection.label,
