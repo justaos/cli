@@ -6,21 +6,21 @@ module.exports = function(loggedInUser) {
 
   let privateData = new WeakMap();
 
-  class Model {
 
-    constructor(modelName) {
+  function getModel(context){
+    return privateData.get(context).model;
+  }
+
+  class Collection extends CollectionFind{
+
+    constructor(collectionName) {
       privateData.set(this, {});
-      privateData.get(this).modelName = modelName;
-      let conn = DatabaseConnector.getInstance().getConnection();
-      privateData.get(this).model = conn.model(modelName);
+      privateData.get(this).collectionName = collectionName;
+      privateData.get(this).model = DatabaseConnector.getInstance().getConnection().model(collectionName);
     }
 
     getName() {
       return privateData.get(this).modelName;
-    }
-
-    getSchemaDef(){
-      return privateData.get(this).model.def;
     }
 
     /**
@@ -28,7 +28,7 @@ module.exports = function(loggedInUser) {
      */
 
     count(conditions) {
-      return privateData.get(this).model.count(conditions);
+      return getModel(this).count(conditions);
     }
 
     create(docs) {
@@ -106,6 +106,6 @@ module.exports = function(loggedInUser) {
 
   }
 
-  return Model;
+  return Collection;
 };
 

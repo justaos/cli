@@ -20,18 +20,18 @@
                 </div>
             </li>
         </ul>
-        <form class="form-inline">
+        <form class="form-inline" id="search-input-form">
             <div class="input-group  input-group-sm">
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">Dropdown
+                    <button class="btn btn-outline-secondary dropdown-toggle selected-option" type="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"
+                            data-selected="<%= cols[0].name %>"><%= cols[0].label %>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
+                        <% cols.forEach(function(col){ %>
+                        <a class="dropdown-item" href="#" data-id="<%= col.name %>"><%= col.label %></a>
+                        <% }) %>
                     </div>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
@@ -92,7 +92,9 @@
                         <% if(col.type == 'password'){ %>
                         <!-- skipped <%= col.name %> -->
                         <% } else { %>
-                        <th id="col-header-<%= col.name %>" class="col-header" data-col="<%= col.name %>"><span class="col-title"><%= col.label %></span> <i class="fas sort-icon float-right d-none"></i></th>
+                        <th id="col-header-<%= col.name %>" class="col-header" data-col="<%= col.name %>"><span
+                                    class="col-title"><%= col.label %></span> <i
+                                    class="fas sort-icon float-right d-none"></i></th>
                         <% }}); %>
                     </tr>
                     </thead>
@@ -112,7 +114,7 @@
                         <!-- skipped <%= col.name %> -->
                         <% } else if(col.type == 'date'){ %>
                         <td>
-                            <%= item[col.name] ? new Date(item[col.name]).toISOString() : ''%>
+                            <%= item[col.name] ? new Date(item[col.name]).toISOString() : '' %>
                         </td>
                         <% } else { %>
                         <td>
@@ -181,19 +183,19 @@
       });
     });
     $('#select-all-checkbox').on('click', function() {
-        $('.item-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
+      $('.item-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
     });
 
     let currentUrl = new URL(window.location.href);
     let sortQuery = currentUrl.searchParams.get('sort');
 
-    if(sortQuery){
+    if (sortQuery) {
       sortQuery = JSON.parse(sortQuery);
-      setTimeout(function(){
+      setTimeout(function() {
         var field = Object.keys(sortQuery)[0];
-        var $sortIcon = $('#col-header-'+field).find('.sort-icon');
+        var $sortIcon = $('#col-header-' + field).find('.sort-icon');
         $sortIcon.removeClass('d-none');
-        if(sortQuery[field] === 1)
+        if (sortQuery[field] === 1)
           $sortIcon.addClass('fa-sort-down').addClass('mb-2');
         else
           $sortIcon.addClass('fa-sort-up').addClass('mt-2');
@@ -201,12 +203,22 @@
 
     }
 
-    $('.col-header').on('click', function(e){
+    $('.col-header').on('click', function(e) {
       var field = $(this).data('col');
-      if(sortQuery && sortQuery[field] === 1){
-        window.location.href = currentUrl.pathname + '?sort={"'+field+'": -1}';
+      if (sortQuery && sortQuery[field] === 1) {
+        currentUrl.searchParams.set('sort', '{"' + field + '": -1}');
       } else
-        window.location.href = currentUrl.pathname + '?sort={"'+field+'": 1}';
+        currentUrl.searchParams.set('sort', '{"' + field + '": 1}');
+
+      window.location.href = currentUrl.href;
+    });
+
+    $('#search-input-form').on('submit', function(e) {
+      e.preventDefault();
+      var field = $(this).find('.selected-option').data('selected');
+      var value = $(this).find('input').val();
+      currentUrl.searchParams.set('conditions', '{ "' + field + '": { "$regex": "' + value + '", "$options": "i" } }');
+      window.location.href = currentUrl.href;
     })
 
   });

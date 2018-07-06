@@ -41,8 +41,12 @@
 <script>
 
   window.onfocus = function() {
-    if (!Cookies.get('x-authenticated'))
-      window.location.reload();
+    if (!Cookies.get('x-authenticated')){
+      if(window.parent)
+        window.parent.location.reload();
+      else
+        window.location.reload();
+    }
   }
 
 </script>
