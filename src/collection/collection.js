@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const DatabaseConnector = require('../config/database-connector');
+const Query = require('./query');
 
 module.exports = function(loggedInUser) {
 
