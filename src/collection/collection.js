@@ -39,21 +39,20 @@ module.exports = function(loggedInUser) {
         }
       
         /**
-         * @param {Object|String|Number} id value of `_id` to query by
+         * @param {Object} [conditions]
          * @param {Object|String} [projection] optional fields to return
          * @param {Object} [options] optional
          * @return {Query}
          */
-        findOne(id, projection, options) {
+        findOne(conditions, projection, options) {
             if (typeof id === 'undefined') {
                 id = null;
             }
-            return this.model.findOne({
-                _id: id
-            }, projection, options);
+            
+            var mongooseQuery = this.model.findOne(conditions, projection, options);
+            
+            return new Query(mongooseQuery);
         }
-
-
 
     }
 
