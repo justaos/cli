@@ -4,108 +4,58 @@ const DatabaseConnector = require('../config/database-connector');
 
 module.exports = function(loggedInUser) {
 
-  let privateData = new WeakMap();
+    let privateData = new WeakMap();
 
 
-  function getModel(context){
-    return privateData.get(context).model;
-  }
-
-  class Collection extends CollectionFind{
-
-    constructor(collectionName) {
-      privateData.set(this, {});
-      privateData.get(this).collectionName = collectionName;
-      privateData.get(this).model = DatabaseConnector.getInstance().getConnection().model(collectionName);
+    function getModel(context) {
+        return privateData.get(context).model;
     }
 
-    getName() {
-      return privateData.get(this).modelName;
-    }
+    class Collection {
 
-    /**
-     * START - mongoose methods wrapping
-     */
-
-    count(conditions) {
-      return getModel(this).count(conditions);
-    }
-
-    create(docs) {
-      if (loggedInUser) {
-        if (docs instanceof Array)
-          docs.forEach(function(doc) {
-            doc.created_by = loggedInUser.id;
-          });
-        else
-          docs.created_by = loggedInUser.id;
-      }
-      return privateData.get(this).model.create(docs);
-    }
-
-    find(conditions, projection, options) {
-      return privateData.get(this).model.find(conditions, projection, options);
-    }
-
-    findById(id) {
-      return privateData.get(this).model.findById(id);
-    }
-
-    findByIdAndUpdate(id, obj) {
-      let condition = {_id: mongoose.Types.ObjectId(id)};
-      return this.findOneAndUpdate(condition, obj, !id);
-    }
-
-    findOne(obj) {
-      return privateData.get(this).model.findOne(obj).exec();
-    }
-
-    findOneAndUpdate(condition, obj, create) {
-      if (loggedInUser){
-        obj.updated_by = loggedInUser.id;
-        if(create){
-          obj.created_by = loggedInUser.id;
+        constructor(collectionName) {
+            privateData.set(this, {});
+            privateData.get(this).collectionName = collectionName;
+            privateData.get(this).model = DatabaseConnector.getInstance().getConnection().model(collectionName);
         }
-      }
-      return privateData.get(this).
-          model.
-          findOneAndUpdate(condition, obj, {upsert: true}).
-          exec();
+
+        getName() {
+            return privateData.get(this).modelName;
+        }
+
+        /**
+         * @param {Object|String|Number} id value of `_id` to query by
+         * @param {Object|String} [projection] optional fields to return, see [`Query.prototype.select()`](#query_Query-select)
+         * @param {Object} [options] optional see [`Query.prototype.setOptions()`](http://mongoosejs.com/docs/api.html#query_Query-setOptions)
+         * @return {Query}
+         */
+        findById(id, projection, options) {
+            if (typeof id === 'undefined') {
+                id = null;
+            }
+            return this.findOne({
+                _id: id
+            }, projection, options);
+        }
+      
+        /**
+         * @param {Object|String|Number} id value of `_id` to query by
+         * @param {Object|String} [projection] optional fields to return, see [`Query.prototype.select()`](#query_Query-select)
+         * @param {Object} [options] optional see [`Query.prototype.setOptions()`](http://mongoosejs.com/docs/api.html#query_Query-setOptions)
+         * @return {Query}
+         */
+        findOne(id, projection, options) {
+            if (typeof id === 'undefined') {
+                id = null;
+            }
+            return this.model.findOne({
+                _id: id
+            }, projection, options);
+        }
+
+
+
     }
 
-    remove(condition) {
-      return privateData.get(this).model.remove(condition).exec();
-    }
-
-    removeById(id) {
-      let condition = {_id: mongoose.Types.ObjectId(id)};
-      return this.remove(condition);
-    }
-
-    upsert(values, condition) {
-      let that = this;
-      return this.findOne({where: condition}).then(function(obj) {
-        if (obj) // update
-          return obj.update(values);
-        else  // insert
-          return that.create(values);
-      });
-    }
-
-    update(condition, obj) {
-      return privateData.get(this).model.update(condition, obj).exec();
-    }
-
-    where(obj) {
-      return privateData.get(this).model.where(obj);
-    }
-
-    /**
-     * END - mongoose methods wrapping
-     */
-
-  }
-
-  return Collection;
+    return Collection;
 };
-
