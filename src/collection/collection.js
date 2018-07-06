@@ -12,7 +12,7 @@ module.exports = function(loggedInUser) {
         return privateData.get(context).model;
     }
 
-    class Collection {
+    class Model {
 
         constructor(collectionName) {
             privateData.set(this, {});
@@ -57,5 +57,5 @@ module.exports = function(loggedInUser) {
 
     }
 
-    return Collection;
+    return Model;
 };
