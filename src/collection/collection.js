@@ -25,8 +25,8 @@ module.exports = function(loggedInUser) {
 
         /**
          * @param {Object|String|Number} id value of `_id` to query by
-         * @param {Object|String} [projection] optional fields to return, see [`Query.prototype.select()`](#query_Query-select)
-         * @param {Object} [options] optional see [`Query.prototype.setOptions()`](http://mongoosejs.com/docs/api.html#query_Query-setOptions)
+         * @param {Object|String} [projection] optional fields to return
+         * @param {Object} [options] optional
          * @return {Query}
          */
         findById(id, projection, options) {
@@ -40,8 +40,8 @@ module.exports = function(loggedInUser) {
       
         /**
          * @param {Object|String|Number} id value of `_id` to query by
-         * @param {Object|String} [projection] optional fields to return, see [`Query.prototype.select()`](#query_Query-select)
-         * @param {Object} [options] optional see [`Query.prototype.setOptions()`](http://mongoosejs.com/docs/api.html#query_Query-setOptions)
+         * @param {Object|String} [projection] optional fields to return
+         * @param {Object} [options] optional
          * @return {Query}
          */
         findOne(id, projection, options) {
