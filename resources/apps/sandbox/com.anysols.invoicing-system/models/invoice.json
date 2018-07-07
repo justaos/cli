@@ -1,0 +1,12 @@
+{
+  "name": "invoice",
+  "label": "Invoice",
+  "fields": [
+	{
+	  "name": "customer",
+	  "type": "reference",
+	  "display_value": true
+	}
+							
+  ]
+}
