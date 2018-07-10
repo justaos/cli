@@ -22,7 +22,7 @@ let P_DEFAULT_FIELDS_PATH = config.root + '/resources/platform/default-fields.js
 
 let PROD_PATH;
 if (config.mode === 'internal')
-  PROD_PATH = config.cwd + '/resources/apps/prod/';
+  PROD_PATH = config.cwd + '/resources/apps/';
 else
   PROD_PATH = config.cwd + '/apps/';
 

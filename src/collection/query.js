@@ -12,4 +12,4 @@ class Query {
 
 }
 
-return Query;
+module.exports = Query;

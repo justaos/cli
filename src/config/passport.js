@@ -4,14 +4,14 @@ const hashUtils = require('../utils/hash-utils');
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
-const Model = require('../model')();
+const Model = require('../collection');
 
 module.exports = function() {
   passport.use(new LocalStrategy(
       function(username, password, done) {
 
-        //Assume there is a DB module pproviding a global UserModel
-        new Model('p_user').where({username: username}).findOne(function(err, user) {
+        //Assume there is a DB module providing a global UserModel
+        new Model('p_user').findOne({username: username}).exec(function(err, user) {
           if (err)
             return done(null, false, {
               found: false,

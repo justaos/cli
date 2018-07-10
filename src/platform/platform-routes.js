@@ -2,7 +2,9 @@ const authenticate = require('../config/authenticate');
 const dsUtils = require('../utils/ds-utils');
 const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
+const PlatformService = require('./service/platform-service');
 const getModel = require('../model');
+const ModelSessionFactory = require('../collection/model-session-fatory');
 const vm = require('vm');
 const js2xmlparser = require('js2xmlparser');
 
@@ -11,14 +13,14 @@ module.exports = function(platform) {
   let router = platform.router;
 
   router.get('/', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_menu').find({}).then(menus => {
+    let ps = new PlatformService(req.user);
+    ps.getMenus(menus => {
       res.render('index', {menus: menus, layout: 'layouts/layout'});
     });
   });
 
   router.get('/profile', authenticate, function(req, res) {
-    res.redirect('/no-menu?url=/p/p_user/edit/'+req.user.id);
+    res.redirect('/no-menu?url=/p/p_user/edit/' + req.user.id);
   });
 
   router.get('/dev-tools', authenticate, function(req, res, next) {
@@ -27,20 +29,19 @@ module.exports = function(platform) {
   });
 
   router.get('/store', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_application').find({}).then(applications => { //order: Sequelize.col('order')
+    let ps = new PlatformService(req.user);
+    ps.getApplications(applications => {
       res.render('pages/store',
           {applications: applications, layout: 'layouts/layout'});
     });
   });
 
   router.get('/store/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_application').findById(req.params.id).
-        then(function(application) {
-          res.render('pages/store-app',
-              {application: application, layout: 'layouts/layout'});
-        });
+    let ps = new PlatformService(req.user);
+    ps.getApplicationById(req.params.id, function(application) {
+      res.render('pages/store-app',
+          {application: application, layout: 'layouts/layout'});
+    });
   });
 
   router.post('/store/:id/install', authenticate, function(req, res) {
@@ -111,24 +112,25 @@ module.exports = function(platform) {
             new Model('p_field').find({ref_collection: collection.id}).
                 then(function(cols) {
                   let conditions = {}, options;
-                  if(req.query.sort){
+                  if (req.query.sort) {
                     options = {};
                     options.sort = JSON.parse(req.query.sort);
                   }
-                  if(req.query.conditions) {
+                  if (req.query.conditions) {
                     conditions = JSON.parse(req.query.conditions);
                   }
-                  collectionModel.find(conditions, null, options).then(function(data) {
-                    res.render('pages/list', {
-                      collection: {
-                        label: collection.label,
-                        name: collection.name
-                      },
-                      data: data,
-                      cols: cols,
-                      layout: 'layouts/no-header-layout'
-                    });
-                  });
+                  collectionModel.find(conditions, null, options).
+                      then(function(data) {
+                        res.render('pages/list', {
+                          collection: {
+                            label: collection.label,
+                            name: collection.name
+                          },
+                          data: data,
+                          cols: cols,
+                          layout: 'layouts/no-header-layout'
+                        });
+                      });
                 });
           else
             res.render('404');
