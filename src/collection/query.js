@@ -7,7 +7,12 @@ class Query {
     }
 
     exec(cb) {
-        this.query.exec(cb)
+        return this.query.exec(cb)
+    }
+
+    remove(filter) {
+        this.query = this.query.remove(filter);
+        return this;
     }
 
 }

@@ -2,36 +2,27 @@
   "collection": "p_module",
   "records": [
 	{
-	  "id": "5b16e136b675ab6406000001",
-	  "name": "Todo",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "id": "5b46449ff81fa46802000001",
+	  "name": "Invoice",
+	  "menu": "5b4643f45383c8b831000001"
 	},
 	{
-	  "id": "5b16e0cc9626929434000001",
+	  "id": "5b4644b14c43a0042a000001",
 	  "name": "Create New",
 	  "order": 100,
 	  "type": "new",
-	  "ref_collection": "todo",
-	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_collection": "invoice",
+	  "parent": "5b46449ff81fa46802000001",
+	  "menu": "5b4643f45383c8b831000001"
 	},
 	{
-	  "id": "5b16e1706254396839000001",
+	  "id": "5b4644ce36cad0bc29000001",
 	  "name": "List",
 	  "order": 200,
 	  "type": "list",
-	  "ref_collection": "todo",
-	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
-	},
-	{
-	  "id": "5b21dfb62df4c91b38d3f321",
-	  "name": "Custom",
-	  "order": 300,
-	  "type": "url",
-	  "url": "/ui/com.anysols.sample.todo/",
-	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_collection": "invoice",
+	  "parent": "5b46449ff81fa46802000001",
+	  "menu": "5b4643f45383c8b831000001"
 	}
   ]
 }
