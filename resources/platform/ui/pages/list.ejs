@@ -1,4 +1,4 @@
-<link href="/views/styles/list.css" rel="stylesheet">
+<link href="/ui/styles/list.css" rel="stylesheet">
 <div class="list-page">
     <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
         <h4 class="navbar-brand py-2 m-0 float-left">
@@ -26,11 +26,11 @@
                     <button class="btn btn-outline-secondary dropdown-toggle selected-option" type="button"
                             data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"
-                            data-selected="<%= cols[0].name %>"><%= cols[0].label %>
+                            data-selected="<%= fields[0].name %>"><%= fields[0].label %>
                     </button>
                     <div class="dropdown-menu">
-                        <% cols.forEach(function(col){ %>
-                        <a class="dropdown-item" href="#" data-id="<%= col.name %>"><%= col.label %></a>
+                        <% fields.forEach(function(field){ %>
+                        <a class="dropdown-item" href="#" data-id="<%= field.name %>"><%= field.label %></a>
                         <% }) %>
                     </div>
                 </div>
@@ -88,12 +88,12 @@
                                             class="sr-only"></span></label>
                             </div>
                         </th>
-                        <% cols.forEach(function(col){ %>
-                        <% if(col.type == 'password'){ %>
-                        <!-- skipped <%= col.name %> -->
+                        <% fields.forEach(function(field){ %>
+                        <% if(field.type == 'password'){ %>
+                        <!-- skipped <%= field.name %> -->
                         <% } else { %>
-                        <th id="col-header-<%= col.name %>" class="col-header" data-col="<%= col.name %>"><span
-                                    class="col-title"><%= col.label %></span> <i
+                        <th id="col-header-<%= field.name %>" class="col-header" data-col="<%= field.name %>"><span
+                                    class="col-title"><%= field.label %></span> <i
                                     class="fas sort-icon float-right d-none"></i></th>
                         <% }}); %>
                     </tr>
@@ -109,19 +109,19 @@
                                             class="sr-only"></span></label>
                             </div>
                         </td>
-                        <% cols.forEach(function(col){ %>
-                        <% if(col.type == 'password'){ %>
-                        <!-- skipped <%= col.name %> -->
-                        <% } else if(col.type == 'date'){ %>
+                        <% fields.forEach(function(field){ %>
+                        <% if(field.type == 'password'){ %>
+                        <!-- skipped <%= field.name %> -->
+                        <% } else if(field.type == 'date'){ %>
                         <td>
-                            <%= item[col.name] ? new moment(item[col.name]).format('DD-MMM-YYYY h:mm A') : '' %>
+                            <%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>
                         </td>
                         <% } else { %>
                         <td>
-                            <% if(col.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= item['id'] %>"><%= item[col.name] %></a>
+                            <% if(field.display_value) { %>
+                            <a href="/p/<%= collection.name %>/edit/<%= item['id'] %>"><%= item[field.name] %></a>
                             <% } else { %>
-                            <%= item[col.name] %>
+                            <%= item[field.name] %>
                             <% } %>
                         </td>
                         <% }}); %>

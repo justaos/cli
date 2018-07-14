@@ -4,7 +4,7 @@
 	{
 	  "id": "5b16e136b675ab6406000001",
 	  "label": "Todo",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_menu": "5b16e0bfe02440982a000001"
 	},
 	{
 	  "id": "5b16e0cc9626929434000001",
@@ -13,7 +13,7 @@
 	  "type": "new",
 	  "ref_collection": "todo",
 	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_menu": "5b16e0bfe02440982a000001"
 	},
 	{
 	  "id": "5b16e1706254396839000001",
@@ -22,7 +22,7 @@
 	  "type": "list",
 	  "ref_collection": "todo",
 	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_menu": "5b16e0bfe02440982a000001"
 	},
 	{
 	  "id": "5b21dfb62df4c91b38d3f321",
@@ -31,7 +31,7 @@
 	  "type": "url",
 	  "url": "/ui/com.anysols.sample.todo/",
 	  "parent": "5b16e136b675ab6406000001",
-	  "menu": "5b16e0bfe02440982a000001"
+	  "ref_menu": "5b16e0bfe02440982a000001"
 	}
   ]
 }

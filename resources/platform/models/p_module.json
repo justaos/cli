@@ -12,12 +12,14 @@
       "display_value": true
     },
     {
+      "label": "Parent",
       "name": "parent",
-      "type": "uuid"
+      "type": "reference"
     },
     {
-      "name": "menu",
-      "type": "uuid"
+      "label": "Menu",
+      "name": "ref_menu",
+      "type": "reference"
     },
     {
       "name": "url",

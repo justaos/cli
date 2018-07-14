@@ -72,7 +72,7 @@ module.exports = function (platform) {
             res.render('pages/list', {
                 collection: collection,
                 data: data,
-                cols: fields,
+                fields: fields,
                 moment: moment,
                 layout: 'layouts/no-header-layout'
             });
@@ -85,17 +85,19 @@ module.exports = function (platform) {
         let ps = new PlatformService(req.user);
 
         ps.getCollectionByName(req.params.collection).then(function (collection) {
-            ps.getFieldsForCollection(collection.id).then(function (cols) {
-                cols = cols.map(model => model.toObject());
-                ps.populateOptions(cols, collection.name).then(function () {
-                    res.render('pages/form', {
+            ps.getFieldsForCollection(collection.id).then(function (fields) {
+                fields = fields.map(model => model.toObject());
+
+                ps.populateOptions(fields, collection.name).then(function () {
+                    res.render('pages/form/form', {
                         collection: {
                             label: collection.label,
                             name: collection.name
                         },
-                        cols: cols,
+                        fields: fields,
                         item: {},
-                        layout: 'layouts/no-header-layout'
+                        layout: 'layouts/no-header-layout',
+                        moment: moment
                     });
                 });
             });
@@ -109,16 +111,17 @@ module.exports = function (platform) {
             promises.push(ps.getFieldsForCollection(collection.id));
             promises.push(ps.findRecordById(req.params.collection, req.params.id));
             Q.all(promises).then(function (result) {
-                let cols = result[0].map(model => model.toObject());
-                ps.populateOptions(cols, collection.name).then(function () {
-                    res.render('pages/form', {
+                let fields = result[0].map(model => model.toObject());
+                ps.populateOptions(fields, collection.name).then(function () {
+                    res.render('pages/form/form', {
                         collection: {
                             label: collection.label,
                             name: collection.name
                         },
-                        cols: cols,
+                        fields: fields,
                         item: result[1].toObject(),
-                        layout: 'layouts/no-header-layout'
+                        layout: 'layouts/no-header-layout',
+                        moment: moment
                     });
                 });
 

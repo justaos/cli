@@ -7,7 +7,7 @@
 	  "order": 100,
 	  "type": "list",
 	  "ref_collection": "p_user",
-	  "menu": "5b15588ef362641220dfebc0"
+	  "ref_menu": "5b15588ef362641220dfebc0"
 	},
 	{
 	  "id": "5b325a0f7763833884702efc",
@@ -15,7 +15,7 @@
 	  "order": 200,
 	  "type": "list",
 	  "ref_collection": "p_role",
-	  "menu": "5b15588ef362641220dfebc0"
+	  "ref_menu": "5b15588ef362641220dfebc0"
 	},
 	{
 	  "id": "5b384f8c1f7ee41020000001",
@@ -23,7 +23,7 @@
 	  "order": 200,
 	  "type": "list",
 	  "ref_collection": "p_user_role",
-	  "menu": "5b15588ef362641220dfebc0"
+	  "ref_menu": "5b15588ef362641220dfebc0"
 	}
   ]
 }

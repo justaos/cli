@@ -1,0 +1,186 @@
+<link href="/ui/styles/form.css" rel="stylesheet"/>
+<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script src="/ui/scripts/form-script.js"></script>
+<script>
+    window.fs = new FormScript(<%- JSON.stringify(fields) %>);
+</script>
+
+<div class="form-page">
+    <%- include('./form-navigation', {}) %>
+    <main>
+        <div class="container-fluid">
+            <form id="view-form" class="needs-validation row mt-4" novalidate>
+                <% fields.forEach(function(field){ if(field.name != 'id'){ %>
+                <div class="col-md-12">
+                    <div class="form-group row no-gutters">
+                        <label for="form-<%= field.name %>"
+                               class="col-sm-2 col-form-label col-form-label"><%= field.label %></label>
+                        <div class="col-sm-8">
+
+                            <!-- integer field -->
+                            <% if(field.type == 'integer'){ %>
+                            <input type="number" class="form-control" id="form-<%= field.name %>"
+                                   name="<%= field.name %>"
+                                   value="<%= item[field.name] %>"
+                                   placeholder="<%= field.label %>">
+
+                            <!-- date field -->
+                            <% } else if(field.type == 'date'){ %>
+                            <input type="text" disabled class="form-control" id="form-<%= field.name %>"
+                                   name="<%= field.name %>"
+                                   value="<%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>"
+                                   placeholder="<%= field.label %>">
+
+                            <!-- integer field -->
+                            <% } else if(field.type == 'password'){ %>
+                            <input type="password" class="form-control" id="form-<%= field.name %>"
+                                   name="<%= field.name %>"
+                                   value=""
+                                   placeholder="<%= field.label %>">
+
+                            <!-- boolean field -->
+                            <% } else if(field.type == 'boolean'){ %>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input item-checkbox"
+                                       id="form-<%= field.name %>"
+                                       name="<%= field.name %>"
+                                       <% if(item[field.name]){ %>checked="checked"<%}%>
+                                       placeholder="<%= field.label %>">
+                                <label class="custom-control-label" for="form-<%= field.name %>"><span
+                                            class="sr-only"></span></label>
+                            </div>
+
+                            <!-- script field -->
+                            <% } else if(field.type == 'script'){ %>
+                            <div class="script-editor" id="form-<%= field.name %>" data-col-name="<%= field.name %>"
+                                 style="height: 500px;border:1px solid grey;"></div>
+
+
+                            <!-- option field -->
+                            <% } else if(field.type == 'option'){ %>
+                            <select class="form-control select-2" data-live-search="true" id="form-<%= field.name %>" title="Choose one of the following..."
+                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
+
+                                <% if(field.options) field.options.forEach(function(option){ %>
+                                <option value="<%= option.value %>"  <% if(option.value === item[field.name]){%>selected="selected"<%}%>><%= option.label %></option>
+                                <% }); %>
+                            </select>
+
+                            <!-- collection field -->
+                            <% } else if(field.type == 'collection'){ %>
+                            <select class="form-control select-2" data-live-search="true" id="form-<%= field.name %>" title="Choose one of the following..."
+                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
+
+                                <% if(field.options) field.options.forEach(function(option){ %>
+                                <option value="<%= option.name %>"  <% if(option.name === item[field.name]){%>selected="selected"<%}%>><%= option.label %></option>
+                                <% }); %>
+                            </select>
+
+
+                            <% } else { %>
+                            <input type="text" class="form-control" id="form-<%= field.name %>"
+                                   name="<%= field.name %>"
+                                   value="<%= item[field.name] %>"
+                                   placeholder="<%= field.label %>">
+                            <% } %>
+                            <div class="invalid-feedback">
+                                Please provide a <%= field.label %>.
+                            </div>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+                <% }}); %>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script>
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      let form = document.getElementById('view-form');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (form.checkValidity() === true) {
+          let formObj = fs.getRecord();
+
+          Object.keys(window.editors).forEach(function(key) {
+            formObj[key] = window.editors[key].getValue();
+          });
+
+            <% if(item.id) { %>
+          formObj.id = <%- JSON.stringify(item.id) %>;
+            <% } %>
+
+          $.ajax({
+            url: "/p/<%= collection.name %>",
+            data: JSON.stringify(formObj),
+            contentType: 'application/json',
+            type: 'POST'
+          }).then(function(data) {
+            if (data.redirect)
+              window.location.href = data.redirect;
+            else
+              window.location.reload();
+          }, function(err) {
+            alert(err.responseJSON.original.sqlMessage);
+          });
+        }
+        form.classList.add('was-validated');
+
+      }, false);
+    }, false);
+  })();
+</script>
+
+<script>var require = {paths: {'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
+<script>
+  monaco.languages.typescript.javascriptDefaults.addExtraLib([
+    'declare class Facts {',
+    '    /**',
+    '     * Returns the next fact',
+    '     */',
+    '    static next():string',
+    '}'
+  ].join('\n'));
+  window.editors = [];
+  var item = <%- JSON.stringify(item) %>;
+  document.querySelectorAll('.script-editor').forEach(function(element) {
+
+    window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
+      value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : [
+        '(function(req, res) {',
+        '\t //write you code here;',
+        '})(req, res)'
+      ].join('\n'),
+      language: 'javascript',
+      theme: 'vs-dark'
+    });
+  });
+
+  // In your Javascript (external .js resource or <script> tag)
+  $(document).ready(function() {
+    $('select').each(function() {
+      $(this).selectpicker();
+    });
+  });
+
+  $('.open-new-window').on('click', function(){
+    window.open(window.location.href, '_blank');
+  })
+
+  //console.log(editor.getValue());
+</script>

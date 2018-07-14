@@ -1,0 +1,42 @@
+<nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
+    <h4 class="navbar-brand py-2 m-0 float-left">
+        <%= collection.label %>
+    </h4>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                Actions
+            </a>
+            <div class="dropdown-menu" aria-labelledby="actionsDD">
+                <a class="dropdown-item" href="#">Delete</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                    data-container="body" title="Filter">
+                <i class="fas fa-filter"></i>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                    data-container="body" title="Filter">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
+                    data-container="body" title="Filter">
+                <i class="fas fa-angle-right"></i>
+            </button>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" target="_blank" class="btn btn-link btn-sm open-new-window" data-toggle="tooltip" data-placement="top"
+               data-container="body" title="Open New Window">
+                <i class="fas fa-external-link-alt"></i>
+            </a>
+        </li>
+    </ul>
+</nav>

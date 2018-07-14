@@ -55,7 +55,7 @@ class PlatformService {
     getMenuAndModules(menuId, cb) {
         let promises = [];
         promises.push(this.getModel('p_menu').findById(menuId).exec());
-        promises.push(this.getModel('p_module').find({menu: menuId}, null, {sort: {order: 1}}).exec());
+        promises.push(this.getModel('p_module').find({ref_menu: menuId}, null, {sort: {order: 1}}).exec());
 
         Q.all(promises).then(function (responses) {
             let menu = responses[0];
