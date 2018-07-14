@@ -99,23 +99,34 @@ class PlatformService {
             if (field.type === 'option') {
                 let dfd = Q.defer();
                 promises.push(dfd.promise);
-                optionModel.find({ref_collection: collectionName, field: field.name}, null, {sort: {order: 1}}).exec((err, options) => {
+                optionModel.find({
+                    ref_collection: collectionName,
+                    field: field.name
+                }, null, {sort: {order: 1}}).exec((err, options) => {
                     field.options = options.map(model => model.toObject());
                     dfd.resolve();
                 });
-            } else if(field.type === 'collection'){
+            } else if (field.type === 'collection') {
                 let dfd = Q.defer();
                 promises.push(dfd.promise);
-                if(collections) {
+                if (collections) {
                     field.options = collections;
                     dfd.resolve();
                 }
                 else
-                    that.getModel('p_collection').find().exec(function(err, cols){
+                    that.getModel('p_collection').find().exec(function (err, cols) {
                         collections = cols.map(collection => collection.toObject());
                         field.options = collections;
                         dfd.resolve();
                     });
+            } else if (field.type === 'reference' && field.ref) {
+                let dfd = Q.defer();
+                promises.push(dfd.promise);
+                that.getDisplayFieldForCollection(collectionName).then(function (displayValueField) {
+                    if (displayValueField)
+                        field.display_value_field = displayValueField.toObject();
+                    dfd.resolve();
+                });
             }
         });
         return Q.all(promises);
@@ -126,9 +137,14 @@ class PlatformService {
         return collectionModel.findOne({name: collectionName}).exec();
     }
 
-    getFieldsForCollection(collectionId) {
+    getFieldsForCollection(collectionName) {
         let fieldModel = this.getModel('p_field');
-        return fieldModel.find({ref_collection: collectionId}).exec();
+        return fieldModel.find({ref_collection: collectionName}).exec();
+    }
+
+    getDisplayFieldForCollection(collectionName) {
+        let fieldModel = this.getModel('p_field');
+        return fieldModel.findOne({ref_collection: collectionName, display_value: true}).exec();
     }
 
     executeAction(collectionName, recordIds, cb) {
@@ -140,8 +156,8 @@ class PlatformService {
 
     getListFormData(collectionName, query, cb, fail) {
         let that = this;
-        this.getCollectionByName(collectionName).then(function(collection){
-            that.getFieldsForCollection(collection.id).then(function(fields){
+        this.getCollectionByName(collectionName).then(function (collection) {
+            that.getFieldsForCollection(collectionName).then(function (fields) {
                 let conditions = {}, options;
                 if (query.sort) {
                     options = {};
@@ -151,28 +167,49 @@ class PlatformService {
                     conditions = JSON.parse(query.conditions);
                 }
                 let collectionModel = that.getModel(collectionName);
-                collectionModel.find(conditions, null, options).exec(function (err, data) {
-                    let collectionObj = {
-                        label: collection.label,
-                        name: collection.name
-                    };
-                    cb(collectionObj, data, fields);
+                let colQuery = collectionModel.find(conditions, null, options);
+                let promises = [];
+                fields.forEach(function (field) {
+                    if (field.type === 'reference' && field.ref){
+                        let dfd = Q.defer();
+                        promises.push(dfd.promise);
+                        colQuery = colQuery.populate(field.name);
+                        that.getDisplayFieldForCollection(field.ref).then(function (displayValueField) {
+                            if (displayValueField)
+                                field.display_value_field = displayValueField.toObject();
+                            else {
+                                field.display_value_field = {};
+                                field.display_value_field.name = "id";
+                            }
+                            dfd.resolve();
+                        });
+                    }
                 });
+                Q.all(promises).then(function(){
+                    colQuery.exec(function (err, data) {
+                        let collectionObj = {
+                            label: collection.label,
+                            name: collection.name
+                        };
+                        cb(collectionObj, data, fields);
+                    });
+                });
+
             })
         });
     }
 
-    findRecordById(modelName, id){
+    findRecordById(modelName, id) {
         let model = this.getModel(modelName);
         return model.findById(id).exec();
     }
 
-    createRecord(modelName, record){
+    createRecord(modelName, record) {
         let model = this.getModel(modelName);
         return model.create(record);
     }
 
-    updateRecord(modelName, record){
+    updateRecord(modelName, record) {
         /*collectionModel.getSchemaDef().fields.forEach(function (field) {
                 if (field.type === 'password' && req.body[field.type]) {
                     req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
@@ -181,7 +218,7 @@ class PlatformService {
             */
 
         let model = this.getModel(modelName);
-        return model.update({ _id: record.id }, { $set: record}).exec();
+        return model.update({_id: record.id}, {$set: record}).exec();
     }
 }
 

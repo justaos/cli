@@ -19,6 +19,10 @@ class Model {
         return privateData.get(this).modelName;
     }
 
+    getDefinition() {
+        return privateData.get(this).model.definition;
+    }
+
     getSessionUser() {
         /*
          * To be over written in ModelSession class.

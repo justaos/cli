@@ -55,13 +55,8 @@ let ModelUtils = {
                     };
                     let fieldDfd = Q.defer();
                     promises.push(fieldDfd.promise);
-                    p_field.find({ref_collection: collection.id}).exec((err, fields) => {
-                        fields.forEach(function (field) {
-                            collectionDef.fields.push({
-                                name: field.name,
-                                type: field.type
-                            });
-                        });
+                    p_field.find({ref_collection: collection.name}).exec((err, fields) => {
+                        collectionDef.fields = fields.map(field => field.toObject());
                         loadSchemaFn(collectionDef);
                         fieldDfd.resolve();
                     });
@@ -76,34 +71,34 @@ let ModelUtils = {
 };
 
 function loadSchemaFactory(conn, backlog) {
-    return function loadSchema(def) {
-        let schema = jsonToSchemaConverter(def);
-        logger.info('model', 'loading : ' + def.name);
-        if (!def.extends) {
-            if (!conn.models[def.name]) {
-                conn.model(def.name, schema, def.name);
-                conn.models[def.name].def = def;
+    return function loadSchema(schemaDefinition) {
+        let schema = jsonToSchemaConverter(schemaDefinition);
+        logger.info('model', 'loading : ' + schemaDefinition.name);
+        if (!schemaDefinition.extends) {
+            if (!conn.models[schemaDefinition.name]) {
+                conn.model(schemaDefinition.name, schema, schemaDefinition.name);
+                conn.models[schemaDefinition.name].definition = schemaDefinition;
             } else {
-                logger.info('Model already loaded : ' + def.name);
+                logger.info('Model already loaded : ' + schemaDefinition.name);
             }
         }
         else {
-            let extendsModel = conn.models[def.extends];
+            let extendsModel = conn.models[schemaDefinition.extends];
             if (extendsModel) {
-                conn.model(def.extends).discriminator(def.name, schema);
+                conn.model(schemaDefinition.extends).discriminator(schemaDefinition.name, schema);
             } else {
-                if (!backlog[def.extends]) {
-                    backlog[def.extends] = [];
+                if (!backlog[schemaDefinition.extends]) {
+                    backlog[schemaDefinition.extends] = [];
                 }
-                backlog[def.extends].push(def);
+                backlog[schemaDefinition.extends].push(schemaDefinition);
             }
         }
 
-        if (backlog[def.name]) {
-            backlog[def.name].forEach(function (def) {
+        if (backlog[schemaDefinition.name]) {
+            backlog[schemaDefinition.name].forEach(function (def) {
                 loadSchema(def);
             });
-            delete backlog[def.name];
+            delete backlog[schemaDefinition.name];
         }
     };
 }

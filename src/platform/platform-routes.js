@@ -69,7 +69,8 @@ module.exports = function (platform) {
     router.get('/p/:collection/list', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
         ps.getListFormData(req.params.collection, req.query, function (collection, data, fields) {
-            res.render('pages/list', {
+            console.log(data);
+            res.render('pages/list/list', {
                 collection: collection,
                 data: data,
                 fields: fields,
@@ -85,7 +86,7 @@ module.exports = function (platform) {
         let ps = new PlatformService(req.user);
 
         ps.getCollectionByName(req.params.collection).then(function (collection) {
-            ps.getFieldsForCollection(collection.id).then(function (fields) {
+            ps.getFieldsForCollection(collection.name).then(function (fields) {
                 fields = fields.map(model => model.toObject());
 
                 ps.populateOptions(fields, collection.name).then(function () {
@@ -108,7 +109,7 @@ module.exports = function (platform) {
         let ps = new PlatformService(req.user);
         ps.getCollectionByName(req.params.collection).then(function (collection) {
             let promises = [];
-            promises.push(ps.getFieldsForCollection(collection.id));
+            promises.push(ps.getFieldsForCollection(collection.name));
             promises.push(ps.findRecordById(req.params.collection, req.params.id));
             Q.all(promises).then(function (result) {
                 let fields = result[0].map(model => model.toObject());

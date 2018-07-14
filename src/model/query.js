@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const Q = require('q');
+
+function businessRuleAfterExection(docs) {
+
+}
 
 class Query {
 
@@ -7,7 +12,24 @@ class Query {
     }
 
     exec(cb) {
-        return this.query.exec(cb)
+        if (cb)
+            this.query.exec(function (err, docs) {
+                businessRuleAfterExection(docs);
+                cb(err, docs);
+            });
+        else {
+            let dfd = Q.defer();
+            this.query.exec().then(function (docs) {
+                businessRuleAfterExection(docs);
+                dfd.resolve(docs);
+            });
+            return dfd.promise;
+        }
+    }
+
+    populate() {
+        this.query = this.query.populate.apply(this.query, arguments);
+        return this;
     }
 
     remove(filter) {

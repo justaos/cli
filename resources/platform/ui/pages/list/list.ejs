@@ -1,80 +1,10 @@
 <link href="/ui/styles/list.css" rel="stylesheet">
 <div class="list-page">
-    <nav class="navbar list-page-header navbar-light bg-light navbar-expand-md justify-content-between py-0">
-        <h4 class="navbar-brand py-2 m-0 float-left">
-            <%= collection.label %>
-        </h4>
-        <form class="form-inline">
-            <a href="/p/<%= collection.name %>/new" class="btn btn-sm btn-link">
-                <i class="fas fa-plus"></i>
-            </a>
-        </form>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="actionsDD" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Actions
-                </a>
-                <div class="dropdown-menu actions-dropdown" aria-labelledby="actionsDD">
-                    <a class="dropdown-item" href="#" data-action-name="delete">Delete</a>
-                </div>
-            </li>
-        </ul>
-        <form class="form-inline" id="search-input-form">
-            <div class="input-group  input-group-sm">
-                <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle selected-option" type="button"
-                            data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"
-                            data-selected="<%= fields[0].name %>"><%= fields[0].label %>
-                    </button>
-                    <div class="dropdown-menu">
-                        <% fields.forEach(function(field){ %>
-                        <a class="dropdown-item" href="#" data-id="<%= field.name %>"><%= field.label %></a>
-                        <% }) %>
-                    </div>
-                </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button">
-            </div>
-        </form>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                        data-container="body" title="Filter">
-                    <i class="fas fa-filter"></i>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                        data-container="body" title="Filter">
-                    <i class="fas fa-angle-double-left"></i>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                        data-container="body" title="Filter">
-                    <i class="fas fa-angle-left"></i>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                        data-container="body" title="Filter">
-                    <i class="fas fa-angle-right"></i>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"
-                        data-container="body" title="Filter">
-                    <i class="fas fa-angle-double-right"></i>
-                </button>
-            </li>
-        </ul>
-    </nav>
+
+    <%- include('./list-navigation') %>
 
     <main>
-        <div class="container-fluid">
-
-        </div>
+        <div class="container-fluid"></div>
 
         <section class="content-area">
             <div class="select-all-checkbox-area">
@@ -115,6 +45,14 @@
                         <% } else if(field.type == 'date'){ %>
                         <td>
                             <%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>
+                        </td>
+                        <% } else if(field.type == 'reference' && field.ref){ %>
+                        <td>
+                            <% if(item[field.name]) {%>
+                            <a href="/p/<%= field.ref %>/edit/<%= item[field.name]['id'] %>">
+                                <%= item[field.name][field.display_value_field.name] %>
+                            </a>
+                            <% } %>
                         </td>
                         <% } else { %>
                         <td>

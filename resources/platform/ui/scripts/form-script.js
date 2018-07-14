@@ -16,6 +16,8 @@
             return $('#form-' + fieldName).val();
         } else if(field.type === 'boolean'){
             return $('#form-' + fieldName).prop('checked');
+        } else if(field.type === 'script'){
+            return window.editors[fieldName].getValue();
         } else if(field.type === 'password'){
 
         } else {

@@ -8,7 +8,7 @@
 </script>
 
 <div class="form-page">
-    <%- include('./form-navigation', {}) %>
+    <%- include('./form-navigation') %>
     <main>
         <div class="container-fluid">
             <form id="view-form" class="needs-validation row mt-4" novalidate>
@@ -113,10 +113,6 @@
         event.stopPropagation();
         if (form.checkValidity() === true) {
           let formObj = fs.getRecord();
-
-          Object.keys(window.editors).forEach(function(key) {
-            formObj[key] = window.editors[key].getValue();
-          });
 
             <% if(item.id) { %>
           formObj.id = <%- JSON.stringify(item.id) %>;

@@ -14,12 +14,14 @@
     {
       "label": "Parent",
       "name": "parent",
-      "type": "reference"
+      "type": "reference",
+      "ref": "p_module"
     },
     {
       "label": "Menu",
       "name": "ref_menu",
-      "type": "reference"
+      "type": "reference",
+      "ref": "p_menu"
     },
     {
       "name": "url",

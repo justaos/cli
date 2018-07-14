@@ -1,22 +1,22 @@
-const vm = require('vm');
+const DatabaseConnector = require("./src/config/database-connector");
+const mongoose = require('mongoose');
 
+const db = new DatabaseConnector();
+db.connect().then(() => {
+    DatabaseConnector.setInstance(db);
+    const Schema = new mongoose.Schema({
+        fullname: {type: String, required: true},
+        username: { type: String, required: true },
+        friends: [
+            { type: mongoose.Schema.ObjectId, ref: 'User' }
+        ]
+    });
 
-global.myTest = 1;
+    db.getConnection().model('User', Schema);
 
-const sandbox = { x: 2 };
-let ctx = vm.createContext(sandbox); // Contextify the sandbox.
-
-const code = `
-function add(y){
-  console.log('test');
-  x++;
-  return x + y;
-}
-
-`;
-// x and y are global variables in the sandboxed environment.
-// Initially, x has the value 2 because that is the value of sandbox.x.
-vm.runInContext(code, ctx);
-
-console.log(sandbox.add(3));
-console.log(sandbox.add(4));
+    db.getConnection().models['User'].
+    find({ }).
+    populate().exec(function(err, users){
+        console.log(users[1].friends[0])
+    })
+});

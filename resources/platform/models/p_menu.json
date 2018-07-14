@@ -14,7 +14,8 @@
     {
       "label": "Application",
       "name": "ref_application",
-      "type": "reference"
+      "type": "reference",
+      "ref": "p_application"
     },
     {
       "name": "order",

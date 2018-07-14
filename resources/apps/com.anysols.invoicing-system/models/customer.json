@@ -1,5 +1,5 @@
 {
-  "name": "customer",
+  "name": "invoice_customer",
   "label": "Customer",
   "fields": [
 	{

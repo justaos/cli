@@ -4,11 +4,13 @@
   "fields": [
     {
       "name": "ref_user",
-      "type": "reference"
+      "type": "reference",
+      "ref": "p_user"
     },
     {
       "name": "ref_role",
-      "type": "reference"
+      "type": "reference",
+      "ref": "p_role"
     }
   ]
 }

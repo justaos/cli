@@ -71,14 +71,15 @@ class Platform {
         Platform.upsertCollection(collectionDef).then(function (collectionRecord) {
             let promises = [];
             collectionDef.fields.forEach(function (field) {
-                promises.push(p_field.upsert({name: field.name, ref_collection: collectionRecord.id}, {
+                promises.push(p_field.upsert({name: field.name, ref_collection: collectionRecord.name}, {
                     name: field.name,
                     label: field.label ?
                         field.label :
                         stringUtils.underscoreToCamelCase(field.name),
                     type: field.type,
                     display_value: field.display_value,
-                    ref_collection: collectionRecord.id
+                    ref_collection: collectionRecord.name,
+                    ref: field.ref
                 }).exec());
                 if (field.type === 'option' && field.options)
                     field.options.forEach(function (optionRecord) {

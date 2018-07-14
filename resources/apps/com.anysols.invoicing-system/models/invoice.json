@@ -2,10 +2,11 @@
   "name": "invoice",
   "label": "Invoice",
   "fields": [
-	{
-	  "name": "customer",
-	  "type": "reference",
-	  "display_value": true
-	}
+    {
+      "name": "customer",
+      "type": "reference",
+      "ref": "invoice_customer",
+      "display_value": true
+    }
   ]
 }
