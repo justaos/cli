@@ -82,7 +82,7 @@ class Platform {
                 }).exec());
                 if (field.type === 'option' && field.options)
                     field.options.forEach(function (optionRecord) {
-                        optionRecord.ref_collection = collectionRecord.id;
+                        optionRecord.ref_collection = collectionRecord.name;
                         optionRecord.field = field.name;
                         promises.push(p_option.upsert({
                             ref_collection: optionRecord.ref_collection,

@@ -3,6 +3,7 @@ const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const PlatformService = require('./service/platform-service');
 const storeController = require('./routes/store.route');
+const moment = require('moment');
 
 module.exports = function (platform) {
 
@@ -72,6 +73,7 @@ module.exports = function (platform) {
                 collection: collection,
                 data: data,
                 cols: fields,
+                moment: moment,
                 layout: 'layouts/no-header-layout'
             });
         }, function () {
@@ -85,7 +87,7 @@ module.exports = function (platform) {
         ps.getCollectionByName(req.params.collection).then(function (collection) {
             ps.getFieldsForCollection(collection.id).then(function (cols) {
                 cols = cols.map(model => model.toObject());
-                ps.populateOptions(cols, collection.id).then(function () {
+                ps.populateOptions(cols, collection.name).then(function () {
                     res.render('pages/form', {
                         collection: {
                             label: collection.label,
@@ -108,7 +110,7 @@ module.exports = function (platform) {
             promises.push(ps.findRecordById(req.params.collection, req.params.id));
             Q.all(promises).then(function (result) {
                 let cols = result[0].map(model => model.toObject());
-                ps.populateOptions(cols, collection.id).then(function () {
+                ps.populateOptions(cols, collection.name).then(function () {
                     res.render('pages/form', {
                         collection: {
                             label: collection.label,

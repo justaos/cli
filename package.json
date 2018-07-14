@@ -66,6 +66,7 @@
     "jsonfile": "^4.0.0",
     "jsonwebtoken": "^8.2.0",
     "lodash": "^4.17.5",
+    "moment": "^2.22.2",
     "mongoose": "^5.0.15",
     "mongoose-schema-extend": "^0.2.2",
     "mysql2": "^1.5.2",

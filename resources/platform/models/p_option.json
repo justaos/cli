@@ -5,7 +5,7 @@
     {
       "label": "Collection",
       "name": "ref_collection",
-      "type": "reference"
+      "type": "collection"
     },
     {
       "name": "field",

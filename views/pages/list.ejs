@@ -114,7 +114,7 @@
                         <!-- skipped <%= col.name %> -->
                         <% } else if(col.type == 'date'){ %>
                         <td>
-                            <%= item[col.name] ? new Date(item[col.name]).toISOString() : '' %>
+                            <%= item[col.name] ? new moment(item[col.name]).format('DD-MMM-YYYY h:mm A') : '' %>
                         </td>
                         <% } else { %>
                         <td>

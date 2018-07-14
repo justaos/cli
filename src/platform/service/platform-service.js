@@ -90,17 +90,32 @@ class PlatformService {
         });
     }
 
-    populateOptions(fields, collectionId) {
+    populateOptions(fields, collectionName) {
+        let that = this;
         let promises = [];
         let optionModel = this.getModel('p_option');
+        let collections;
         fields.forEach(function (field) {
             if (field.type === 'option') {
                 let dfd = Q.defer();
                 promises.push(dfd.promise);
-                optionModel.find({ref_collection: collectionId, field: field.name}).exec((err, options) => {
+                optionModel.find({ref_collection: collectionName, field: field.name}, null, {sort: {order: 1}}).exec((err, options) => {
                     field.options = options.map(model => model.toObject());
                     dfd.resolve();
                 });
+            } else if(field.type === 'collection'){
+                let dfd = Q.defer();
+                promises.push(dfd.promise);
+                if(collections) {
+                    field.options = collections;
+                    dfd.resolve();
+                }
+                else
+                    that.getModel('p_collection').find().exec(function(err, cols){
+                        collections = cols.map(collection => collection.toObject());
+                        field.options = collections;
+                        dfd.resolve();
+                    });
             }
         });
         return Q.all(promises);
