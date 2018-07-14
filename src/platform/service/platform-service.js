@@ -1,5 +1,5 @@
 const logger = require('../../config/logger');
-const ModelSessionFactory = require('../../collection/model-session-fatory');
+const ModelSessionFactory = require('../../model/model-session-fatory');
 const dsUtils = require('../../utils/ds-utils');
 const Q = require('q');
 const vm = require('vm');
@@ -116,8 +116,8 @@ class PlatformService {
         return fieldModel.find({ref_collection: collectionId}).exec();
     }
 
-    executeAction(collectionId, recordIds, cb) {
-        let model = this.getModel(collectionId);
+    executeAction(collectionName, recordIds, cb) {
+        let model = this.getModel(collectionName);
         model.remove({_id: recordIds}).exec(function (err) {
             cb(err);
         });
@@ -145,6 +145,28 @@ class PlatformService {
                 });
             })
         });
+    }
+
+    findRecordById(modelName, id){
+        let model = this.getModel(modelName);
+        return model.findById(id).exec();
+    }
+
+    createRecord(modelName, record){
+        let model = this.getModel(modelName);
+        return model.create(record);
+    }
+
+    updateRecord(modelName, record){
+        /*collectionModel.getSchemaDef().fields.forEach(function (field) {
+                if (field.type === 'password' && req.body[field.type]) {
+                    req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
+                }
+            });
+            */
+
+        let model = this.getModel(modelName);
+        return model.update({ _id: record.id }, { $set: record}).exec();
     }
 }
 

@@ -1,77 +1,132 @@
-const mongoose = require('mongoose');
-
 const DatabaseConnector = require('../config/database-connector');
+const Query = require('./query');
 
-module.exports = function (loggedInUser) {
+let privateData = new WeakMap();
 
-    let privateData = new WeakMap();
+function getModel(context) {
+    return privateData.get(context).model;
+}
 
-    class Model {
+class Model {
 
-        constructor(modelName) {
-            privateData.set(this, {});
-            privateData.get(this).modelName = modelName;
-            let conn = DatabaseConnector.getInstance().getConnection();
-            privateData.get(this).model = conn.model(modelName);
-        }
-
-        getSchemaDef() {
-            return privateData.get(this).model.def;
-        }
-
-        /**
-         * START - mongoose methods wrapping
-         */
-
-        create(docs) {
-            if (loggedInUser) {
-                if (docs instanceof Array)
-                    docs.forEach(function (doc) {
-                        doc.created_by = loggedInUser.id;
-                    });
-                else
-                    docs.created_by = loggedInUser.id;
-            }
-            return privateData.get(this).model.create(docs);
-        }
-
-        find(conditions, projection, options) {
-            return privateData.get(this).model.find(conditions, projection, options);
-        }
-
-        findById(id) {
-            return privateData.get(this).model.findById(id);
-        }
-
-        findByIdAndUpdate(id, obj) {
-            let condition = {_id: mongoose.Types.ObjectId(id)};
-            return this.findOneAndUpdate(condition, obj, !id);
-        }
-
-        findOneAndUpdate(condition, obj, create) {
-            if (loggedInUser) {
-                obj.updated_by = loggedInUser.id;
-                if (create) {
-                    obj.created_by = loggedInUser.id;
-                }
-            }
-            return privateData.get(this).model.findOneAndUpdate(condition, obj, {upsert: true}).exec();
-        }
-
-        update(condition, obj) {
-            return privateData.get(this).model.update(condition, obj).exec();
-        }
-
-        where(obj) {
-            return privateData.get(this).model.where(obj);
-        }
-
-        /**
-         * END - mongoose methods wrapping
-         */
-
+    constructor(collectionName) {
+        privateData.set(this, {});
+        privateData.get(this).collectionName = collectionName;
+        privateData.get(this).model = DatabaseConnector.getInstance().getConnection().model(collectionName);
     }
 
-    return Model;
-};
+    getName() {
+        return privateData.get(this).modelName;
+    }
 
+    getSessionUser() {
+        /*
+         * To be over written in ModelSession class.
+         */
+        return null;
+    }
+
+    /**
+     * @param {Array|Object} docs Documents to insert, as a spread or array
+     * @param {Object} [options] Options passed down to `save()`. To specify `options`, `docs` **must** be an array, not a spread.
+     * @return {Promise}
+     */
+    create(docs, options) {
+        let user = this.getSessionUser();
+        if (user) {
+            if (Array.isArray(docs))
+                docs.forEach(function (doc) {
+                    doc.created_by = user.id;
+                    doc.updated_by = user.id;
+                });
+            else {
+                docs.created_by = user.id;
+                docs.updated_by = user.id;
+            }
+        }
+        return getModel(this).create(docs, options);
+    }
+
+    /**
+     * @param {Object} [conditions]
+     * @param {Object|String} [projection] optional fields to return
+     * @param {Object} [options] optional
+     * @return {Query}
+     */
+    find(conditions, projection, options) {
+        let mongooseQuery = getModel(this).find(conditions, projection, options);
+        return new Query(mongooseQuery);
+    }
+
+    /**
+     * @param {Object|String|Number} id value of `_id` to query by
+     * @param {Object|String} [projection] optional fields to return
+     * @param {Object} [options] optional
+     * @return {Query}
+     */
+    findById(id, projection, options) {
+        if (typeof id === 'undefined') {
+            id = null;
+        }
+        return this.findOne({
+            _id: id
+        }, projection, options);
+    }
+
+    /**
+     * @param {Object} [conditions]
+     * @param {Object|String} [projection] optional fields to return
+     * @param {Object} [options] optional
+     * @return {Query}
+     */
+    findOne(conditions, projection, options) {
+        let mongooseQuery = getModel(this).findOne(conditions, projection, options);
+        return new Query(mongooseQuery);
+    }
+
+
+    findOneAndUpdate(conditions, update, options) {
+        let mongooseQuery = getModel(this).findOneAndUpdate(conditions, update, options);
+        return new Query(mongooseQuery);
+    }
+
+    upsert(conditions, update) {
+        return this.findOneAndUpdate(conditions, update, {upsert: true, new: true});
+    }
+
+    /**
+     * @param {Object} conditions
+     * @return {Query}
+     */
+    remove(conditions) {
+        let mongooseQuery = getModel(this).remove(conditions);
+        return new Query(mongooseQuery);
+    }
+
+    /**
+     * @param id
+     * @returns {Query}
+     */
+    removeById(id) {
+        return this.remove({_id: id});
+    }
+
+    /**
+     * @param {Object} conditions
+     * @param {Object} doc
+     * @param {Object} [options] optional see [`Query.prototype.setOptions()`](http://mongoosejs.com/docs/api.html#query_Query-setOptions)
+     * @return {Query}
+     */
+    update(conditions, doc, options) {
+        let user = this.getSessionUser();
+        if (user) {
+            delete doc.created_by;
+            doc.updated_by = user.id;
+        }
+        let mongooseQuery = getModel(this).update(conditions, doc, options);
+        return new Query(mongooseQuery);
+    }
+
+}
+
+module.exports = Model;

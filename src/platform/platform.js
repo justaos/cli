@@ -8,7 +8,7 @@ const config = require('../config/config');
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 const cleanInstall = require('./clean-install');
-const ModelSessionFactory = require('../collection/model-session-fatory');
+const ModelSessionFactory = require('../model/model-session-fatory');
 
 const modelUtils = require('../model/model-utils');
 const glob = require('glob');

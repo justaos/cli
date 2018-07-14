@@ -2,7 +2,6 @@ const authenticate = require('../config/authenticate');
 const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const PlatformService = require('./service/platform-service');
-const getModel = require('../model');
 const storeController = require('./routes/store.route');
 
 module.exports = function (platform) {
@@ -68,14 +67,14 @@ module.exports = function (platform) {
 
     router.get('/p/:collection/list', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.getListFormData(req.params.collection, req.query, function(collection, data, fields){
+        ps.getListFormData(req.params.collection, req.query, function (collection, data, fields) {
             res.render('pages/list', {
                 collection: collection,
                 data: data,
                 cols: fields,
                 layout: 'layouts/no-header-layout'
             });
-        }, function(){
+        }, function () {
             res.render('404');
         });
     });
@@ -83,99 +82,68 @@ module.exports = function (platform) {
     router.get('/p/:collection/new', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
 
-        let Model = getModel(req.user);
         ps.getCollectionByName(req.params.collection).then(function (collection) {
-            let schema = new Model(req.params.collection);
-            if (schema)
-                new Model('p_field').find({ref_collection: collection.id}).then(function (cols) {
-                    cols = cols.map(function (model) {
-                        return model.toObject();
+            ps.getFieldsForCollection(collection.id).then(function (cols) {
+                cols = cols.map(model => model.toObject());
+                ps.populateOptions(cols, collection.id).then(function () {
+                    res.render('pages/form', {
+                        collection: {
+                            label: collection.label,
+                            name: collection.name
+                        },
+                        cols: cols,
+                        item: {},
+                        layout: 'layouts/no-header-layout'
                     });
-
-                    ps.populateOptions(cols, collection.id).then(function () {
-                        res.render('pages/form', {
-                            collection: {
-                                label: collection.label,
-                                name: collection.name
-                            },
-                            cols: cols,
-                            item: {},
-                            layout: 'layouts/no-header-layout'
-                        });
-                    });
-
                 });
-            else
-                res.render('404');
+            });
         });
     });
 
     router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-
-        let Model = getModel(req.user);
-
         ps.getCollectionByName(req.params.collection).then(function (collection) {
-            let schema = new Model(req.params.collection);
-            if (schema) {
-                let promises = [];
-                promises.push(
-                    new Model('p_field').find({ref_collection: collection.id}));
-                promises.push(schema.findById(req.params.id));
-
-                Q.all(promises).then(function (result) {
-
-                    let cols = result[0].map(function (model) {
-                        return model.toObject();
+            let promises = [];
+            promises.push(ps.getFieldsForCollection(collection.id));
+            promises.push(ps.findRecordById(req.params.collection, req.params.id));
+            Q.all(promises).then(function (result) {
+                let cols = result[0].map(model => model.toObject());
+                ps.populateOptions(cols, collection.id).then(function () {
+                    res.render('pages/form', {
+                        collection: {
+                            label: collection.label,
+                            name: collection.name
+                        },
+                        cols: cols,
+                        item: result[1].toObject(),
+                        layout: 'layouts/no-header-layout'
                     });
-
-                    ps.populateOptions(cols, collection.id).then(function () {
-                        res.render('pages/form', {
-                            collection: {
-                                label: collection.label,
-                                name: collection.name
-                            },
-                            cols: cols,
-                            item: result[1].toObject(),
-                            layout: 'layouts/no-header-layout'
-                        });
-                    });
-
                 });
-            }
-            else
-                res.render('404');
+
+            });
         });
     });
 
     router.post('/p/:collection', authenticate, function (req, res) {
-        let Model = getModel(req.user);
-        let collectionModel = new Model(req.params.collection);
-        delete req.body.created_at;
-        delete req.body.updated_at;
-        collectionModel.getSchemaDef().fields.forEach(function (field) {
-            if (field.type === 'password' && req.body[field.type]) {
-                req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
-            }
-        });
-        if (collectionModel)
-            collectionModel.findByIdAndUpdate(req.body.id, req.body).then(function () {
-                res.send({});
-            }, function (err) {
-                res.status(400);
-                res.send(err);
+        let ps = new PlatformService(req.user);
+        if (!req.body.id) {
+            ps.createRecord(req.params.collection, req.body).then(function () {
+                res.send();
             });
-        else
-            res.render('404');
+        } else {
+            ps.updateRecord(req.params.collection, req.body).then(function () {
+                res.send();
+            });
+        }
     });
 
     router.post('/p/:collection/action', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.executeAction(req.params.collection, req.body.items, function(err){
-            if(err)
+        ps.executeAction(req.params.collection, req.body.items, function (err) {
+            if (err)
                 res.status(404).render('404');
             else
-                res.send('success');
+                res.send();
         });
     });
 
