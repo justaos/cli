@@ -3,6 +3,11 @@
   "label": "Option",
   "fields": [
     {
+      "name": "label",
+      "type": "string",
+      "display_value": true
+    },
+    {
       "label": "Collection",
       "name": "ref_collection",
       "type": "collection"
@@ -10,11 +15,6 @@
     {
       "name": "field",
       "type": "string"
-    },
-    {
-      "name": "label",
-      "type": "string",
-      "display_value": true
     },
     {
       "name": "value",

@@ -27,9 +27,9 @@
                         data-selected="<%= fields[0].name %>"><%= fields[0].label %>
                 </button>
                 <div class="dropdown-menu">
-                    <% fields.forEach(function(field){ %>
+                    <% fields.forEach(function(field){ if(field.type !== 'date') {%>
                     <a class="dropdown-item" href="#" data-id="<%= field.name %>"><%= field.label %></a>
-                    <% }) %>
+                    <% }}) %>
                 </div>
             </div>
             <input type="text" class="form-control" aria-label="Text input with dropdown button">

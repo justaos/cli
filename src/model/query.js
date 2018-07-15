@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Q = require('q');
+const logger = require('../config/logger');
 
 function businessRuleAfterExection(docs) {
 
@@ -15,6 +16,8 @@ class Query {
         if (cb)
             this.query.exec(function (err, docs) {
                 businessRuleAfterExection(docs);
+                if (err)
+                    logger.error(err);
                 cb(err, docs);
             });
         else {
@@ -22,6 +25,8 @@ class Query {
             this.query.exec().then(function (docs) {
                 businessRuleAfterExection(docs);
                 dfd.resolve(docs);
+            }, function (err) {
+                logger.error(err);
             });
             return dfd.promise;
         }

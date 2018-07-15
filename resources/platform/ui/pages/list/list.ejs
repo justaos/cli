@@ -29,13 +29,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% data.forEach(function(item){ %>
-                    <tr>
-                        <td class="item">
+                    <% data.forEach(function(record){ %>
+                    <tr class="record" data-id="<%= record.id %>">
+                        <td>
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input item-checkbox" value="<%= item.id %>"
-                                       id="checkbox-<%= item.id %>">
-                                <label class="custom-control-label" for="checkbox-<%= item.id %>"><span
+                                <input type="checkbox" class="custom-control-input record-checkbox"
+                                       value="<%= record.id %>"
+                                       id="checkbox-<%= record.id %>">
+                                <label class="custom-control-label" for="checkbox-<%= record.id %>"><span
                                             class="sr-only"></span></label>
                             </div>
                         </td>
@@ -44,22 +45,22 @@
                         <!-- skipped <%= field.name %> -->
                         <% } else if(field.type == 'date'){ %>
                         <td>
-                            <%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>
+                            <%= new moment(record[field.name]).format('DD-MMM-YYYY h:mm A') %>
                         </td>
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
-                            <% if(item[field.name]) {%>
-                            <a href="/p/<%= field.ref %>/edit/<%= item[field.name]['id'] %>">
-                                <%= item[field.name][field.display_value_field.name] %>
+                            <% if(record[field.name]) { %>
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>">
+                                <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
                         </td>
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= item['id'] %>"><%= item[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>"><%= record[field.name] %></a>
                             <% } else { %>
-                            <%= item[field.name] %>
+                            <%= record[field.name] %>
                             <% } %>
                         </td>
                         <% }}); %>
@@ -73,91 +74,122 @@
 
     </main>
 </div>
+<div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item cm-open" href="#">Open</a>
+    <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
+</div>
 <script>
-  $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-    let $table = $('.responsive-table');
-    let $thead = $table.find('thead');
-    let $tbody = $table.find('tbody');
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        let $table = $('.responsive-table');
+        let $thead = $table.find('thead');
+        let $tbody = $table.find('tbody');
 
-    let header = $('.list-page-header');
-    $thead.width($thead.width());
-    $thead.find('th').each(function(i, el) {
-      $(el).width($(el).width());
-    });
-    $tbody.width($tbody.width());
-    $tbody.find('tr:first-child').find('td').each(function(i, el) {
-      $(el).width($(el).width());
-    });
-    $(window).scroll(function(e) {
-      if (header.offset().top > 50) {
-        if (!$tbody.hasClass('shadow')) {
-          $thead.addClass('shadow');
-          $table.addClass('fixed-table-header');
-          $('.table-area').css('margin-top', '50px');
+        let header = $('.list-page-header');
+        $thead.width($thead.width());
+        $thead.find('th').each(function (i, el) {
+            $(el).width($(el).width());
+        });
+        $tbody.width($tbody.width());
+        $tbody.find('tr:first-child').find('td').each(function (i, el) {
+            $(el).width($(el).width());
+        });
+        $(window).scroll(function (e) {
+            if (header.offset().top > 50) {
+                if (!$tbody.hasClass('shadow')) {
+                    $thead.addClass('shadow');
+                    $table.addClass('fixed-table-header');
+                    $('.table-area').css('margin-top', '50px');
+                }
+            } else {
+                $thead.removeClass('shadow');
+                $table.removeClass('fixed-table-header');
+                $('.table-area').css('margin-top', '0px');
+            }
+        });
+        $('.actions-dropdown .dropdown-item').on('click', function (event) {
+            event.preventDefault();
+            let action = $(this).attr('data-action-name');
+            let selectedItems = [];
+            $.each($('.record-checkbox:checked'), function () {
+                selectedItems.push($(this).val());
+            });
+            $.ajax({
+                url: "/p/<%= collection.name %>/action",
+                data: JSON.stringify({items: selectedItems}),
+                contentType: 'application/json',
+                type: 'POST'
+            }).then(function (data) {
+                window.location.reload();
+            }, function (err) {
+                alert(err.responseJSON.original.sqlMessage);
+            });
+        });
+        $('#select-all-checkbox').on('click', function () {
+            $('.record-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
+        });
+
+        let currentUrl = new URL(window.location.href);
+        let sortQuery = currentUrl.searchParams.get('sort');
+
+        if (sortQuery) {
+            sortQuery = JSON.parse(sortQuery);
+            setTimeout(function () {
+                var field = Object.keys(sortQuery)[0];
+                var $sortIcon = $('#col-header-' + field).find('.sort-icon');
+                $sortIcon.removeClass('d-none');
+                if (sortQuery[field] === 1)
+                    $sortIcon.addClass('fa-sort-down').addClass('mb-2');
+                else
+                    $sortIcon.addClass('fa-sort-up').addClass('mt-2');
+            }, 100);
+
         }
-      } else {
-        $thead.removeClass('shadow');
-        $table.removeClass('fixed-table-header');
-        $('.table-area').css('margin-top', '0px');
-      }
+
+        $('.col-header').on('click', function (e) {
+            var field = $(this).data('col');
+            if (sortQuery && sortQuery[field] === 1) {
+                currentUrl.searchParams.set('sort', '{"' + field + '": -1}');
+            } else
+                currentUrl.searchParams.set('sort', '{"' + field + '": 1}');
+
+            window.location.href = currentUrl.href;
+        });
+
+        let $searchInputForm = $('#search-input-form');
+
+        $searchInputForm.on('submit', function (e) {
+            e.preventDefault();
+            var field = $(this).find('.selected-option').data('selected');
+            var value = $(this).find('input').val();
+            currentUrl.searchParams.set('conditions', '{ "' + field + '": { "$regex": "' + value + '", "$options": "i" } }');
+            window.location.href = currentUrl.href;
+        });
+
+        $('#search-input-form .dropdown-item').on('click', function () {
+            let $selectedOption = $searchInputForm.find('.selected-option');
+            $selectedOption.data('selected', $(this).data('id'));
+            $selectedOption.text($(this).text());
+        });
+
+        $('.record').on('contextmenu', function (e) {
+            var top = e.pageY - 10;
+            var left = e.pageX - 20;
+            $(".context-menu").css({
+                display: "block",
+                top: top,
+                left: left
+            });
+            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
+            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
+            return false; //blocks default Webbrowser right click menu
+        }).on("click", function () {
+            $(".context-menu").hide();
+        });
+
+        $(".context-menu a").on("click", function () {
+            $(this).parent().hide();
+        });
+
     });
-    $('.actions-dropdown .dropdown-item').on('click', function(event) {
-      event.preventDefault();
-      let action = $(this).attr('data-action-name');
-      let selectedItems = [];
-      $.each($('.item-checkbox:checked'), function() {
-        selectedItems.push($(this).val());
-      });
-      $.ajax({
-        url: "/p/<%= collection.name %>/action",
-        data: JSON.stringify({items: selectedItems}),
-        contentType: 'application/json',
-        type: 'POST'
-      }).then(function(data) {
-        window.location.reload();
-      }, function(err) {
-        alert(err.responseJSON.original.sqlMessage);
-      });
-    });
-    $('#select-all-checkbox').on('click', function() {
-      $('.item-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
-    });
-
-    let currentUrl = new URL(window.location.href);
-    let sortQuery = currentUrl.searchParams.get('sort');
-
-    if (sortQuery) {
-      sortQuery = JSON.parse(sortQuery);
-      setTimeout(function() {
-        var field = Object.keys(sortQuery)[0];
-        var $sortIcon = $('#col-header-' + field).find('.sort-icon');
-        $sortIcon.removeClass('d-none');
-        if (sortQuery[field] === 1)
-          $sortIcon.addClass('fa-sort-down').addClass('mb-2');
-        else
-          $sortIcon.addClass('fa-sort-up').addClass('mt-2');
-      }, 100);
-
-    }
-
-    $('.col-header').on('click', function(e) {
-      var field = $(this).data('col');
-      if (sortQuery && sortQuery[field] === 1) {
-        currentUrl.searchParams.set('sort', '{"' + field + '": -1}');
-      } else
-        currentUrl.searchParams.set('sort', '{"' + field + '": 1}');
-
-      window.location.href = currentUrl.href;
-    });
-
-    $('#search-input-form').on('submit', function(e) {
-      e.preventDefault();
-      var field = $(this).find('.selected-option').data('selected');
-      var value = $(this).find('input').val();
-      currentUrl.searchParams.set('conditions', '{ "' + field + '": { "$regex": "' + value + '", "$options": "i" } }');
-      window.location.href = currentUrl.href;
-    })
-
-  });
 </script>

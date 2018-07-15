@@ -187,7 +187,7 @@ class PlatformService {
                 });
                 Q.all(promises).then(function(){
                     colQuery.exec(function (err, data) {
-                        let collectionObj = {
+                       let collectionObj = {
                             label: collection.label,
                             name: collection.name
                         };

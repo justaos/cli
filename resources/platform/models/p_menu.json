@@ -3,13 +3,13 @@
   "label": "Menu",
   "fields": [
     {
-      "name": "name",
-      "type": "string"
-    },
-    {
       "name": "label",
       "type": "string",
       "display_value": true
+    },
+    {
+      "name": "name",
+      "type": "string"
     },
     {
       "label": "Application",
