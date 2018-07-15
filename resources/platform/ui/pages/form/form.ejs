@@ -1,7 +1,11 @@
 <link href="/ui/styles/form.css" rel="stylesheet"/>
-<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.css">
+<link rel="stylesheet" data-name="vs/editor/editor.main"
+      href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.css">
 <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet"/>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.4/css/ajax-bootstrap-select.min.css"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.4/js/ajax-bootstrap-select.min.js"></script>
 <script src="/ui/scripts/form-script.js"></script>
 <script>
     window.fs = new FormScript(<%- JSON.stringify(fields) %>);
@@ -46,7 +50,8 @@
                                 <input type="checkbox" class="custom-control-input item-checkbox"
                                        id="form-<%= field.name %>"
                                        name="<%= field.name %>"
-                                       <% if(item[field.name]){ %>checked="checked"<%}%>
+                                       <% if(item[field.name]){ %>checked="checked"
+                                        <% } %>
                                        placeholder="<%= field.label %>">
                                 <label class="custom-control-label" for="form-<%= field.name %>"><span
                                             class="sr-only"></span></label>
@@ -60,25 +65,45 @@
 
                             <!-- option field -->
                             <% } else if(field.type == 'option'){ %>
-                            <select class="form-control select-2" data-live-search="true" id="form-<%= field.name %>" title="Choose one of the following..."
+                            <select class="form-control select-option" data-live-search="true"
+                                    id="form-<%= field.name %>" title="Choose one of the following..."
                                     data-col-name="<%= field.name %>" name="<%= field.name %>">
 
                                 <% if(field.options) field.options.forEach(function(option){ %>
-                                <option value="<%= option.value %>"  <% if(option.value === item[field.name]){%>selected="selected"<%}%>><%= option.label %></option>
+                                <option value="<%= option.value %>"
+                                        <% if(option.value === item[field.name]){ %>selected="selected"
+                                        <% } %>
+                                ><%= option.label %></option>
                                 <% }); %>
                             </select>
 
                             <!-- collection field -->
                             <% } else if(field.type == 'collection'){ %>
-                            <select class="form-control select-2" data-live-search="true" id="form-<%= field.name %>" title="Choose one of the following..."
+                            <select class="form-control select-collection" data-live-search="true"
+                                    id="form-<%= field.name %>" title="Choose one of the following..."
                                     data-col-name="<%= field.name %>" name="<%= field.name %>">
 
                                 <% if(field.options) field.options.forEach(function(option){ %>
-                                <option value="<%= option.name %>"  <% if(option.name === item[field.name]){%>selected="selected"<%}%>><%= option.label %></option>
+                                <option value="<%= option.name %>"
+                                        <% if(option.name === item[field.name]){ %>selected="selected"
+                                        <% } %>
+                                ><%= option.label %></option>
                                 <% }); %>
                             </select>
 
+                            <!-- reference field -->
+                            <% } else if(field.type == 'reference' && field.ref){ %>
 
+                            <select class="form-control select-reference" data-live-search="true"
+                                    id="form-<%= field.name %>"
+                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
+                                <% if(item[field.name]){ %>
+
+
+                                <option value="<%= item[field.name].id %>"
+                                        selected="selected"><%= item[field.name][field.display_value_field.name] %></option>
+                                <% } %>
+                            </select>
                             <% } else { %>
                             <input type="text" class="form-control" id="form-<%= field.name %>"
                                    name="<%= field.name %>"
@@ -103,40 +128,40 @@
     </main>
 </div>
 <script>
-  (function() {
-    'use strict';
-    window.addEventListener('load', function() {
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      let form = document.getElementById('view-form');
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (form.checkValidity() === true) {
-          let formObj = fs.getRecord();
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            let form = document.getElementById('view-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (form.checkValidity() === true) {
+                    let formObj = fs.getRecord();
 
-            <% if(item.id) { %>
-          formObj.id = <%- JSON.stringify(item.id) %>;
-            <% } %>
+                    <% if(item.id) { %>
+                    formObj.id = <%- JSON.stringify(item.id) %>;
+                    <% } %>
 
-          $.ajax({
-            url: "/p/<%= collection.name %>",
-            data: JSON.stringify(formObj),
-            contentType: 'application/json',
-            type: 'POST'
-          }).then(function(data) {
-            if (data.redirect)
-              window.location.href = data.redirect;
-            else
-              window.location.reload();
-          }, function(err) {
-            alert(err.responseJSON.original.sqlMessage);
-          });
-        }
-        form.classList.add('was-validated');
+                    $.ajax({
+                        url: "/p/<%= collection.name %>",
+                        data: JSON.stringify(formObj),
+                        contentType: 'application/json',
+                        type: 'POST'
+                    }).then(function (data) {
+                        if (data.redirect)
+                            window.location.href = data.redirect;
+                        else
+                            window.location.reload();
+                    }, function (err) {
+                        alert(err.responseJSON.original.sqlMessage);
+                    });
+                }
+                form.classList.add('was-validated');
 
-      }, false);
-    }, false);
-  })();
+            }, false);
+        }, false);
+    })();
 </script>
 
 <script>var require = {paths: {'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs'}};</script>
@@ -144,39 +169,64 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
 <script>
-  monaco.languages.typescript.javascriptDefaults.addExtraLib([
-    'declare class Facts {',
-    '    /**',
-    '     * Returns the next fact',
-    '     */',
-    '    static next():string',
-    '}'
-  ].join('\n'));
-  window.editors = [];
-  var item = <%- JSON.stringify(item) %>;
-  document.querySelectorAll('.script-editor').forEach(function(element) {
+    monaco.languages.typescript.javascriptDefaults.addExtraLib([
+        'declare class Facts {',
+        '    /**',
+        '     * Returns the next fact',
+        '     */',
+        '    static next():string',
+        '}'
+    ].join('\n'));
+    window.editors = [];
+    var item = <%- JSON.stringify(item) %>;
+    document.querySelectorAll('.script-editor').forEach(function (element) {
 
-    window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
-      value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : [
-        '(function(req, res) {',
-        '\t //write you code here;',
-        '})(req, res)'
-      ].join('\n'),
-      language: 'javascript',
-      theme: 'vs-dark'
+        window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
+            value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : [
+                '(function(req, res) {',
+                '\t //write you code here;',
+                '})(req, res)'
+            ].join('\n'),
+            language: 'javascript',
+            theme: 'vs-dark'
+        });
     });
-  });
 
-  // In your Javascript (external .js resource or <script> tag)
-  $(document).ready(function() {
-    $('select').each(function() {
-      $(this).selectpicker();
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+        $('select.select-option').each(function () {
+            $(this).selectpicker();
+        });
+
+        $('select.select-collection').each(function () {
+            $(this).selectpicker();
+        });
+
+        $('select.select-reference').each(function () {
+            $(this).selectpicker().ajaxSelectPicker({
+                ajax: {
+                    url: '/search',
+                    dataType: 'json',
+                    data: function () {
+                        var params = {
+                            q: '{{{q}}}',
+                            collection: '<%= collection.name %>',
+                            field: this.plugin.$element.data('col-name')
+                        };
+                        return params;
+                    }
+                },
+                locale: {
+                    emptyTitle: 'Search for item...'
+                }
+            });
+            $('#form-parent').append("<option>test</option>")
+        });
     });
-  });
 
-  $('.open-new-window').on('click', function(){
-    window.open(window.location.href, '_blank');
-  })
+    $('.open-new-window').on('click', function () {
+        window.open(window.location.href, '_blank');
+    })
 
-  //console.log(editor.getValue());
+    //console.log(editor.getValue());
 </script>

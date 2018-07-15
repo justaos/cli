@@ -30,6 +30,22 @@ class Model {
         return null;
     }
 
+    _populateReferenceFields(query) {
+        if(!this.skipPopulate) {
+            let def = this.getDefinition();
+            def.fields.forEach(function (field) {
+                if (field.type === 'reference' && field.ref) {
+                    query = query.populate(field.name);
+                }
+            });
+        }
+        return query;
+    }
+
+    skipReferenceFieldPopulation() {
+        this.skipPopulate = true;
+    }
+
     /**
      * @param {Array|Object} docs Documents to insert, as a spread or array
      * @param {Object} [options] Options passed down to `save()`. To specify `options`, `docs` **must** be an array, not a spread.
@@ -59,7 +75,9 @@ class Model {
      */
     find(conditions, projection, options) {
         let mongooseQuery = getModel(this).find(conditions, projection, options);
-        return new Query(mongooseQuery);
+        let query = new Query(mongooseQuery);
+        query = this._populateReferenceFields(query);
+        return query;
     }
 
     /**
@@ -85,13 +103,17 @@ class Model {
      */
     findOne(conditions, projection, options) {
         let mongooseQuery = getModel(this).findOne(conditions, projection, options);
-        return new Query(mongooseQuery);
+        let query = new Query(mongooseQuery);
+        query = this._populateReferenceFields(query);
+        return query;
     }
 
 
     findOneAndUpdate(conditions, update, options) {
         let mongooseQuery = getModel(this).findOneAndUpdate(conditions, update, options);
-        return new Query(mongooseQuery);
+        let query = new Query(mongooseQuery);
+        query = this._populateReferenceFields(query);
+        return query;
     }
 
     upsert(conditions, update) {

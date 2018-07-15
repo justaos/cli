@@ -55,7 +55,10 @@ class PlatformService {
     getMenuAndModules(menuId, cb) {
         let promises = [];
         promises.push(this.getModel('p_menu').findById(menuId).exec());
-        promises.push(this.getModel('p_module').find({ref_menu: menuId}, null, {sort: {order: 1}}).exec());
+
+        let moduleModel = this.getModel('p_module');
+        moduleModel.skipReferenceFieldPopulation();
+        promises.push(moduleModel.find({ref_menu: menuId}, null, {sort: {order: 1}}).exec());
 
         Q.all(promises).then(function (responses) {
             let menu = responses[0];
@@ -122,9 +125,13 @@ class PlatformService {
             } else if (field.type === 'reference' && field.ref) {
                 let dfd = Q.defer();
                 promises.push(dfd.promise);
-                that.getDisplayFieldForCollection(collectionName).then(function (displayValueField) {
+                that.getDisplayFieldForCollection(field.ref).then(function (displayValueField) {
                     if (displayValueField)
                         field.display_value_field = displayValueField.toObject();
+                    else {
+                        field.display_value_field = {};
+                        field.display_value_field.name = "id";
+                    }
                     dfd.resolve();
                 });
             }
@@ -170,10 +177,9 @@ class PlatformService {
                 let colQuery = collectionModel.find(conditions, null, options);
                 let promises = [];
                 fields.forEach(function (field) {
-                    if (field.type === 'reference' && field.ref){
+                    if (field.type === 'reference' && field.ref) {
                         let dfd = Q.defer();
                         promises.push(dfd.promise);
-                        colQuery = colQuery.populate(field.name);
                         that.getDisplayFieldForCollection(field.ref).then(function (displayValueField) {
                             if (displayValueField)
                                 field.display_value_field = displayValueField.toObject();
@@ -185,9 +191,9 @@ class PlatformService {
                         });
                     }
                 });
-                Q.all(promises).then(function(){
+                Q.all(promises).then(function () {
                     colQuery.exec(function (err, data) {
-                       let collectionObj = {
+                        let collectionObj = {
                             label: collection.label,
                             name: collection.name
                         };
@@ -219,6 +225,26 @@ class PlatformService {
 
         let model = this.getModel(modelName);
         return model.update({_id: record.id}, {$set: record}).exec();
+    }
+
+    fieldSearch(q, collectionName, fieldName) {
+        let dfd = Q.defer();
+        let that = this;
+        let fieldModel = this.getModel('p_field');
+        fieldModel.findOne({ref_collection: collectionName, name: fieldName}).exec(function (err, field) {
+            that.getDisplayFieldForCollection(field.ref).then(function (displayField) {
+                let model = that.getModel(field.ref);
+                model.find({[displayField.name]: {"$regex": q, "$options": "i"}}, null, {sort: {[displayField.name]: 1}, limit: 10}).exec(function (err, items) {
+                    dfd.resolve(items.map(function (item) {
+                        return {
+                            "value": item.id,
+                            "text": item[displayField.name]
+                        }
+                    }))
+                })
+            });
+        });
+        return dfd.promise;
     }
 }
 

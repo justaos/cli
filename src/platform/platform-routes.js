@@ -69,7 +69,6 @@ module.exports = function (platform) {
     router.get('/p/:collection/list', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
         ps.getListFormData(req.params.collection, req.query, function (collection, data, fields) {
-            console.log(data);
             res.render('pages/list/list', {
                 collection: collection,
                 data: data,
@@ -151,6 +150,14 @@ module.exports = function (platform) {
             else
                 res.send();
         });
+    });
+
+    router.post('/search', authenticate, function(req, res){
+        let ps = new PlatformService(req.user);
+        ps.fieldSearch(req.body.q, req.body.collection, req.body.field).then(function(data){
+            res.send(data);
+        });
+
     });
 
     router.all('/api/*', authenticate, function (req, res) {
