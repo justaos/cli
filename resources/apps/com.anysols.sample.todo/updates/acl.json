@@ -1,0 +1,13 @@
+{
+  "collection": "p_acl",
+  "records": [
+    {
+      "id": "5b4b8857d8e8f11bb0ea2e29",
+      "field": "*",
+      "name": "Only todo users have access to todo items",
+      "ref_collection": "todo",
+      "access": "read",
+      "type": "record"
+    }
+  ]
+}

@@ -7,7 +7,7 @@ class StoreController {
         let ps = new PlatformService(req.user);
         ps.getApplications(applications => {
             res.render('pages/store',
-                {applications: applications, layout: 'layouts/layout'});
+                {applications: applications, layout: 'layouts/layout', user: req.user});
         });
     }
 
@@ -15,7 +15,7 @@ class StoreController {
         let ps = new PlatformService(req.user);
         ps.getApplicationById(req.params.id, function (application) {
             res.render('pages/store-app',
-                {application: application, layout: 'layouts/layout'});
+                {application: application, layout: 'layouts/layout', user: req.user});
         });
     }
 

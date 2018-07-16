@@ -28,7 +28,7 @@
     <script src="/assets/js/popper.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script defer src="/assets/js/fontawesome.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
 
 
 </head>
@@ -36,33 +36,12 @@
 <body>
 <%- body %>
 
+
 <script defer src="/assets/js/jquery.smoothwheel.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.25.3/sweetalert2.all.min.js"></script>
 
-  window.onfocus = function() {
-    if (!Cookies.get('x-authenticated')){
-      if(window.parent)
-        window.parent.location.reload();
-      else
-        window.location.reload();
-    }
-  }
+<script src="/ui/scripts/common.js"></script>
 
-</script>
-<script>
-  (function() {
-    if ('registerElement' in document
-        && 'import' in document.createElement('link')
-        && 'content' in document.createElement('template')) {
-      // platform is good!
-    } else {
-      // polyfill the platform!
-      var e = document.createElement('script');
-      e.src = ' https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-lite.js';
-      document.body.appendChild(e);
-    }
-  })();
-</script>
 </body>
 </html>

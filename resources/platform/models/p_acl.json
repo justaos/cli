@@ -1,11 +1,23 @@
 {
   "name": "p_acl",
-  "label": "Access Level Control (ACL)",
+  "label": "Access Control (ACL)",
   "fields": [
     {
       "name": "name",
       "type": "string",
       "display_value": true
+    },
+    {
+      "name": "type",
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "RECORD",
+          "value": "record"
+        }
+      ]
     },
     {
       "label": "Collection",
@@ -17,29 +29,34 @@
       "type": "string"
     },
     {
-      "name": "type",
+      "name": "access",
       "type": "option",
-      "options": [{
-        "order": "100",
-        "language": "en",
-        "label": "CREATE",
-        "value": "create"
-      }, {
-        "order": "200",
-        "language": "en",
-        "label": "READ",
-        "value": "read"
-      }, {
-        "order": "300",
-        "language": "en",
-        "label": "UPDATE",
-        "value": "update"
-      }, {
-        "order": "300",
-        "language": "en",
-        "label": "DELETE",
-        "value": "delete"
-      }]
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "CREATE",
+          "value": "create"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "READ",
+          "value": "read"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "UPDATE",
+          "value": "update"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "DELETE",
+          "value": "delete"
+        }
+      ]
     }
   ]
 }

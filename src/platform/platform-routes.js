@@ -11,8 +11,9 @@ module.exports = function (platform) {
 
     router.get('/', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
+        console.log(req.user.hasRole('admin'));
         ps.getMenus(menus => {
-            res.render('index', {menus: menus, layout: 'layouts/layout'});
+            res.render('index', {menus: menus, layout: 'layouts/layout', user: req.user});
         });
     });
 
@@ -41,7 +42,8 @@ module.exports = function (platform) {
                     menu: menu,
                     url: req.query.url,
                     modules: modules,
-                    layout: 'layouts/layout'
+                    layout: 'layouts/layout',
+                    user: req.user
                 });
             else
                 res.render('404');
@@ -52,7 +54,8 @@ module.exports = function (platform) {
         res.render('pages/menu', {
             menu: undefined,
             url: req.query.url,
-            layout: 'layouts/layout'
+            layout: 'layouts/layout',
+            user: req.user
         });
     });
 
@@ -61,7 +64,8 @@ module.exports = function (platform) {
         ps.getMenuById(req.params.id, menu => {
             res.render('pages/home', {
                 menu: menu,
-                layout: 'layouts/layout'
+                layout: 'layouts/layout',
+                user: req.user
             });
         });
     });
@@ -74,7 +78,8 @@ module.exports = function (platform) {
                 data: data,
                 fields: fields,
                 moment: moment,
-                layout: 'layouts/no-header-layout'
+                layout: 'layouts/no-header-layout',
+                user: req.user
             });
         }, function () {
             res.render('404');
@@ -96,8 +101,9 @@ module.exports = function (platform) {
                         },
                         fields: fields,
                         item: {},
+                        moment: moment,
                         layout: 'layouts/no-header-layout',
-                        moment: moment
+                        user: req.user
                     });
                 });
             });
@@ -121,7 +127,8 @@ module.exports = function (platform) {
                         fields: fields,
                         item: result[1].toObject(),
                         layout: 'layouts/no-header-layout',
-                        moment: moment
+                        moment: moment,
+                        user: req.user
                     });
                 });
 
@@ -152,9 +159,9 @@ module.exports = function (platform) {
         });
     });
 
-    router.post('/search', authenticate, function(req, res){
+    router.post('/search', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.fieldSearch(req.body.q, req.body.collection, req.body.field).then(function(data){
+        ps.fieldSearch(req.body.q, req.body.collection, req.body.field).then(function (data) {
             res.send(data);
         });
 

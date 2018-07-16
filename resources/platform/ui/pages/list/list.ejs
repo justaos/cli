@@ -4,7 +4,11 @@
     <%- include('./list-navigation') %>
 
     <main>
-        <div class="container-fluid"></div>
+        <div class="container-fluid">
+            <div class="filters-applied m-1 d-none">
+                <span>Filters:</span>
+            </div>
+        </div>
 
         <section class="content-area">
             <div class="select-all-checkbox-area">
@@ -77,6 +81,7 @@
 <div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item cm-open" href="#">Open</a>
     <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
+    <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
 </div>
 <script>
     $(document).ready(function () {
@@ -156,13 +161,27 @@
             window.location.href = currentUrl.href;
         });
 
+        var conditions = JSON.parse(new URL(window.location.href).searchParams.get('conditions'));
+        if (conditions) {
+            var conditionKeys = Object.keys(conditions);
+            $('.filters-applied').removeClass('d-none');
+            conditionKeys.forEach(function (condition) {
+                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">'+ condition + '=' + conditions[condition].$regex + ' <i class="fas fa-times"></i></a>')
+            });
+        }
+
+
         let $searchInputForm = $('#search-input-form');
 
         $searchInputForm.on('submit', function (e) {
             e.preventDefault();
             var field = $(this).find('.selected-option').data('selected');
             var value = $(this).find('input').val();
-            currentUrl.searchParams.set('conditions', '{ "' + field + '": { "$regex": "' + value + '", "$options": "i" } }');
+            if (!conditions) {
+                conditions = {};
+            }
+            conditions[field] = {"$regex": value, "$options": "i"};
+            currentUrl.searchParams.set('conditions', JSON.stringify(conditions));
             window.location.href = currentUrl.href;
         });
 
@@ -173,6 +192,7 @@
         });
 
         $('.record').on('contextmenu', function (e) {
+            var that = this;
             var top = e.pageY - 10;
             var left = e.pageX - 20;
             $(".context-menu").css({
@@ -182,6 +202,14 @@
             });
             $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
             $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
+            $(".context-menu .cm-copy-id").on('click', function (e) {
+                e.preventDefault();
+                copyToClipboard($(that).data('id'));
+                toast({
+                    type: 'success',
+                    title: 'Record ID copied'
+                });
+            });
             return false; //blocks default Webbrowser right click menu
         }).on("click", function () {
             $(".context-menu").hide();
@@ -190,6 +218,7 @@
         $(".context-menu a").on("click", function () {
             $(this).parent().hide();
         });
+
 
     });
 </script>

@@ -1,6 +1,5 @@
 <%- include('../partials/header-navigation') %>
 <% if(application){ %>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
   window.APPLICATION = <%- JSON.stringify(application || null) %>;
   $(document).ready(function() {
@@ -32,7 +31,7 @@
           swal({
             title: 'Success',
             text: 'Installation completed',
-            icon: 'success',
+            type: 'success',
             button: 'Ok'
           });
         },

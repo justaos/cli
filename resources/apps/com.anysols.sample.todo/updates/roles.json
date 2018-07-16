@@ -1,0 +1,15 @@
+{
+  "collection": "p_role",
+  "records": [
+    {
+      "id": "5b4b87845152905835000001",
+      "name": "todo_user",
+      "label": "Todo User"
+    },
+    {
+      "id": "5b4b87ce267ae84437000001",
+      "name": "todo_admin",
+      "label": "Todo Admin"
+    }
+  ]
+}
