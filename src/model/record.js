@@ -18,4 +18,4 @@ class Record {
 
 }
 
-module.exports = Query;
+module.exports = Record;
