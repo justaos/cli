@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-
+const copydir = require('copy-dir');
+const _ = require('lodash');
+  
 // Delete the 0 and 1 argument (node and script.js)
 let args = process.argv.splice(process.execArgv.length + 2);
 
@@ -8,8 +10,6 @@ let name = args[0];
 
 if (name === 'init') {
   const fileUtils = require('../src/utils/file-utils');
-  const copydir = require('copy-dir');
-  const _ = require('lodash');
   let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../resources/config.json'); // load from default config.
   const prodConfig = _.cloneDeep(defaultConfig, true);
   prodConfig.logger = 'info';
@@ -25,8 +25,7 @@ if (name === 'init') {
       generatedConfig);
   fileUtils.writeFileSync(process.cwd() + '/.env', 'NODE_ENV=development');
 
-
-  copydir.sync(__dirname + '/../resources/apps/prod', process.cwd() + '/apps');
+  copydir.sync(__dirname + '/../resources/apps', process.cwd() + '/resources/apps');
   console.log("Project setup complete.");
   console.log("Modify the anysols-config.js file.");
 } else
