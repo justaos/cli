@@ -9,8 +9,8 @@
     "hidden": true
   }, {
     "id": "5b15588ef362641220dfebc0",
-    "label": "User Administration",
-    "name": "user-administration",
+    "label": "Administration",
+    "name": "administration",
     "description": "Set up users and control how they can view or edit your business data.",
     "icon": "fa-users"
   }]

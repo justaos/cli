@@ -4,7 +4,7 @@ const logger = require('../../config/logger');
 const BaseService = require('./base-service');
 const modelUtils = require('../../model/model-utils');
 const fileUtils = require('../../utils/file-utils');
-const {DEFAULT_FIELDS_PATH, PROD_PATH} = require('../platform-constants');
+const {path} = require('../platform-constants');
 
 
 class StoreService extends BaseService {
@@ -57,8 +57,8 @@ class StoreService extends BaseService {
 
     /** helper functions **/
     static readModelsForPackage(pkg) {
-        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg + '/models/**.json');
-        let defaultFields = fileUtils.readJsonFileSync(DEFAULT_FIELDS_PATH);
+        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(path.APPS + '/' + pkg + '/models/**.json');
+        let defaultFields = fileUtils.readJsonFileSync(path.DEFAULT_FIELDS);
         modelDefinitions.forEach(function (modelDef) {
             modelDef.fields = modelDef.fields.concat(defaultFields);
         });
@@ -66,11 +66,11 @@ class StoreService extends BaseService {
     }
 
     static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/updates/**.json');
+        return modelUtils.loadDataFromPath(path.APPS + '/' + pkg + '/updates/**.json');
     }
 
     static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/samples/**.json');
+        return modelUtils.loadDataFromPath(path.APPS + '/' + pkg + '/samples/**.json');
     }
 }
 

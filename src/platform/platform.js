@@ -1,26 +1,21 @@
 'use strict';
-const DatabaseConnector = require('../config/database-connector');
 const express = require('express');
 const Q = require('q');
+const glob = require('glob');
+
 const logger = require('../config/logger');
 const config = require('../config/config');
 
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
+
+const DatabaseConnector = require('../config/database-connector');
 const cleanInstall = require('./clean-install');
 const ModelSessionFactory = require('../model/model-session-fatory');
 
 const modelUtils = require('../model/model-utils');
-const glob = require('glob');
 const platformRoutes = require('./platform-routes');
-
-let PLATFORM_MODELS_PATH = config.root + '/resources/platform/models/**.json';
-let P_COLLECTION_PATH = config.root +
-    '/resources/platform/models/p_collection.json';
-let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
-let P_OPTION_PATH = config.root + '/resources/platform/models/p_option.json';
-
-const {PROD_PATH} = require('./platform-constants');
+const {path} = require('./platform-constants');
 
 let Model = ModelSessionFactory.createModelWithSession();
 
@@ -42,9 +37,9 @@ class Platform {
 
     boot() {
         let that = this;
-        let collectionDef = fileUtils.readJsonFilesFromPathSync(P_COLLECTION_PATH);
-        let fieldDef = fileUtils.readJsonFilesFromPathSync(P_FIELD_PATH);
-        let optionDef = fileUtils.readJsonFilesFromPathSync(P_OPTION_PATH);
+        let collectionDef = fileUtils.readJsonFilesFromPathSync(path.P_COLLECTION_MODEL);
+        let fieldDef = fileUtils.readJsonFilesFromPathSync(path.P_FIELD_MODEL);
+        let optionDef = fileUtils.readJsonFilesFromPathSync(path.P_OPTION_MODEL);
         modelUtils.loadSchemasIntoStore(collectionDef);
         modelUtils.loadSchemasIntoStore(fieldDef);
         modelUtils.loadSchemasIntoStore(optionDef);
@@ -106,7 +101,7 @@ class Platform {
         let that = this;
         logger.info('Scanning for apps');
         let applicationModel = new Model('p_application');
-        glob.sync(PROD_PATH + '**/config.json').forEach(file => {
+        glob.sync(path.APPS + '/**/config.json').forEach(file => {
             let config = fileUtils.readJsonFileSync(file);
             applicationModel.upsert({package: config.package}, config).exec();
             that.serveStaticFiles(config.package);
@@ -114,11 +109,11 @@ class Platform {
     }
 
     serveStaticFiles(pkg) {
-        this.router.use('/ui/' + pkg, express.static(PROD_PATH + pkg + '/ui'));
+        this.router.use('/ui/' + pkg, express.static(path.APPS + '/' + pkg + '/ui'));
     }
 
     cleanInstall() {
-        return cleanInstall(this, PLATFORM_MODELS_PATH);
+        return cleanInstall(this, path.PATFORM_MODELS + '/**.json');
     }
 }
 

@@ -46,7 +46,7 @@
       "label": "Role Role (m2m)",
       "order": 200,
       "type": "list",
-      "ref_collection": "p_role_role",
+      "ref_collection": "p_role_contains",
       "ref_menu": "5b15588ef362641220dfebc0"
     }
   ]
