@@ -131,6 +131,5 @@ lib-cov
 *.pid
 .env
 .nyc_output
-docs/reports/coverage/
 playground.js
 resources/apps/dev

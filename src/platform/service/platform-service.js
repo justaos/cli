@@ -1,19 +1,15 @@
 const logger = require('../../config/logger');
-const ModelSessionFactory = require('../../model/model-session-fatory');
 const dsUtils = require('../../utils/ds-utils');
 const Q = require('q');
 const vm = require('vm');
 const js2xmlparser = require('js2xmlparser');
 
-class PlatformService {
+const BaseService = require('./base-service');
+
+class PlatformService extends BaseService {
 
     constructor(user) {
-        this.sessionUser = user;
-        this.Model = ModelSessionFactory.createModelWithSession(user);
-    }
-
-    getModel(modelName) {
-        return new this.Model(modelName);
+        super(user);
     }
 
     getMenus(cb) {
@@ -31,24 +27,6 @@ class PlatformService {
             if (err)
                 logger.error(err);
             else cb(menu);
-        });
-    }
-
-    getApplications(cb) {
-        let applicationModel = this.getModel('p_application');
-        applicationModel.find({}, null, {sort: {order: 1}}).exec(function (err, applications) {
-            if (err)
-                logger.error(err);
-            else cb(applications);
-        });
-    }
-
-    getApplicationById(id, cb) {
-        let applicationModel = this.getModel('p_application');
-        applicationModel.findById(id).exec(function (err, application) {
-            if (err)
-                logger.error(err);
-            else cb(application);
         });
     }
 

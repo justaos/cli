@@ -19,13 +19,8 @@ let P_COLLECTION_PATH = config.root +
     '/resources/platform/models/p_collection.json';
 let P_FIELD_PATH = config.root + '/resources/platform/models/p_field.json';
 let P_OPTION_PATH = config.root + '/resources/platform/models/p_option.json';
-let P_DEFAULT_FIELDS_PATH = config.root + '/resources/platform/default-fields.json';
 
-let PROD_PATH;
-if (config.mode === 'internal')
-    PROD_PATH = config.cwd + '/resources/apps/';
-else
-    PROD_PATH = config.cwd + '/apps/';
+const {PROD_PATH} = require('./platform-constants');
 
 let Model = ModelSessionFactory.createModelWithSession();
 
@@ -118,56 +113,12 @@ class Platform {
         });
     }
 
-    installApplication(appId, loadSampleData) {
-        let that = this;
-        let dfd = Q.defer();
-        logger.info('STARTED INSTALLING');
-
-        let applicationModel = new Model('p_application');
-        applicationModel.findById(appId).exec((err, application) => {
-            let modelDef = Platform.readModelsForPackage(application.package);
-            modelUtils.loadSchemasIntoStore(modelDef);
-            Platform.loadDataForPackage(application.package);
-            if (loadSampleData)
-                Platform.loadSampleDataForPackage(application.package);
-            let promises = [];
-            modelDef.forEach((model) => {
-                promises.push(that.populateSysData(model));
-            });
-            application.installed_version = application.version;
-            promises.push(application.save());
-            Q.all(promises).then(dfd.resolve);
-            that.serveStaticFiles(application.package);
-        });
-        return dfd.promise;
-    }
-
     serveStaticFiles(pkg) {
         this.router.use('/ui/' + pkg, express.static(PROD_PATH + pkg + '/ui'));
     }
 
     cleanInstall() {
         return cleanInstall(this, PLATFORM_MODELS_PATH);
-    }
-
-    /** helper functions **/
-    static readModelsForPackage(pkg) {
-        let modelDefs = fileUtils.readJsonFilesFromPathSync(PROD_PATH + pkg + '/models/**.json');
-
-        let defaultFields = fileUtils.readJsonFileSync(P_DEFAULT_FIELDS_PATH);
-
-        modelDefs.forEach(function (modelDef) {
-            modelDef.fields = modelDef.fields.concat(defaultFields);
-        });
-        return modelDefs;
-    }
-
-    static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/updates/**.json');
-    }
-
-    static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(PROD_PATH + pkg + '/samples/**.json');
     }
 }
 
