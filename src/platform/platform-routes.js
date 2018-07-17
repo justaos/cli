@@ -167,6 +167,14 @@ module.exports = function (platform) {
 
     });
 
+    router.post('/p/:collection/export', authenticate, function (req, res) {
+        var result = {
+            collection: req.params.collection,
+            records: []
+        };
+        res.send(result);
+    });
+
     router.all('/api/*', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
         ps.executeRestApi(req, res, () => {
