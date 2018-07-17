@@ -3,7 +3,7 @@ const config = require('../config/config');
 const constants = {};
 
 constants.path = {};
-constants.path.APPS = config.cwd + '/resources/apps/';
+constants.path.APPS = config.cwd + '/resources/apps';
 
 constants.path.PATFORM_RESOUCES = config.root + '/resources/platform';
 constants.path.DEFAULT_FIELDS = constants.path.PATFORM_RESOUCES + '/default-fields.json';
