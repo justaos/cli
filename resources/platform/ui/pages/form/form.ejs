@@ -204,15 +204,15 @@
         });
 
         $('select.select-reference').each(function () {
-            $(this).selectpicker({noneSelectedText: 'Insert Placeholder text'}).ajaxSelectPicker({
+            var fieldName = $(this).data('col-name');
+            $(this).selectpicker().ajaxSelectPicker({
                 ajax: {
-                    url: '/search',
+                    url: '/p/<%= collection.name %>/search',
                     dataType: 'json',
                     data: function () {
                         var params = {
                             q: '{{{q}}}',
-                            collection: '<%= collection.name %>',
-                            field: this.plugin.$element.data('col-name')
+                            field: fieldName
                         };
                         return params;
                     }
