@@ -2,7 +2,7 @@ const authenticate = require('../config/authenticate');
 const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const PlatformService = require('./service/platform-service');
-const storeController = require('./routes/store.route');
+const storeController = require('./controller/store.ctrl');
 const moment = require('moment');
 
 module.exports = function (platform) {
