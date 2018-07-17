@@ -159,9 +159,9 @@ module.exports = function (platform) {
         });
     });
 
-    router.post('/search', authenticate, function (req, res) {
+    router.post('/p/:collection/search', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.fieldSearch(req.body.q, req.body.collection, req.body.field).then(function (data) {
+        ps.fieldSearch(req.body.q, req.params.collection, req.body.field).then(function (data) {
             res.send(data);
         });
 
