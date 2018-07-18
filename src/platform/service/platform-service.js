@@ -23,13 +23,24 @@ class PlatformService extends BaseService {
 
             let recordIDs = menus.map(menu => menu.id);
             let aclModel = that.getModel('p_acl');
-            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls){
-                console.log(acls);
-                menus = menus.filter(function (menu) {
-
+            let resultMenus  = [], promises = [];
+            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls)
+                
+                menus.forEach(function (menu) {      
+                   var dfd = Q.defer();
+                   promises.push(dfd.promise);
+                   var menuAcls = acls.filter(acl => acl.record_id === menu.id);
+                   if(menuAcls.length){
+                      
+                   } else {
+                      resultMenus.push(menu);
+                      dfd.resolve();
+                   }
+                }); 
+                Q.all(promises).then(function(){
+                   cb(resultMenus);
                 });
             });
-            cb(menus);
         });
     }
 
