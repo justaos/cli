@@ -20,18 +20,20 @@ class PlatformService extends BaseService {
             if (err)
                 logger.error(err);
 
-
             let recordIDs = menus.map(menu => menu.id);
             let aclModel = that.getModel('p_acl');
-            let resultMenus  = [], promises = [];
-            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls)
-                
+            let resultMenus  = [];
+            let promises = [];
+            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls) {
                 menus.forEach(function (menu) {      
-                   var dfd = Q.defer();
+                   let dfd = Q.defer();
                    promises.push(dfd.promise);
-                   var menuAcls = acls.filter(acl => acl.record_id === menu.id);
+                   let aclRolesForMenu = acls.filter(acl => acl.record_id == menu.id).map(acl => acl.id);
                    if(menuAcls.length){
-                      
+                       that.getRecords('p_acl_role', aclRolesForMenu).then(function(aclRoles){
+                           
+                       });
+                      aclRoleModel.find({})
                    } else {
                       resultMenus.push(menu);
                       dfd.resolve();
