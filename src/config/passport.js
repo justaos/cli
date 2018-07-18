@@ -54,6 +54,15 @@ module.exports = function () {
                         }
                         return false;
                     };
+                    user.hasRoleId = function (roleId) {
+                        let i;
+                        for (i = 0; i < userRoles.length; i++) {
+                            if (userRoles[i].role.id === roleId) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
                     cb(null, user);
                 });
             });

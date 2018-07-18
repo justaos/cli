@@ -11,7 +11,6 @@ module.exports = function (platform) {
 
     router.get('/', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        console.log(req.user.hasRole('admin'));
         ps.getMenus(menus => {
             res.render('index', {menus: menus, layout: 'layouts/layout', user: req.user});
         });
@@ -167,12 +166,20 @@ module.exports = function (platform) {
 
     });
 
-    router.post('/p/:collection/export', authenticate, function (req, res) {
-        var result = {
-            collection: req.params.collection,
-            records: []
+    router.get('/p/:collection/export', authenticate, function (req, res) {
+        let result = {
+            collection: req.params.collection
         };
-        res.send(result);
+        let ps = new PlatformService(req.user);
+        ps.getRecords(req.params.collection, req.query.records).then(function(records){
+            result.records = records;
+            res.send(result);
+        });
+    });
+
+    router.get('/p/api/update', authenticate, function (req, res) {
+        platform.loadPlatformUpdates();
+        res.send();
     });
 
     router.all('/api/*', authenticate, function (req, res) {

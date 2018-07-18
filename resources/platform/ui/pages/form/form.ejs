@@ -192,6 +192,37 @@
         });
     });
 
+    $('.actions-dropdown .dropdown-item').on('click', function (event) {
+        event.preventDefault();
+        let action = $(this).attr('data-action-name');
+        let selectedItems = [];
+        selectedItems.push(item.id);
+        if (action === 'export-json') {
+            var exportUrl = window.location.origin + '/p/<%= collection.name %>/export?';
+            selectedItems.forEach(function (recordId, index) {
+                if (index)
+                    exportUrl += '&';
+                exportUrl += 'records[]=' + recordId;
+            })
+            window.open(exportUrl, '_blank');
+        } else {
+            $.ajax({
+                url: "/p/<%= collection.name %>/action",
+                data: JSON.stringify({items: selectedItems}),
+                contentType: 'application/json',
+                type: 'POST'
+            }).then(function (data) {
+                if(window.parent)
+                    window.parent.location.href = window.parent.location.origin + window.parent.location.pathname;
+                else
+                    window.location.href = '/';
+            }, function (err) {
+                alert(err.responseJSON.original.sqlMessage);
+            });
+        }
+
+    });
+
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
 
@@ -225,9 +256,4 @@
         });
     });
 
-    $('.open-new-window').on('click', function () {
-        window.open(window.location.href, '_blank');
-    })
-
-    //console.log(editor.getValue());
 </script>

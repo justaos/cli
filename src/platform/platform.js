@@ -44,14 +44,17 @@ class Platform {
         modelUtils.loadSchemasIntoStore(fieldDef);
         modelUtils.loadSchemasIntoStore(optionDef);
         modelUtils.loadSchemasFromDB().then(() => {
-            modelUtils.loadDataFromPath(config.root +
-                '/resources/platform/updates/**.json');
+            that.loadPlatformUpdates();
             platformRoutes(that);
             that.scanApplications();
             logger.logBox();
             logger.logBox('Application started');
             logger.logBox();
         });
+    }
+
+    loadPlatformUpdates(){
+        modelUtils.loadDataFromPath(path.PATFORM_RESOUCES + '/updates/**.json');
     }
 
     populateSysData(collectionDef) {

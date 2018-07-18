@@ -16,6 +16,18 @@
           "language": "en",
           "label": "RECORD",
           "value": "record"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "Menu",
+          "value": "p_menu"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "Module",
+          "value": "p_module"
         }
       ]
     },
@@ -26,6 +38,10 @@
     },
     {
       "name": "field",
+      "type": "string"
+    },
+    {
+      "name": "record_id",
       "type": "string"
     },
     {

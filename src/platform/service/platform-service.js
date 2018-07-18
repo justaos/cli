@@ -2,6 +2,7 @@ const logger = require('../../config/logger');
 const dsUtils = require('../../utils/ds-utils');
 const Q = require('q');
 const vm = require('vm');
+const mongoose = require('mongoose');
 const js2xmlparser = require('js2xmlparser');
 
 const BaseService = require('./base-service');
@@ -13,11 +14,22 @@ class PlatformService extends BaseService {
     }
 
     getMenus(cb) {
+        let that = this;
         let menuModel = this.getModel('p_menu');
         menuModel.find().exec(function (err, menus) {
             if (err)
                 logger.error(err);
-            else cb(menus);
+
+
+            let recordIDs = menus.map(menu => menu.id);
+            let aclModel = that.getModel('p_acl');
+            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls){
+                console.log(acls);
+                menus = menus.filter(function (menu) {
+
+                });
+            });
+            cb(menus);
         });
     }
 
@@ -212,7 +224,10 @@ class PlatformService extends BaseService {
         fieldModel.findOne({ref_collection: collectionName, name: fieldName}).exec(function (err, field) {
             that.getDisplayFieldForCollection(field.ref).then(function (displayField) {
                 let model = that.getModel(field.ref);
-                model.find({[displayField.name]: {"$regex": q, "$options": "i"}}, null, {sort: {[displayField.name]: 1}, limit: 10}).exec(function (err, items) {
+                model.find({[displayField.name]: {"$regex": q, "$options": "i"}}, null, {
+                    sort: {[displayField.name]: 1},
+                    limit: 10
+                }).exec(function (err, items) {
                     dfd.resolve(items.map(function (item) {
                         return {
                             "value": item.id,
@@ -223,6 +238,18 @@ class PlatformService extends BaseService {
             });
         });
         return dfd.promise;
+    }
+
+    getRecords(collectionName, recordIDs) {
+        let model = this.getModel(collectionName);
+        model.skipReferenceFieldPopulation();
+        return model.find({
+            _id: {
+                $in: recordIDs.map(function (id) {
+                    return mongoose.Types.ObjectId.ObjectId(id);
+                })
+            }
+        }).exec();
     }
 }
 

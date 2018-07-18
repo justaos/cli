@@ -20,7 +20,7 @@
     {
       "id": "5b384f8c1f7ee41020000001",
       "label": "User Role",
-      "order": 200,
+      "order": 300,
       "type": "list",
       "ref_collection": "p_user_role",
       "ref_menu": "5b15588ef362641220dfebc0"
@@ -28,7 +28,7 @@
     {
       "id": "5b4b850da261d4e818000001",
       "label": "Access Control (ACL)",
-      "order": 200,
+      "order": 400,
       "type": "list",
       "ref_collection": "p_acl",
       "ref_menu": "5b15588ef362641220dfebc0"
@@ -36,7 +36,7 @@
     {
       "id": "5b4b86056faf312014000001",
       "label": "ACL Role (m2m)",
-      "order": 200,
+      "order": 500,
       "type": "list",
       "ref_collection": "p_acl_role",
       "ref_menu": "5b15588ef362641220dfebc0"
@@ -44,7 +44,7 @@
     {
       "id": "5b4c1c6961dde31c1f000001",
       "label": "Role Role (m2m)",
-      "order": 200,
+      "order": 600,
       "type": "list",
       "ref_collection": "p_role_contains",
       "ref_menu": "5b15588ef362641220dfebc0"

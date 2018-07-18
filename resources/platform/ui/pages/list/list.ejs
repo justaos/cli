@@ -81,6 +81,7 @@
 <div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item cm-open" href="#">Open</a>
     <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
+    <a class="dropdown-item cm-export-json" href="#" target="_blank">Export JSON</a>
     <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
 </div>
 <script>
@@ -119,16 +120,27 @@
             $.each($('.record-checkbox:checked'), function () {
                 selectedItems.push($(this).val());
             });
-            $.ajax({
-                url: "/p/<%= collection.name %>/action",
-                data: JSON.stringify({items: selectedItems}),
-                contentType: 'application/json',
-                type: 'POST'
-            }).then(function (data) {
-                window.location.reload();
-            }, function (err) {
-                alert(err.responseJSON.original.sqlMessage);
-            });
+            if (action === 'export-json') {
+                var exportUrl = window.location.origin + '/p/<%= collection.name %>/export?';
+                selectedItems.forEach(function (recordId, index) {
+                    if (index)
+                        exportUrl += '&';
+                    exportUrl += 'records[]=' + recordId;
+                })
+                window.open(exportUrl, '_blank');
+            } else {
+                $.ajax({
+                    url: "/p/<%= collection.name %>/action",
+                    data: JSON.stringify({items: selectedItems}),
+                    contentType: 'application/json',
+                    type: 'POST'
+                }).then(function (data) {
+                    window.location.reload();
+                }, function (err) {
+                    alert(err.responseJSON.original.sqlMessage);
+                });
+            }
+
         });
         $('#select-all-checkbox').on('click', function () {
             $('.record-checkbox').prop('checked', $('#select-all-checkbox').prop('checked'));
@@ -166,7 +178,7 @@
             var conditionKeys = Object.keys(conditions);
             $('.filters-applied').removeClass('d-none');
             conditionKeys.forEach(function (condition) {
-                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">'+ condition + '=' + conditions[condition].$regex + ' <i class="fas fa-times"></i></a>')
+                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">' + condition + '=' + conditions[condition].$regex + ' <i class="fas fa-times"></i></a>')
             });
         }
 
@@ -202,6 +214,7 @@
             });
             $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
             $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
+            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id'));
             $(".context-menu .cm-copy-id").on('click', function (e) {
                 e.preventDefault();
                 copyToClipboard($(that).data('id'));
@@ -218,7 +231,6 @@
         $(".context-menu a").on("click", function () {
             $(this).parent().hide();
         });
-
 
     });
 </script>

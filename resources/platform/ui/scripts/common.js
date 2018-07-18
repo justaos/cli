@@ -34,4 +34,8 @@ window.copyToClipboard = function (str) {
         e.src = ' https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-lite.js';
         document.body.appendChild(e);
     }
+
+    $('.open-new-window').on('click', function () {
+        window.open(window.location.href, '_blank');
+    })
 })();
