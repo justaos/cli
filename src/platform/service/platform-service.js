@@ -40,8 +40,8 @@ class PlatformService extends BaseService {
                            });
                            if(flag){
                                resultMenus.push(menu);
-                               dfd.resolve();
                            }
+                           dfd.resolve();
                        });
                    } else {
                       resultMenus.push(menu);
