@@ -22,6 +22,7 @@ class PlatformService extends BaseService {
 
             let recordIDs = menus.map(menu => menu.id);
             let aclModel = that.getModel('p_acl');
+            let aclRoleModel = that.getModel('p_acl_role');
             let resultMenus  = [];
             let promises = [];
             aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls) {
@@ -30,10 +31,18 @@ class PlatformService extends BaseService {
                    promises.push(dfd.promise);
                    let aclRolesForMenu = acls.filter(acl => acl.record_id == menu.id).map(acl => acl.id);
                    if(menuAcls.length){
-                       that.getRecords('p_acl_role', aclRolesForMenu).then(function(aclRoles){
-                           
+                       aclRoleModel.find({acl: aclRolesForMenu[0].id}).then(function(aclRoles){
+                           let flag = false;
+                           aclRoles.forEach(function(aclRole){
+                               if(this.sessionUser.hasRoleId(aclRole)){
+                                   flag = true;
+                               }
+                           });
+                           if(flag){
+                               resultMenus.push(menu);
+                               dfd.resolve();
+                           }
                        });
-                      aclRoleModel.find({})
                    } else {
                       resultMenus.push(menu);
                       dfd.resolve();
