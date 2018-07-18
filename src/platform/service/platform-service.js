@@ -35,7 +35,7 @@ class PlatformService extends BaseService {
                            if(aclRoles.length){
                                let flag = false;
                                aclRoles.forEach(function(aclRole){
-                                   if(that.sessionUser.hasRoleId(aclRole.role)){
+                                   if(that.sessionUser.hasRoleId(aclRole.toObject().role)){
                                        flag = true;
                                    }
                                });
