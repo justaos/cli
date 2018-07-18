@@ -57,7 +57,7 @@ module.exports = function () {
                     user.hasRoleId = function (roleId) {
                         let i;
                         for (i = 0; i < userRoles.length; i++) {
-                            if (userRoles[i].role.id === roleId) {
+                            if (userRoles[i].role.id == roleId) {
                                 return true;
                             }
                         }
@@ -78,6 +78,7 @@ function getUserRoles(userId) {
         dfd.resolve(userRoles);
     } else {
         new Model('p_user_role').find({user: userId}).exec(function (err, userRoles) {
+            userRoles = userRoles.map(userRole => userRole.toObject());
             cache.put(userId, userRoles, 24 * 60 * 60 * 1000);
             dfd.resolve(userRoles);
         })
