@@ -31,14 +31,18 @@ class PlatformService extends BaseService {
                    promises.push(dfd.promise);
                    let aclRolesForMenu = acls.filter(acl => acl.record_id == menu.id).map(acl => acl.id);
                    if(aclRolesForMenu.length){
-                       aclRoleModel.find({acl: aclRolesForMenu[0]}).exec(function(err, aclRoles){
-                           let flag = false;
-                           aclRoles.forEach(function(aclRole){
-                               if(that.sessionUser.hasRoleId(aclRole.role)){
-                                   flag = true;
+                       aclRoleModel.find({acl: mongoose.Types.ObjectId.ObjectId(aclRolesForMenu[0])}).exec(function(err, aclRoles){
+                           if(aclRoles.length){
+                               let flag = false;
+                               aclRoles.forEach(function(aclRole){
+                                   if(that.sessionUser.hasRoleId(aclRole.role)){
+                                       flag = true;
+                                   }
+                               });
+                               if(flag){
+                                   resultMenus.push(menu);
                                }
-                           });
-                           if(flag){
+                           } else {
                                resultMenus.push(menu);
                            }
                            dfd.resolve();
