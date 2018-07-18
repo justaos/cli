@@ -31,7 +31,7 @@ class PlatformService extends BaseService {
                    promises.push(dfd.promise);
                    let aclRolesForMenu = acls.filter(acl => acl.record_id == menu.id).map(acl => acl.id);
                    if(aclRolesForMenu.length){
-                       aclRoleModel.find({acl: aclRolesForMenu[0].id}).exec(function(err, aclRoles){
+                       aclRoleModel.find({acl: aclRolesForMenu[0]}).exec(function(err, aclRoles){
                            let flag = false;
                            aclRoles.forEach(function(aclRole){
                                if(that.sessionUser.hasRoleId(aclRole)){
