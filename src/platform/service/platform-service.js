@@ -1,5 +1,6 @@
 const logger = require('../../config/logger');
 const dsUtils = require('../../utils/ds-utils');
+const hashUtils = require('../../utils/hash-utils');
 const Q = require('q');
 const vm = require('vm');
 const mongoose = require('mongoose');
@@ -110,7 +111,7 @@ class PlatformService extends BaseService {
                     return m;
                 });
 
-                that.filterBasedOnAccess('p_module', modules, function(modules){
+                that.filterBasedOnAccess('p_module', modules, function (modules) {
                     modules = dsUtils.flatToHierarchy(modules);
                     cb(menu, modules);
                 });
@@ -232,7 +233,7 @@ class PlatformService extends BaseService {
                 });
                 Q.all(promises).then(function () {
                     colQuery.exec(function (err, data) {
-                        if(err)
+                        if (err)
                             console.log(err);
                         let collectionObj = {
                             label: collection.label,
@@ -253,17 +254,15 @@ class PlatformService extends BaseService {
 
     createRecord(modelName, record) {
         let model = this.getModel(modelName);
+        model.getDefinition().fields.forEach(function (field) {
+            if (field.type === 'password' && record[field.type]) {
+                record[field.type] = hashUtils.generateHash(record[field.type]);
+            }
+        });
         return model.create(record);
     }
 
     updateRecord(modelName, record) {
-        /*collectionModel.getSchemaDef().fields.forEach(function (field) {
-                if (field.type === 'password' && req.body[field.type]) {
-                    req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
-                }
-            });
-            */
-
         let model = this.getModel(modelName);
         return model.update({_id: record.id}, {$set: record}).exec();
     }
