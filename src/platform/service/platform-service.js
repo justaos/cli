@@ -19,44 +19,63 @@ class PlatformService extends BaseService {
         menuModel.find().exec(function (err, menus) {
             if (err)
                 logger.error(err);
+            that.filterBasedOnAccess('p_menu', menus, cb);
+        });
+    }
 
-            let recordIDs = menus.map(menu => menu.id);
-            let aclModel = that.getModel('p_acl');
-            let aclRoleModel = that.getModel('p_acl_role');
-            let resultMenus  = [];
+    filterBasedOnAccess(type, records, cb) {
+        let that = this;
+        let recordIDs = records.map(record => record.id);
+        let filteredRecords = [];
+        that.getACLs(type, recordIDs).then(function (acls) {
             let promises = [];
-            aclModel.find({type: 'p_menu', record_id: {$in: recordIDs}}).exec(function(err, acls) {
-                menus.forEach(function (menu) {      
-                   let dfd = Q.defer();
-                   promises.push(dfd.promise);
-                   let aclRolesForMenu = acls.filter(acl => acl.record_id == menu.id).map(acl => acl.id);
-                   if(aclRolesForMenu.length){
-                       aclRoleModel.find({acl: mongoose.Types.ObjectId.ObjectId(aclRolesForMenu[0])}).exec(function(err, aclRoles){
-                           if(aclRoles.length){
-                               let flag = false;
-                               aclRoles.forEach(function(aclRole){
-                                   if(that.sessionUser.hasRoleId(aclRole.toObject().role)){
-                                       flag = true;
-                                   }
-                               });
-                               if(flag){
-                                   resultMenus.push(menu);
-                               }
-                           } else {
-                               resultMenus.push(menu);
-                           }
-                           dfd.resolve();
-                       });
-                   } else {
-                      resultMenus.push(menu);
-                      dfd.resolve();
-                   }
-                }); 
-                Q.all(promises).then(function(){
-                   cb(resultMenus);
+            records.forEach(function (record) {
+                let dfd = Q.defer();
+                promises.push(dfd.promise);
+                let aclRolesForMenu = acls.filter(acl => acl.record_id === record.id).map(acl => acl.id);
+                that.recordHasAccess(aclRolesForMenu).then(function (access) {
+                    if (access)
+                        filteredRecords.push(record);
+                    dfd.resolve();
                 });
             });
+            Q.all(promises).then(function () {
+                cb(filteredRecords);
+            });
         });
+    }
+
+    recordHasAccess(aclIDs) {
+        let that = this;
+        let dfd = Q.defer();
+        if (aclIDs.length) {
+            let aclRoleModel = that.getModel('p_acl_role');
+            aclRoleModel.skipPopulation().find({acl: aclIDs[0]}).exec(function (err, aclRoles) {
+                aclRoles = aclRoles.map(aclRole => aclRole.toObject());
+                dfd.resolve(that.hasAccess(aclRoles));
+            });
+        } else {
+            dfd.resolve(true);
+        }
+        return dfd.promise;
+    }
+
+    getACLs(type, recordIDs) {
+        let aclModel = this.getModel('p_acl');
+        return aclModel.find({type: type, record_id: {$in: recordIDs}}).exec();
+    }
+
+    hasAccess(aclRoles) {
+        let that = this;
+        if (that.sessionUser.hasRole('admin') || !aclRoles.length)
+            return true;
+        let flag = false;
+        aclRoles.forEach(function (aclRole) {
+            if (that.sessionUser.hasRoleId(aclRole.role.toString())) {
+                flag = true;
+            }
+        });
+        return flag;
     }
 
     getMenuById(id, cb) {
@@ -69,11 +88,12 @@ class PlatformService extends BaseService {
     }
 
     getMenuAndModules(menuId, cb) {
+        let that = this;
         let promises = [];
         promises.push(this.getModel('p_menu').findById(menuId).exec());
 
         let moduleModel = this.getModel('p_module');
-        moduleModel.skipReferenceFieldPopulation();
+        moduleModel.skipPopulation();
         promises.push(moduleModel.find({ref_menu: menuId}, null, {sort: {order: 1}}).exec());
 
         Q.all(promises).then(function (responses) {
@@ -90,8 +110,11 @@ class PlatformService extends BaseService {
                     return m;
                 });
 
-                modules = dsUtils.flatToHierarchy(modules);
-                cb(menu, modules);
+                that.filterBasedOnAccess('p_module', modules, function(modules){
+                    modules = dsUtils.flatToHierarchy(modules);
+                    cb(menu, modules);
+                });
+
             } else
                 cb(null);
         });
@@ -209,6 +232,8 @@ class PlatformService extends BaseService {
                 });
                 Q.all(promises).then(function () {
                     colQuery.exec(function (err, data) {
+                        if(err)
+                            console.log(err);
                         let collectionObj = {
                             label: collection.label,
                             name: collection.name
@@ -268,7 +293,7 @@ class PlatformService extends BaseService {
 
     getRecords(collectionName, recordIDs) {
         let model = this.getModel(collectionName);
-        model.skipReferenceFieldPopulation();
+        model.skipPopulation();
         return model.find({
             _id: {
                 $in: recordIDs.map(function (id) {

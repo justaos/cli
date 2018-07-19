@@ -15,7 +15,7 @@ module.exports = function () {
 
             //Assume there is a DB module providing a global UserModel
             new Model('p_user').findOne({username: username}).exec(function (err, user) {
-                if (err)
+                if (err || !user)
                     return done(null, false, {
                         found: false,
                         message: 'Username does not exist'
@@ -43,7 +43,6 @@ module.exports = function () {
 
             //find the user in db if needed
             return new Model('p_user').findById(jwtPayload.id).exec((err, user) => {
-                delete user.password;
                 getUserRoles(user.id).then(function (userRoles) {
                     user.hasRole = function (roleName) {
                         let i;
@@ -57,7 +56,7 @@ module.exports = function () {
                     user.hasRoleId = function (roleId) {
                         let i;
                         for (i = 0; i < userRoles.length; i++) {
-                            if (userRoles[i].role.id == roleId) {
+                            if (userRoles[i].role.id === roleId) {
                                 return true;
                             }
                         }

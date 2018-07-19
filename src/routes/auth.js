@@ -16,6 +16,7 @@ router.post('/login', function (req, res, next) {
                 user: info.found
             });
 
+        cache.del(user.id);
         req.login(user, {session: false}, (err) => {
             if (err)
                 res.send(err);
@@ -36,8 +37,6 @@ router.get('/login', (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-    if (req.user)
-        cache.del(req.user.id);
     res.clearCookie('x-auth-token');
     res.clearCookie('x-authenticated');
     res.redirect('./login');

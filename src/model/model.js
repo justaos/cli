@@ -30,20 +30,21 @@ class Model {
         return null;
     }
 
-    _populateReferenceFields(query) {
-        if(!this.skipPopulate) {
+    _populateReferenceFields(query, options) {
+        if (!this.skipPopulate) {
             let def = this.getDefinition();
             def.fields.forEach(function (field) {
                 if (field.type === 'reference' && field.ref) {
-                    query = query.populate(field.name);
+                    query = query.populate({path: field.name});
                 }
             });
         }
         return query;
     }
 
-    skipReferenceFieldPopulation() {
+    skipPopulation() {
         this.skipPopulate = true;
+        return this;
     }
 
     /**
@@ -76,7 +77,7 @@ class Model {
     find(conditions, projection, options) {
         let mongooseQuery = getModel(this).find(conditions, projection, options);
         let query = new Query(mongooseQuery);
-        query = this._populateReferenceFields(query);
+        query = this._populateReferenceFields(query, options);
         return query;
     }
 
@@ -104,7 +105,7 @@ class Model {
     findOne(conditions, projection, options) {
         let mongooseQuery = getModel(this).findOne(conditions, projection, options);
         let query = new Query(mongooseQuery);
-        query = this._populateReferenceFields(query);
+        query = this._populateReferenceFields(query, options);
         return query;
     }
 
@@ -112,7 +113,7 @@ class Model {
     findOneAndUpdate(conditions, update, options) {
         let mongooseQuery = getModel(this).findOneAndUpdate(conditions, update, options);
         let query = new Query(mongooseQuery);
-        query = this._populateReferenceFields(query);
+        query = this._populateReferenceFields(query, options);
         return query;
     }
 
