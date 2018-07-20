@@ -59,6 +59,10 @@
     {
       "name": "ref",
       "type": "string"
+    },
+    {
+      "name": "length",
+      "type": "integer"
     }
   ]
 }

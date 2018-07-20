@@ -14,7 +14,8 @@ module.exports = function () {
         function (username, password, done) {
 
             //Assume there is a DB module providing a global UserModel
-            new Model('p_user').findOne({username: username}).exec(function (err, user) {
+            username = username.replace('.', '[.]');
+            new Model('p_user').findOne({username: new RegExp(`^${username}$`, 'i')}).exec(function (err, user) {
                 if (err || !user)
                     return done(null, false, {
                         found: false,

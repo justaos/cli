@@ -104,6 +104,10 @@
                                         selected="selected"><%= item[field.name][field.display_value_field.name] %></option>
                                 <% } %>
                             </select>
+                            <% } else if(field.type == 'string' && field.length > 256){ %>
+                            <textarea type="text" class="form-control" id="form-<%= field.name %>"
+                                   name="<%= field.name %>"
+                                   placeholder="<%= field.label %>"><%= item[field.name] %></textarea>
                             <% } else { %>
                             <input type="text" class="form-control" id="form-<%= field.name %>"
                                    name="<%= field.name %>"

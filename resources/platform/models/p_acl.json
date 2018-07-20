@@ -8,6 +8,11 @@
       "display_value": true
     },
     {
+      "name": "short_description",
+      "type": "string",
+      "length": 500
+    },
+    {
       "name": "type",
       "type": "option",
       "options": [

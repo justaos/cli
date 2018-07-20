@@ -171,8 +171,13 @@ module.exports = function (platform) {
             collection: req.params.collection
         };
         let ps = new PlatformService(req.user);
-        ps.getRecords(req.params.collection, req.query.records).then(function(records){
-            result.records = records;
+        ps.getRecords(req.params.collection, req.query.records).then(function (records) {
+            result.records = records.map(rec => {
+                rec = rec.toObject();
+                delete rec._id;
+                delete rec.__v;
+                return rec;
+            });
             res.send(result);
         });
     });

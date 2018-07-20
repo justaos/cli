@@ -53,7 +53,7 @@ class Platform {
         });
     }
 
-    loadPlatformUpdates(){
+    loadPlatformUpdates() {
         modelUtils.loadDataFromPath(path.PATFORM_RESOUCES + '/updates/**.json');
     }
 
@@ -64,16 +64,12 @@ class Platform {
         Platform.upsertCollection(collectionDef).then(function (collectionRecord) {
             let promises = [];
             collectionDef.fields.forEach(function (field) {
-                promises.push(p_field.upsert({name: field.name, ref_collection: collectionRecord.name}, {
-                    name: field.name,
-                    label: field.label ?
-                        field.label :
-                        stringUtils.underscoreToCamelCase(field.name),
-                    type: field.type,
-                    display_value: field.display_value,
-                    ref_collection: collectionRecord.name,
-                    ref: field.ref
-                }).exec());
+                if (!field.label) {
+                    field.label = stringUtils.underscoreToCamelCase(field.name);
+                }
+                field.ref_collection = collectionRecord.name;
+
+                promises.push(p_field.upsert({name: field.name, ref_collection: collectionRecord.name}, field).exec());
                 if (field.type === 'option' && field.options)
                     field.options.forEach(function (optionRecord) {
                         optionRecord.ref_collection = collectionRecord.name;
