@@ -1,287 +1,205 @@
 const authenticate = require('../config/authenticate');
-const dsUtils = require('../utils/ds-utils');
 const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
-const getModel = require('../model');
-const vm = require('vm');
-const js2xmlparser = require('js2xmlparser');
+const PlatformService = require('./service/platform-service');
+const storeController = require('./controller/store.ctrl');
+const moment = require('moment');
 
-module.exports = function(platform) {
+module.exports = function (platform) {
 
-  let router = platform.router;
+    let router = platform.router;
 
-  router.get('/', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_menu').find({}).then(menus => {
-      res.render('index', {menus: menus, layout: 'layouts/layout'});
+    router.get('/', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getMenus(menus => {
+            res.render('index', {menus: menus, layout: 'layouts/layout', user: req.user});
+        });
     });
-  });
 
-  router.get('/profile', authenticate, function(req, res) {
-    res.redirect('/no-menu?url=/p/p_user/edit/'+req.user.id);
-  });
-
-  router.get('/dev-tools', authenticate, function(req, res, next) {
-    req.url = '/menu/5b15588ef362641220dfebc1';
-    next();
-  });
-
-  router.get('/store', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_application').find({}).then(applications => { //order: Sequelize.col('order')
-      res.render('pages/store',
-          {applications: applications, layout: 'layouts/layout'});
+    router.get('/profile', authenticate, function (req, res) {
+        res.redirect('/no-menu?url=/p/p_user/edit/' + req.user.id);
     });
-  });
 
-  router.get('/store/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_application').findById(req.params.id).
-        then(function(application) {
-          res.render('pages/store-app',
-              {application: application, layout: 'layouts/layout'});
-        });
-  });
+    router.get('/dev-tools', authenticate, function (req, res, next) {
+        req.url = '/menu/5b15588ef362641220dfebc1';
+        next();
+    });
 
-  router.post('/store/:id/install', authenticate, function(req, res) {
-    platform.installApplication(req.params.id, req.body.sample).
-        then(function() {
-          res.send({});
-        });
-  });
+    router.get('/store', authenticate, storeController.store);
 
-  router.get('/menu/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    let menuId = req.params.id;
-    let promises = [];
-    promises.push(new Model('p_menu').findById(menuId));
-    promises.push(
-        new Model('p_module').find({menu: menuId}, null, {sort: {order: 1}})); // order: [Sequelize.col('order'), Sequelize.col('name')]
+    router.get('/store/:id', authenticate, storeController.storeApp);
 
-    Q.all(promises).then(function(responses) {
-      if (responses[0] && responses[1]) {
-        let menu = responses[0];
-        let modules = responses[1];
-        modules = modules.map(function(module) {
-          return module.toObject();
+    router.post('/store/:id/install', authenticate, function (req, res) {
+        storeController.storeAppInstall(platform, req, res)
+    });
+
+    router.get('/menu/:id', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getMenuAndModules(req.params.id, function (menu, modules) {
+            if (menu)
+                res.render('pages/menu', {
+                    menu: menu,
+                    url: req.query.url,
+                    modules: modules,
+                    layout: 'layouts/layout',
+                    user: req.user
+                });
+            else
+                res.render('404');
         });
-        modules.forEach(function(module) {
-          if (module.type === 'list') {
-            module.url = '/p/' + module.ref_collection + '/list';
-          } else if (module.type === 'new') {
-            module.url = '/p/' + module.ref_collection + '/new';
-          }
-        });
-        modules = dsUtils.flatToHierarchy(modules);
+    });
+
+    router.get('/no-menu', authenticate, function (req, res) {
         res.render('pages/menu', {
-          menu: menu,
-          url: req.query.url,
-          modules: modules,
-          layout: 'layouts/layout'
+            menu: undefined,
+            url: req.query.url,
+            layout: 'layouts/layout',
+            user: req.user
         });
-      } else
-        res.render('404');
     });
-  });
 
-  router.get('/no-menu', authenticate, function(req, res) {
-    res.render('pages/menu', {
-      menu: undefined,
-      url: req.query.url,
-      layout: 'layouts/layout'
+    router.get('/menu/:id/home', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getMenuById(req.params.id, menu => {
+            res.render('pages/home', {
+                menu: menu,
+                layout: 'layouts/layout',
+                user: req.user
+            });
+        });
     });
-  });
 
-  router.get('/menu/:id/home', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_menu').findById(req.params.id).then(menu => {
-      res.render('pages/home', {
-        menu: menu,
-        layout: 'layouts/layout'
-      });
-    });
-  });
-
-  router.get('/p/:collection/list', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_collection').findOne({name: req.params.collection}).
-        then(function(collection) {
-          let collectionModel = new Model(req.params.collection);
-          if (collectionModel)
-            new Model('p_field').find({ref_collection: collection.id}).
-                then(function(cols) {
-                  collectionModel.find({}).then(function(data) {
-                    res.render('pages/list', {
-                      collection: {
-                        label: collection.label,
-                        name: collection.name
-                      },
-                      data: data,
-                      cols: cols,
-                      layout: 'layouts/no-header-layout'
-                    });
-                  });
-                });
-          else
+    router.get('/p/:collection/list', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getListFormData(req.params.collection, req.query, function (collection, data, fields) {
+            res.render('pages/list/list', {
+                collection: collection,
+                data: data,
+                fields: fields,
+                moment: moment,
+                layout: 'layouts/no-header-layout',
+                user: req.user
+            });
+        }, function () {
             res.render('404');
         });
-  });
+    });
 
-  router.get('/p/:collection/new', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_collection').findOne({name: req.params.collection}).
-        then(function(collection) {
-          let schema = new Model(req.params.collection);
-          if (schema)
-            new Model('p_field').find({ref_collection: collection.id}).
-                then(function(cols) {
-                  cols = cols.map(function(model) {
-                    return model.toObject();
-                  });
+    router.get('/p/:collection/new', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
 
-                  let promises = [];
-                  let optionModel = new Model('p_option');
-                  cols.forEach(function(field) {
-                    if (field.type === 'option') {
-                      let dfd = Q.defer();
-                      promises.push(dfd.promise);
-                      optionModel.find(
-                          {ref_collection: collection.id, field: field.name}).
-                          then(function(options) {
-                            field.options = options.map(function(model) {
-                              return model.toObject();
-                            });
-                            dfd.resolve();
-                          });
-                    }
-                  });
+        ps.getCollectionByName(req.params.collection).then(function (collection) {
+            ps.getFieldsForCollection(collection.name).then(function (fields) {
+                fields = fields.map(model => model.toObject());
 
-                  Q.all(promises).then(function() {
-                    res.render('pages/form', {
-                      collection: {
-                        label: collection.label,
-                        name: collection.name
-                      },
-                      cols: cols,
-                      item: {},
-                      layout: 'layouts/no-header-layout'
-                    });
-                  });
-
-                });
-          else
-            res.render('404');
-        });
-  });
-
-  router.get('/p/:collection/edit/:id', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    new Model('p_collection').findOne({name: req.params.collection}).
-        then(function(collection) {
-          let schema = new Model(req.params.collection);
-          if (schema) {
-            let promises = [];
-            promises.push(
-                new Model('p_field').find({ref_collection: collection.id}));
-            promises.push(schema.findById(req.params.id));
-
-            Q.all(promises).
-                then(function(result) {
-
-                  promises = [];
-                  let cols = result[0].map(function(model) {
-                    return model.toObject();
-                  });
-
-                  let optionModel = new Model('p_option');
-                  cols.forEach(function(field) {
-                    if (field.type === 'option') {
-                      let dfd = Q.defer();
-                      promises.push(dfd.promise);
-                      optionModel.find(
-                          {ref_collection: collection.id, field: field.name}).
-                          then(function(options) {
-                            field.options = options.map(function(model) {
-                              return model.toObject();
-                            });
-                            dfd.resolve();
-                          });
-                    }
-                  });
-
-                  Q.all(promises).
-                      then(function() {
-                        res.render('pages/form', {
-                          collection: {
+                ps.populateOptions(fields, collection.name).then(function () {
+                    res.render('pages/form/form', {
+                        collection: {
                             label: collection.label,
                             name: collection.name
-                          },
-                          cols: cols,
-                          item: result[1].toObject(),
-                          layout: 'layouts/no-header-layout'
-                        });
-                      });
-
+                        },
+                        fields: fields,
+                        item: {},
+                        moment: moment,
+                        layout: 'layouts/no-header-layout',
+                        user: req.user
+                    });
                 });
-          }
-          else
-            res.render('404');
+            });
         });
-  });
-
-  router.post('/p/:collection', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    let collectionModel = new Model(req.params.collection);
-    delete req.body.created_at;
-    delete req.body.updated_at;
-    collectionModel.getSchemaDef().fields.forEach(function(field) {
-      if (field.type === 'password' && req.body[field.type]) {
-        req.body[field.type] = hashUtils.generateHash(req.body[field.type]);
-      }
     });
-    if (collectionModel)
-      collectionModel.findByIdAndUpdate(req.body.id, req.body).then(function() {
-        /*
-        const url = require('url');
-        let referer = req.header('Referer');
-        let refererUrl = new url.URL(referer);
-        console.log(refererUrl.searchParams.get('test'));*/
-        res.send({});
-      }, function(err) {
-        res.status(400);
-        res.send(err);
-      });
-    else
-      res.render('404');
-  });
 
-  router.post('/p/:collection/action', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    let schema = new Model(req.params.collection);
-    if (schema)
-      schema.remove({_id: req.body.items}).then(function() {
-        res.send({});
-      }, function(err) {
-        res.status(400);
-        res.send(err);
-      });
-    else
-      res.status(404).render('404');
-  });
+    router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getCollectionByName(req.params.collection).then(function (collection) {
+            let promises = [];
+            promises.push(ps.getFieldsForCollection(collection.name));
+            promises.push(ps.findRecordById(req.params.collection, req.params.id));
+            Q.all(promises).then(function (result) {
+                let fields = result[0].map(model => model.toObject());
+                ps.populateOptions(fields, collection.name).then(function () {
+                    res.render('pages/form/form', {
+                        collection: {
+                            label: collection.label,
+                            name: collection.name
+                        },
+                        fields: fields,
+                        item: result[1].toObject(),
+                        layout: 'layouts/no-header-layout',
+                        moment: moment,
+                        user: req.user
+                    });
+                });
 
-  router.all('/api/*', authenticate, function(req, res) {
-    let Model = getModel(req.user);
-    let restApiModel = new Model('p_rest_api');
-    restApiModel.findOne({url: req.url, method: req.method}).
-        then(function(restApiRecord) {
-          if (restApiRecord) {
-            let ctx = vm.createContext({req, res, Model, js2xmlparser, JSON});
-            vm.runInContext(restApiRecord.script, ctx);
-          } else
+            });
+        });
+    });
+
+    router.post('/p/:collection', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        if (!req.body.id) {
+            ps.createRecord(req.params.collection, req.body).then(function () {
+                res.send();
+            });
+        } else {
+            ps.updateRecord(req.params.collection, req.body).then(function () {
+                res.send();
+            });
+        }
+    });
+
+    router.post('/p/:collection/action', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.executeAction(req.params.collection, req.body.items, function (err) {
+            if (err)
+                res.status(404).render('404');
+            else
+                res.send();
+        });
+    });
+
+    router.post('/p/:collection/search', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.fieldSearch(req.body.q, req.params.collection, req.body.field).then(function (data) {
+            res.send(data);
+        });
+
+    });
+
+    router.get('/p/:collection/export', authenticate, function (req, res) {
+        let result = {
+            collection: req.params.collection
+        };
+        let ps = new PlatformService(req.user);
+        ps.getRecords(req.params.collection, req.query.records).then(function (records) {
+            result.records = records.map(rec => {
+                rec = rec.toObject();
+                delete rec._id;
+                delete rec.__v;
+                return rec;
+            });
+            res.send(result);
+        });
+    });
+
+    router.get('/p/api/update', authenticate, function (req, res) {
+        platform.loadPlatformUpdates();
+        res.send();
+    });
+
+    router.all('/api/*', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.executeRestApi(req, res, () => {
             res.status(404).render('404');
         });
-  });
+    });
 
-  return router;
+    return router;
 
 };
+/*
+  const url = require('url');
+  let referer = req.header('Referer');
+  let refererUrl = new url.URL(referer);
+  console.log(refererUrl.searchParams.get('test'));
+  */

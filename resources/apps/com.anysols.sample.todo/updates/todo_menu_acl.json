@@ -1,0 +1,12 @@
+{
+  "collection": "p_acl",
+  "records": [
+    {
+      "id": "5b4b8857d8e8f11bb0ea2e29",
+      "name": "todo menu restrictions",
+      "short_description": "todo users to have access todo menu",
+      "type": "p_menu",
+      "record_id": "5b16e0bfe02440982a000001"
+    }
+  ]
+}

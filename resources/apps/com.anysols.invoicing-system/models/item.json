@@ -1,0 +1,20 @@
+{
+  "name": "invoice_item",
+  "label": "Item",
+  "fields": [
+    {
+      "name": "invoice",
+      "type": "reference",
+      "ref": "invoice"
+    },
+    {
+      "name": "product",
+      "type": "reference",
+      "ref": "invoice_product"
+    },
+    {
+      "name": "quality",
+      "type": "integer"
+    }
+  ]
+}

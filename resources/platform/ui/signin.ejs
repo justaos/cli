@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <title>Sign In | Anysols</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/ui/styles/theme.css" rel="stylesheet">
+    <link href="/ui/styles/signin.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+
+</head>
+
+<body>
+<form class="form-signin" action="javascript:void(0);" method="post">
+    <div id="signin-header" class="text-center mb-4">
+        <img src="https://raw.githubusercontent.com/anysols/anysols.github.io/master/assets/img/logo.png" alt=""
+             width="142" height="142">
+        <h1 class="h3 mb-3 font-weight-normal">Sign in to Anysols</h1>
+    </div>
+
+    <div class="form-label-group">
+        <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off" required
+               autofocus>
+        <label for="username">Username</label>
+    </div>
+
+    <div class="form-label-group">
+        <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="off" required>
+        <label for="password">Password</label>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2018-2019</p>
+</form>
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script>
+  (function() {
+    'use strict';
+    let $signInHeader = $('#signin-header');
+    let $username = $('#username');
+    let $password = $('#password');
+    let searchParams = new URLSearchParams(window.location.search);
+    let redirect = searchParams.get('redirect');
+    if (!redirect)
+      redirect = '/';
+    $('form').on('submit', function(e) {
+      let data = {};
+      data.username = $username.val();
+      data.password = $password.val();
+      $.post('/auth/login', data).then(function() {
+        window.location.href = redirect;
+      }, function(res) {
+        $signInHeader.find('.alert').remove();
+        $signInHeader.append('<div class="alert alert-danger" role="alert">' + res.responseJSON.message + '</div>');
+        if (!res.responseJSON.user) {
+          $username.val(null).focus();
+          $password.val(null);
+        } else
+          $password.val(null).focus();
+      });
+
+      //stop form submission
+      e.preventDefault();
+    });
+  })();
+</script>
+</body>
+</html>

@@ -2,43 +2,67 @@
   "name": "p_module",
   "label": "Module",
   "fields": [
-	{
-	  "name": "name",
-	  "type": "string"
-	},
-	{
-	  "name": "label",
-	  "type": "string",
-	  "display_value": true
-	},
-	{
-	  "name": "parent",
-	  "type": "uuid"
-	},
-	{
-	  "name": "menu",
-	  "type": "uuid"
-	},
-	{
-	  "name": "url",
-	  "type": "string"
-	},
-	{
-	  "name": "type",
-	  "type": "string"
-	},
-	{
-	  "label": "Collection",
-	  "name": "ref_collection",
-	  "type": "reference"
-	},
-	{
-	  "name": "order",
-	  "type": "integer"
-	},
-	{
-	  "name": "hidden",
-	  "type": "boolean"
-	}
+    {
+      "name": "label",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "label": "Parent",
+      "name": "parent",
+      "type": "reference",
+      "ref": "p_module"
+    },
+    {
+      "label": "Menu",
+      "name": "ref_menu",
+      "type": "reference",
+      "ref": "p_menu"
+    },
+    {
+      "name": "url",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "LIST",
+          "value": "list"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "NEW",
+          "value": "new"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "URL",
+          "value": "url"
+        }
+      ]
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection"
+    },
+    {
+      "name": "order",
+      "type": "integer"
+    },
+    {
+      "name": "hidden",
+      "type": "boolean"
+    }
   ]
 }

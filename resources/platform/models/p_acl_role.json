@@ -1,0 +1,16 @@
+{
+  "name": "p_acl_role",
+  "label": "ACL Role (m2m)",
+  "fields": [
+    {
+      "name": "acl",
+      "type": "reference",
+      "ref": "p_acl"
+    },
+    {
+      "name": "role",
+      "type": "reference",
+      "ref": "p_role"
+    }
+  ]
+}

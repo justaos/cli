@@ -1,0 +1,37 @@
+{
+  "collection": "p_module",
+  "records": [
+	{
+	  "id": "5b4644b14c43a0042a000001",
+	  "label": "Invoice",
+	  "order": 100,
+	  "type": "list",
+	  "ref_collection": "invoice",
+	  "ref_menu": "5b4643f45383c8b831000001"
+	},
+    {
+      "id": "5b4a2e4f80ce103821000001",
+      "label": "Invoice Item",
+      "order": 200,
+      "type": "list",
+      "ref_collection": "invoice_item",
+      "ref_menu": "5b4643f45383c8b831000001"
+    },
+    {
+      "id": "5b4a2e55005efe4826000001",
+      "label": "Customer",
+      "order": 300,
+      "type": "list",
+      "ref_collection": "invoice_customer",
+      "ref_menu": "5b4643f45383c8b831000001"
+    },
+    {
+      "id": "5b4a331064087da00c000001",
+      "label": "Product",
+      "order": 400,
+      "type": "list",
+      "ref_collection": "invoice_product",
+      "ref_menu": "5b4643f45383c8b831000001"
+    }
+  ]
+}

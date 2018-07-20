@@ -3,26 +3,66 @@
   "label": "Field",
   "fields": [
     {
-      "name": "name",
-      "type": "string"
-    },
-    {
       "name": "label",
       "type": "string",
       "display_value": true
     },
     {
+      "name": "name",
+      "type": "string"
+    },
+    {
       "label": "Collection",
       "name": "ref_collection",
-      "type": "reference"
+      "type": "collection"
     },
     {
       "name": "type",
-      "type": "string"
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "String",
+          "value": "string"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "Integer",
+          "value": "integer"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "Reference",
+          "value": "reference"
+        },
+        {
+          "order": "400",
+          "language": "en",
+          "label": "Boolean",
+          "value": "boolean"
+        },
+        {
+          "order": "500",
+          "language": "en",
+          "label": "Date",
+          "value": "date"
+        }
+      ]
     },
     {
       "name": "display_value",
       "type": "boolean"
+    },
+    {
+      "name": "ref",
+      "type": "string"
+    },
+    {
+      "name": "length",
+      "type": "integer"
     }
   ]
 }

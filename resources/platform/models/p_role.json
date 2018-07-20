@@ -2,14 +2,14 @@
   "name": "p_role",
   "label": "Role",
   "fields": [
-	{
-	  "name": "name",
-	  "type": "string"
-	},
-	{
-	  "name": "label",
-	  "type": "string",
-	  "display_value": true
-	}
+    {
+      "name": "label",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "name",
+      "type": "string"
+    }
   ]
 }

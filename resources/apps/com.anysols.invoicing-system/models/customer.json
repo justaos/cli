@@ -1,0 +1,20 @@
+{
+  "name": "invoice_customer",
+  "label": "Customer",
+  "fields": [
+	{
+	  "name": "first_name",
+	  "type": "string",
+	  "display_value": true
+	},{
+	  "name": "last_name",
+	  "type": "string"
+	}, {
+	  "name": "city",
+	  "type": "reference"
+	},
+ {
+	  "name": "country",
+	  "type": "string"
+	}]
+}

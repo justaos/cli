@@ -1,0 +1,15 @@
+[{
+  "name": "created_at",
+  "type": "date"
+}, {
+  "name": "updated_at",
+  "type": "date"
+}, {
+  "name": "created_by",
+  "type": "reference",
+  "ref": "p_user"
+}, {
+  "name": "updated_by",
+  "type": "reference",
+  "ref": "p_user"
+}]

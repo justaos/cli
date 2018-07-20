@@ -3,12 +3,14 @@
   "label": "User Role",
   "fields": [
     {
-      "name": "ref_user",
-      "type": "reference"
+      "name": "user",
+      "type": "reference",
+      "ref": "p_user"
     },
     {
-      "name": "ref_role",
-      "type": "reference"
+      "name": "role",
+      "type": "reference",
+      "ref": "p_role"
     }
   ]
 }

@@ -27,11 +27,12 @@ module.exports = function(app, router) {
   app.set('layout', 'layouts/blank');
 
   app.use('/assets', express.static(config.root + '/assets'));
-  app.use('/views/styles/', express.static(config.root + '/views/styles'));
+  app.use('/ui/styles/', express.static(config.root + '/resources/platform/ui/styles'));
+  app.use('/ui/scripts/', express.static(config.root + '/resources/platform/ui/scripts'));
 
-  // set views path, template engine and default layout
+  // set ui path, template engine and default layout
   app.use(engine);
-  app.set('views', config.root + '/views');
+  app.set('views', config.root + '/resources/platform/ui');
   app.set('view engine', 'ejs');
 
   // cookieParser should be above session

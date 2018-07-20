@@ -1,0 +1,83 @@
+{
+  "name": "p_acl",
+  "label": "Access Control (ACL)",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "short_description",
+      "type": "string",
+      "length": 500
+    },
+    {
+      "name": "type",
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "RECORD",
+          "value": "record"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "Menu",
+          "value": "p_menu"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "Module",
+          "value": "p_module"
+        }
+      ]
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection"
+    },
+    {
+      "name": "field",
+      "type": "string"
+    },
+    {
+      "name": "record_id",
+      "type": "string"
+    },
+    {
+      "name": "access",
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "CREATE",
+          "value": "create"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "READ",
+          "value": "read"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "UPDATE",
+          "value": "update"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "DELETE",
+          "value": "delete"
+        }
+      ]
+    }
+  ]
+}

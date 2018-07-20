@@ -3,51 +3,51 @@
   "records": [
 	{
 	  "id": "5b15588ef362641220dfebc5",
-	  "name": "Collection",
+	  "label": "Collection",
 	  "order": 100,
 	  "type": "list",
 	  "ref_collection": "p_collection",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b15588ef362641220dfebc3",
-	  "name": "Field",
+	  "label": "Field",
 	  "order": 200,
 	  "type": "list",
 	  "ref_collection": "p_field",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b15588ef362641220dfebc2",
-	  "name": "Menu",
+	  "label": "Menu",
 	  "order": 300,
 	  "type": "list",
 	  "ref_collection": "p_menu",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b15588ef362641220dfebc4",
-	  "name": "Module",
+	  "label": "Module",
 	  "order": 400,
 	  "type": "list",
 	  "ref_collection": "p_module",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b372b99fe7f152d70825f4a",
-	  "name": "Option",
+	  "label": "Option",
 	  "order": 500,
 	  "type": "list",
 	  "ref_collection": "p_option",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	},
 	{
 	  "id": "5b273a6fd24fdf2fb4f0aa77",
-	  "name": "Rest API",
+	  "label": "Rest API",
 	  "order": 600,
 	  "type": "list",
 	  "ref_collection": "p_rest_api",
-	  "menu": "5b15588ef362641220dfebc1"
+	  "ref_menu": "5b15588ef362641220dfebc1"
 	}
   ]
 }

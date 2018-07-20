@@ -1,0 +1,10 @@
+{
+  "collection": "p_user_role",
+  "records": [
+	{
+	  "id": "5b3842d9ca64b01432000001",
+	  "user": "5b37598359a01c43346f8632",
+	  "role": "5b31d9d67454bd08144f520b"
+	}
+  ]
+}
