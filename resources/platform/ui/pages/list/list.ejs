@@ -54,7 +54,7 @@
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>">
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=/p/<%= collection.name %>/list">
                                 <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
@@ -62,7 +62,7 @@
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>"><%= record[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=/p/<%= collection.name %>/list"><%= record[field.name] %></a>
                             <% } else { %>
                             <%= record[field.name] %>
                             <% } %>

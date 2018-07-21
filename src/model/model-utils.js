@@ -30,10 +30,13 @@ let ModelUtils = {
 
     loadDataFromPath(path) {
         let that = this;
+        let promises = [];
         glob.sync(path).forEach(function (file) {
             let data = fileUtils.readJsonFileSync(file);
-            that.loadData(data);
+            let promise = that.loadData(data);
+            promises.push(promise);
         });
+        return Q.all(promises);
     },
 
     loadSchemasFromDB() {

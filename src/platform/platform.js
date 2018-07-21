@@ -4,20 +4,21 @@ const Q = require('q');
 const glob = require('glob');
 
 const logger = require('../config/logger');
-const config = require('../config/config');
-
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 
 const DatabaseConnector = require('../config/database-connector');
-const cleanInstall = require('./clean-install');
 const ModelSessionFactory = require('../model/model-session-fatory');
 
 const modelUtils = require('../model/model-utils');
 const platformRoutes = require('./platform-routes');
-const {path} = require('./platform-constants');
+const constants = require('./platform-constants');
 
 let Model = ModelSessionFactory.createModelWithSession();
+
+const PlatformService = require('./service/platform-service');
+const ViewService = require('./service/view.service');
+
 
 class Platform {
 
@@ -37,14 +38,13 @@ class Platform {
 
     boot() {
         let that = this;
-        let collectionDef = fileUtils.readJsonFilesFromPathSync(path.P_COLLECTION_MODEL);
-        let fieldDef = fileUtils.readJsonFilesFromPathSync(path.P_FIELD_MODEL);
-        let optionDef = fileUtils.readJsonFilesFromPathSync(path.P_OPTION_MODEL);
+        let collectionDef = fileUtils.readJsonFilesFromPathSync(constants.path.P_COLLECTION_MODEL);
+        let fieldDef = fileUtils.readJsonFilesFromPathSync(constants.path.P_FIELD_MODEL);
+        let optionDef = fileUtils.readJsonFilesFromPathSync(constants.path.P_OPTION_MODEL);
         modelUtils.loadSchemasIntoStore(collectionDef);
         modelUtils.loadSchemasIntoStore(fieldDef);
         modelUtils.loadSchemasIntoStore(optionDef);
         modelUtils.loadSchemasFromDB().then(() => {
-            that.loadPlatformUpdates();
             platformRoutes(that);
             that.scanApplications();
             logger.logBox();
@@ -53,14 +53,11 @@ class Platform {
         });
     }
 
-    loadPlatformUpdates() {
-        modelUtils.loadDataFromPath(path.PATFORM_RESOUCES + '/updates/**.json');
-    }
 
     populateSysData(collectionDef) {
         let dfd = Q.defer();
-        let p_field = new Model('p_field');
-        let p_option = new Model('p_option');
+        let p_field = new Model(constants.model.FIELD);
+        let p_option = new Model(constants.model.OPTION);
         Platform.upsertCollection(collectionDef).then(function (collectionRecord) {
             let promises = [];
             collectionDef.fields.forEach(function (field) {
@@ -87,9 +84,9 @@ class Platform {
         return dfd.promise;
     }
 
-    static upsertCollection(collectionDef) {
-        let p_collection = new Model('p_collection');
 
+    static upsertCollection(collectionDef) {
+        let p_collection = new Model(constants.model.COLLECTION);
         return p_collection.upsert({name: collectionDef.name}, {
             name: collectionDef.name,
             label: collectionDef.label
@@ -99,8 +96,8 @@ class Platform {
     scanApplications() {
         let that = this;
         logger.info('Scanning for apps');
-        let applicationModel = new Model('p_application');
-        glob.sync(path.APPS + '/**/config.json').forEach(file => {
+        let applicationModel = new Model(constants.model.APPLICATION);
+        glob.sync(constants.path.APPS + '/**/config.json').forEach(file => {
             let config = fileUtils.readJsonFileSync(file);
             applicationModel.upsert({package: config.package}, config).exec();
             that.serveStaticFiles(config.package);
@@ -108,11 +105,33 @@ class Platform {
     }
 
     serveStaticFiles(pkg) {
-        this.router.use('/ui/' + pkg, express.static(path.APPS + '/' + pkg + '/ui'));
+        this.router.use('/ui/' + pkg, express.static(constants.path.APPS + '/' + pkg + '/ui'));
     }
 
     cleanInstall() {
-        return cleanInstall(this, path.PATFORM_MODELS + '/**.json');
+        let that = this;
+        let db = DatabaseConnector.getInstance();
+        let dfd = Q.defer();
+        logger.info('platform', 'clean installing...');
+        db.dropDatabase().then(function () {
+            let platformSchemaDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.PATFORM_MODELS + '/**.json');
+            modelUtils.loadSchemasIntoStore(platformSchemaDefinitions);
+            let promises = [];
+            platformSchemaDefinitions.forEach(def => {
+                promises.push(that.populateSysData(def));
+            });
+            Q.all(promises).then(() => {
+                PlatformService.loadPlatformUpdates().then(function () {
+                    platformSchemaDefinitions.forEach(def => {
+                        new ViewService(null, def.name).createDefaultView();
+                    });
+                    logger.info('platform', 'clean installation complete');
+                    dfd.resolve();
+                });
+            });
+        });
+        return dfd.promise;
+
     }
 }
 

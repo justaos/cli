@@ -1,0 +1,54 @@
+{
+  "name": "p_client_script",
+  "label": "Client Script",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "short_description",
+      "type": "string",
+      "length": 500
+    },
+    {
+      "name": "type",
+      "type": "option",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "onLoad",
+          "value": "on_load"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "onChange",
+          "value": "on_change"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "onSubmit",
+          "value": "on_submit"
+        }
+      ]
+    },
+    {
+      "name": "order",
+      "type": "integer"
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection"
+    },
+    {
+      "name": "script",
+      "type": "script",
+      "default_value": "function onLoad() {\r\n alert('test');   \r\n}"
+    }
+  ]
+}

@@ -1,53 +1,103 @@
 {
   "collection": "p_module",
   "records": [
-	{
-	  "id": "5b15588ef362641220dfebc5",
-	  "label": "Collection",
-	  "order": 100,
-	  "type": "list",
-	  "ref_collection": "p_collection",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	},
-	{
-	  "id": "5b15588ef362641220dfebc3",
-	  "label": "Field",
-	  "order": 200,
-	  "type": "list",
-	  "ref_collection": "p_field",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	},
-	{
-	  "id": "5b15588ef362641220dfebc2",
-	  "label": "Menu",
-	  "order": 300,
-	  "type": "list",
-	  "ref_collection": "p_menu",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	},
-	{
-	  "id": "5b15588ef362641220dfebc4",
-	  "label": "Module",
-	  "order": 400,
-	  "type": "list",
-	  "ref_collection": "p_module",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	},
-	{
-	  "id": "5b372b99fe7f152d70825f4a",
-	  "label": "Option",
-	  "order": 500,
-	  "type": "list",
-	  "ref_collection": "p_option",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	},
-	{
-	  "id": "5b273a6fd24fdf2fb4f0aa77",
-	  "label": "Rest API",
-	  "order": 600,
-	  "type": "list",
-	  "ref_collection": "p_rest_api",
-	  "ref_menu": "5b15588ef362641220dfebc1"
-	}
+    {
+      "id": "5b15588ef362641220dfebc5",
+      "label": "Collection",
+      "order": 100,
+      "type": "list",
+      "ref_collection": "p_collection",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b15588ef362641220dfebc3",
+      "label": "Field",
+      "order": 200,
+      "type": "list",
+      "ref_collection": "p_field",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b15588ef362641220dfebc2",
+      "label": "Menu",
+      "order": 300,
+      "type": "list",
+      "ref_collection": "p_menu",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b15588ef362641220dfebc4",
+      "label": "Module",
+      "order": 400,
+      "type": "list",
+      "ref_collection": "p_module",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b372b99fe7f152d70825f4a",
+      "label": "Option",
+      "order": 500,
+      "type": "list",
+      "ref_collection": "p_option",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b273a6fd24fdf2fb4f0aa77",
+      "label": "Rest API",
+      "order": 600,
+      "type": "list",
+      "ref_collection": "p_rest_api",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52049bd9ad2bd804000001",
+      "label": "Client Script",
+      "order": 700,
+      "type": "list",
+      "ref_collection": "p_client_script",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52dc2fe71e4db033000001",
+      "label": "UI Tools",
+      "order": 800,
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52dc8de4565da824000001",
+      "label": "View",
+      "order": 900,
+      "type": "list",
+      "ref_collection": "p_view",
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52dd129758a11836000001",
+      "label": "Form",
+      "order": 900,
+      "type": "list",
+      "ref_collection": "p_form",
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52e08c33063b3834000001",
+      "label": "Form Section",
+      "order": 1000,
+      "type": "list",
+      "ref_collection": "p_form_section",
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
+      "id": "5b52e4b7929c9efc1d000001",
+      "label": "Form Element",
+      "order": 1100,
+      "type": "list",
+      "ref_collection": "p_form_element",
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    }
   ]
 }

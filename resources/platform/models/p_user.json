@@ -5,7 +5,8 @@
     {
       "name": "username",
       "type": "text",
-      "display_value": true
+      "display_value": true,
+      "mandatory": true
     },
     {
       "name": "first_name",
@@ -17,7 +18,8 @@
     },
     {
       "name": "password",
-      "type": "password"
+      "type": "password",
+      "hint": "Leave the input field balance, if you don't want to change password"
     },
     {
       "name": "email",

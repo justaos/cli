@@ -3,7 +3,7 @@
         <%= collection.label %>
     </h4>
     <form class="form-inline">
-        <a href="/p/<%= collection.name %>/new" class="btn btn-sm btn-link">
+        <a href="/p/<%= collection.name %>/new?redirect=/p/<%= collection.name %>/list" class="btn btn-sm btn-link">
             <i class="fas fa-plus"></i>
         </a>
     </form>
@@ -20,7 +20,7 @@
         </li>
     </ul>
     <% var filteredFields = fields.filter(function (field) {
-        return (field.type !== 'date' && field.type !== 'reference' && field.type !== 'collection')
+        return (field.type !== 'date' && field.type !== 'reference')
     }); %>
     <%if(filteredFields.length) {%>
     <form class="form-inline" id="search-input-form">

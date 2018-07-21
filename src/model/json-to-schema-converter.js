@@ -13,7 +13,7 @@ function converter(collectionDef) {
                 case dataTypes.STRING :
                     property.type = dataTypes.STRING.getType();
                     break;
-                case 'number' :
+                case 'integer' :
                     property.type = dataTypes.INTEGER.getType();
                     break;
                 case 'boolean' :

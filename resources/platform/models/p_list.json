@@ -1,0 +1,16 @@
+{
+  "name": "p_list",
+  "label": "List",
+  "fields": [
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection"
+    },
+    {
+      "name": "view",
+      "type": "reference",
+      "ref": "p_view"
+    }
+  ]
+}

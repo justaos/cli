@@ -1,0 +1,16 @@
+{
+  "name": "p_form_section",
+  "label": "Form Section",
+  "fields": [
+    {
+      "name": "form",
+      "type": "reference",
+      "ref": "p_form"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true
+    }
+  ]
+}

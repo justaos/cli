@@ -1,0 +1,17 @@
+{
+  "name": "p_form",
+  "label": "Form",
+  "fields": [
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection",
+      "display_value": true
+    },
+    {
+      "name": "view",
+      "type": "reference",
+      "ref": "p_view"
+    }
+  ]
+}

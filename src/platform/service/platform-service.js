@@ -1,6 +1,9 @@
 const logger = require('../../config/logger');
 const dsUtils = require('../../utils/ds-utils');
 const hashUtils = require('../../utils/hash-utils');
+const fileUtils = require('../../utils/file-utils');
+const modelUtils = require('../../model/model-utils');
+
 const Q = require('q');
 const vm = require('vm');
 const mongoose = require('mongoose');
@@ -8,10 +11,20 @@ const js2xmlparser = require('js2xmlparser');
 
 const BaseService = require('./base-service');
 
+const constants = require('../platform-constants');
+
 class PlatformService extends BaseService {
 
     constructor(user) {
         super(user);
+    }
+
+    static loadPlatformUpdates() {
+        return PlatformService.loadUpdates(constants.path.PATFORM_RESOUCES);
+    }
+
+    static loadUpdates(path) {
+        return modelUtils.loadDataFromPath(path + '/updates/**.json');
     }
 
     getMenus(cb) {
@@ -133,6 +146,33 @@ class PlatformService extends BaseService {
         });
     }
 
+    async getCollectionFieldsAndScripts(collectionName, callBack) {
+        let collection = this.getCollectionByName(collectionName);
+        let fields = this.getFieldsForCollection(collectionName);
+        let clientScripts = this.getClientScriptsForCollection(collectionName);
+        let result = {collection: await collection, fields: await fields, clientScripts: await clientScripts};
+        callBack(result.collection, result.fields, result.clientScripts);
+    }
+
+    async getFormResources(collectionName, callBack) {
+        let collection = this.getCollectionByName(collectionName);
+        let fields = this.getFieldsForCollection(collectionName);
+        let clientScripts = this.getClientScriptsForCollection(collectionName);
+        let defaultView = await this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
+        let formView = await this.getModel('p_form').skipPopulation().findOne({
+            view: defaultView.id,
+            ref_collection: collectionName
+        }).exec();
+        let formSections = await (this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
+            sort: {order: 1}
+        }).exec());
+        let formElements = this.getModel('p_form_element').skipPopulation().find({form_section: {$in: formSections.map(fs => fs.id)}}, null, {
+            lean: true,
+            sort: {order: 1}
+        }).exec();
+        callBack(await collection, await fields, await clientScripts, formView, formSections, await formElements);
+    }
+
     populateOptions(fields, collectionName) {
         let that = this;
         let promises = [];
@@ -181,17 +221,30 @@ class PlatformService extends BaseService {
 
     getCollectionByName(collectionName) {
         let collectionModel = this.getModel('p_collection');
-        return collectionModel.findOne({name: collectionName}).exec();
+        return collectionModel.findOne({name: collectionName}, null, {lean: true}).exec();
     }
 
     getFieldsForCollection(collectionName) {
         let fieldModel = this.getModel('p_field');
-        return fieldModel.find({ref_collection: collectionName}).exec();
+        return fieldModel.find({ref_collection: collectionName}, null, {lean: true}).exec();
     }
+
+    getClientScriptsForCollection(collectionName) {
+        let clientScriptModel = this.getModel('p_client_script');
+        return clientScriptModel.find({ref_collection: collectionName}, null, {lean: true}).exec();
+    }
+
 
     getDisplayFieldForCollection(collectionName) {
         let fieldModel = this.getModel('p_field');
-        return fieldModel.findOne({ref_collection: collectionName, display_value: true}).exec();
+        let dfd = Q.defer();
+        fieldModel.findOne({ref_collection: collectionName, display_value: true}).exec(function (err, field) {
+            if (!field)
+                fieldModel.findOne({ref_collection: collectionName, name: 'id'}).exec().then(dfd.resolve);
+            else
+                dfd.resolve(field);
+        });
+        return dfd.promise;
     }
 
     executeAction(collectionName, recordIds, cb) {
@@ -242,10 +295,10 @@ class PlatformService extends BaseService {
                         cb(collectionObj, data, fields);
                     });
                 });
-
-            })
+            });
         });
     }
+
 
     findRecordById(modelName, id) {
         let model = this.getModel(modelName);
@@ -264,6 +317,11 @@ class PlatformService extends BaseService {
 
     updateRecord(modelName, record) {
         let model = this.getModel(modelName);
+        model.getDefinition().fields.forEach(function (field) {
+            if (field.type === 'password' && record[field.type]) {
+                record[field.type] = hashUtils.generateHash(record[field.type]);
+            }
+        });
         return model.update({_id: record.id}, {$set: record}).exec();
     }
 

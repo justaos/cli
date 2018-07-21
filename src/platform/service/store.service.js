@@ -4,7 +4,8 @@ const logger = require('../../config/logger');
 const BaseService = require('./base-service');
 const modelUtils = require('../../model/model-utils');
 const fileUtils = require('../../utils/file-utils');
-const {path} = require('../platform-constants');
+const constants = require('../platform-constants');
+const ViewService = require('./view.service');
 
 
 class StoreService extends BaseService {
@@ -38,18 +39,23 @@ class StoreService extends BaseService {
 
         let applicationModel = this.getModel('p_application');
         applicationModel.findById(appId).exec((err, application) => {
-            let modelDef = StoreService.readModelsForPackage(application.package);
-            modelUtils.loadSchemasIntoStore(modelDef);
+            let schemaDefinitions = StoreService.readModelsForPackage(application.package);
+            modelUtils.loadSchemasIntoStore(schemaDefinitions);
             StoreService.loadDataForPackage(application.package);
             if (loadSampleData)
                 StoreService.loadSampleDataForPackage(application.package);
             let promises = [];
-            modelDef.forEach((model) => {
-                promises.push(platform.populateSysData(model));
+            schemaDefinitions.forEach((def) => {
+                promises.push(platform.populateSysData(def));
             });
             application.installed_version = application.version;
             promises.push(application.save());
-            Q.all(promises).then(dfd.resolve);
+            Q.all(promises).then(function () {
+                schemaDefinitions.forEach((def) => {
+                    new ViewService(null, def.name).createDefaultView();
+                });
+                dfd.resolve();
+            });
             platform.serveStaticFiles(application.package);
         });
         return dfd.promise;
@@ -57,8 +63,8 @@ class StoreService extends BaseService {
 
     /** helper functions **/
     static readModelsForPackage(pkg) {
-        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(path.APPS + '/' + pkg + '/models/**.json');
-        let defaultFields = fileUtils.readJsonFileSync(path.DEFAULT_FIELDS);
+        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.APPS + '/' + pkg + '/models/**.json');
+        let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
         modelDefinitions.forEach(function (modelDef) {
             modelDef.fields = modelDef.fields.concat(defaultFields);
         });
@@ -66,11 +72,11 @@ class StoreService extends BaseService {
     }
 
     static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(path.APPS + '/' + pkg + '/updates/**.json');
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**.json');
     }
 
     static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(path.APPS + '/' + pkg + '/samples/**.json');
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**.json');
     }
 }
 

@@ -49,6 +49,12 @@
           "language": "en",
           "label": "Date",
           "value": "date"
+        },
+        {
+          "order": "500",
+          "language": "en",
+          "label": "Script",
+          "value": "script"
         }
       ]
     },
@@ -63,6 +69,25 @@
     {
       "name": "length",
       "type": "integer"
+    },
+    {
+      "name": "default_value",
+      "type": "string",
+      "length": 1000
+    },
+    {
+      "name": "read_only",
+      "type": "boolean",
+      "hint": "This is applied on form element, not on database"
+    },
+    {
+      "name": "mandatory",
+      "type": "boolean",
+      "hint": "This is applied on form element, not on database"
+    },
+    {
+      "name": "hint",
+      "type": "string"
     }
   ]
 }

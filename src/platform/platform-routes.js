@@ -1,5 +1,4 @@
 const authenticate = require('../config/authenticate');
-const hashUtils = require('../utils/hash-utils');
 const Q = require('q');
 const PlatformService = require('./service/platform-service');
 const storeController = require('./controller/store.ctrl');
@@ -85,25 +84,30 @@ module.exports = function (platform) {
         });
     });
 
+
     router.get('/p/:collection/new', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
+        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView,
+                                                             formSections, formElements) {
+            ps.populateOptions(fields, collection.name).then(function () {
+                res.render('pages/form/form', {
+                    collection: {
+                        label: collection.label,
+                        name: collection.name
+                    },
+                    fields: fields,
+                    item: {},
+                    clientScripts: clientScripts,
 
-        ps.getCollectionByName(req.params.collection).then(function (collection) {
-            ps.getFieldsForCollection(collection.name).then(function (fields) {
-                fields = fields.map(model => model.toObject());
+                    formView: formView,
+                    formSections: formSections,
+                    formElements: formElements,
 
-                ps.populateOptions(fields, collection.name).then(function () {
-                    res.render('pages/form/form', {
-                        collection: {
-                            label: collection.label,
-                            name: collection.name
-                        },
-                        fields: fields,
-                        item: {},
-                        moment: moment,
-                        layout: 'layouts/no-header-layout',
-                        user: req.user
-                    });
+                    moment: moment,
+
+                    user: req.user,
+
+                    layout: 'layouts/no-header-layout'
                 });
             });
         });
@@ -111,12 +115,9 @@ module.exports = function (platform) {
 
     router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.getCollectionByName(req.params.collection).then(function (collection) {
-            let promises = [];
-            promises.push(ps.getFieldsForCollection(collection.name));
-            promises.push(ps.findRecordById(req.params.collection, req.params.id));
-            Q.all(promises).then(function (result) {
-                let fields = result[0].map(model => model.toObject());
+        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView,
+                                                             formSections, formElements) {
+            ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
                 ps.populateOptions(fields, collection.name).then(function () {
                     res.render('pages/form/form', {
                         collection: {
@@ -124,13 +125,20 @@ module.exports = function (platform) {
                             name: collection.name
                         },
                         fields: fields,
-                        item: result[1].toObject(),
-                        layout: 'layouts/no-header-layout',
+                        item: item.toObject(),
+                        clientScripts: clientScripts,
+
+                        formView: formView,
+                        formSections: formSections,
+                        formElements: formElements,
+
                         moment: moment,
-                        user: req.user
+
+                        user: req.user,
+
+                        layout: 'layouts/no-header-layout'
                     });
                 });
-
             });
         });
     });
@@ -183,7 +191,7 @@ module.exports = function (platform) {
     });
 
     router.get('/p/api/update', authenticate, function (req, res) {
-        platform.loadPlatformUpdates();
+        PlatformService.loadPlatformUpdates();
         res.send();
     });
 
