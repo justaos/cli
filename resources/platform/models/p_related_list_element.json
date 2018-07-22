@@ -1,0 +1,28 @@
+{
+  "name": "p_related_list_element",
+  "label": "Related List Element",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "related_list",
+      "type": "reference",
+      "ref": "p_related_list"
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection"
+    },
+    {
+      "name": "filter",
+      "type": "script"
+    },
+    {
+      "name": "order",
+      "type": "integer"
+    }
+  ]
+}

@@ -33,20 +33,24 @@ module.exports = function (platform) {
     });
 
     router.get('/menu/:id', authenticate, function (req, res) {
-        let ps = new PlatformService(req.user);
-        ps.getMenuAndModules(req.params.id, function (menu, modules) {
-            if (menu)
-                res.render('pages/menu', {
-                    menu: menu,
-                    url: req.query.url,
-                    modules: modules,
-                    layout: 'layouts/layout',
-                    user: req.user
-                });
-            else
-                res.render('404');
-        });
-    });
+            let ps = new PlatformService(req.user);
+            ps.getMenuAndModules(req.params.id, function (menu, modules) {
+                if (!menu || menu instanceof Error) {
+                    res.status('404').render('404');
+                } else {
+                    res.render('pages/menu', {
+                        menu: menu,
+                        url: req.query.url,
+                        modules: modules,
+                        layout: 'layouts/layout',
+                        user: req.user
+                    });
+                }
+
+            });
+        }
+    )
+    ;
 
     router.get('/no-menu', authenticate, function (req, res) {
         res.render('pages/menu', {
@@ -91,8 +95,8 @@ module.exports = function (platform) {
 
     router.get('/p/:collection/new', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView,
-                                                             formSections, formElements) {
+        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
+                                                             formView, formSections, formElements) {
             res.render('pages/form/form', {
                 collection: {
                     label: collection.label,
@@ -105,6 +109,8 @@ module.exports = function (platform) {
                 formView: formView,
                 formSections: formSections,
                 formElements: formElements,
+                relatedList: null,
+                relatedListElements: null,
 
                 moment: moment,
 
@@ -117,28 +123,35 @@ module.exports = function (platform) {
 
     router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView, formSections, formElements) {
+        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
+                                                             formView, formSections, formElements) {
             ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
-                res.render('pages/form/form', {
-                    collection: {
-                        label: collection.label,
-                        name: collection.name
-                    },
-                    fields: fields,
-                    item: item.toObject(),
-                    clientScripts: clientScripts,
+                ps.getRelatedLists(req.params.collection, formView.view, item, function (relatedList, relatedListElements) {
 
-                    formView: formView,
-                    formSections: formSections,
-                    formElements: formElements,
+                    res.render('pages/form/form', {
+                        collection: {
+                            label: collection.label,
+                            name: collection.name
+                        },
+                        fields: fields,
+                        item: item.toObject(),
+                        clientScripts: clientScripts,
 
-                    moment: moment,
+                        formView: formView,
+                        formSections: formSections,
+                        formElements: formElements,
+                        relatedList: relatedList,
+                        relatedListElements: relatedListElements,
 
-                    user: req.user,
+                        moment: moment,
 
-                    layout: 'layouts/no-header-layout'
+                        user: req.user,
+
+                        layout: 'layouts/no-header-layout'
+                    });
                 });
-            });
+            })
+
         });
     });
 
@@ -203,7 +216,8 @@ module.exports = function (platform) {
 
     return router;
 
-};
+}
+;
 /*
   const url = require('url');
   let referer = req.header('Referer');

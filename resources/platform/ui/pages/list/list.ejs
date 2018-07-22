@@ -188,7 +188,7 @@ listElements.forEach(function (listElement) {
             var conditionKeys = Object.keys(conditions);
             $('.filters-applied').removeClass('d-none');
             conditionKeys.forEach(function (condition) {
-                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">' + condition + '=' + conditions[condition].$regex + ' <i class="fas fa-times"></i></a>')
+                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">' + condition + '=' + (conditions[condition].$regex || conditions[condition])+ ' <i class="fas fa-times"></i></a>')
             });
         }
 

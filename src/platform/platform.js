@@ -115,6 +115,11 @@ class Platform {
         logger.info('platform', 'clean installing...');
         db.dropDatabase().then(function () {
             let platformSchemaDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.PATFORM_MODELS + '/**.json');
+            let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
+            platformSchemaDefinitions.forEach(function (modelDef) {
+                modelDef.fields = modelDef.fields.concat(defaultFields);
+            });
+
             modelUtils.loadSchemasIntoStore(platformSchemaDefinitions);
             let promises = [];
             platformSchemaDefinitions.forEach(def => {

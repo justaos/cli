@@ -104,7 +104,15 @@ class PlatformService extends BaseService {
     getMenuAndModules(menuId, cb) {
         let that = this;
         let promises = [];
-        promises.push(this.getModel('p_menu').findById(menuId).exec());
+        let menuDfd = Q.defer();
+        promises.push(menuDfd.promise);
+        this.getModel('p_menu').findById(menuId).exec(function (err, menu) {
+            if (err) {
+                cb(err)
+            } else {
+                menuDfd.resolve(menu);
+            }
+        });
 
         let moduleModel = this.getModel('p_module');
         moduleModel.skipPopulation();
@@ -147,9 +155,9 @@ class PlatformService extends BaseService {
     }
 
     async getFormResources(collectionName, callBack) {
-        let collection = this.getCollectionByName(collectionName);
-        let fields = this.getFieldsForCollection(collectionName);
-        let clientScripts = this.getClientScriptsForCollection(collectionName);
+        let collectionPromise = this.getCollectionByName(collectionName);
+        let fieldsPromise = this.getFieldsForCollection(collectionName);
+        let clientScriptsPromise = this.getClientScriptsForCollection(collectionName);
         let defaultView = await this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
         let formView = await this.getModel('p_form').skipPopulation().findOne({
             view: defaultView.id,
@@ -158,15 +166,42 @@ class PlatformService extends BaseService {
         let formSections = await this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
             sort: {order: 1}
         }).exec();
-        let formElements = this.getModel('p_form_element').skipPopulation().find({form_section: {$in: formSections.map(fs => fs.id)}}, null, {
+        let formElementsPromise = this.getModel('p_form_element').skipPopulation().find({form_section: {$in: formSections.map(fs => fs.id)}}, null, {
             lean: true,
             sort: {order: 1}
         }).exec();
 
-        fields = await fields;
+
+        let fields = await fieldsPromise;
         await this.populateOptions(fields, collectionName);
 
-        callBack(await collection, fields, await clientScripts, formView, formSections, await formElements);
+        callBack(await collectionPromise, fields, await clientScriptsPromise, formView, formSections, await formElementsPromise);
+    }
+
+    async getRelatedLists(collectionName, defaultViewId, current, callBack) {
+        let relatedList = await this.getModel('p_related_list').skipPopulation().findOne({
+            view: defaultViewId,
+            ref_collection: collectionName
+        }).exec();
+
+        let relatedListElements;
+        if (relatedList) {
+            relatedListElements = await this.getModel('p_related_list_element').skipPopulation().find({
+                related_list: relatedList.id
+            }, null, {
+                lean: true,
+                sort: {order: 1}
+            }).exec();
+            relatedListElements.forEach(function (relatedListElement) {
+                if (relatedListElement.filter) {
+                    let ctx = vm.createContext({current});
+                    vm.runInContext(relatedListElement.filter + ' var conditions = filter(current);', ctx);
+                    relatedListElement.conditions = ctx.conditions;
+                }
+
+            })
+        }
+        callBack(relatedList, relatedListElements);
     }
 
     async getListFormResources(collectionName, query, callBack) {

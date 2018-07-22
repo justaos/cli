@@ -6,21 +6,24 @@ function converter(collectionDef) {
     if (collectionDef.fields) {
         collectionDef.fields.forEach(function (fieldDef) {
             let property = {};
-            if (fieldDef.name === 'created_at' || fieldDef.name === 'updated_at') {
+            if (fieldDef.name === 'id' || fieldDef.name === 'created_at' || fieldDef.name === 'updated_at') {
                 return;
             }
             switch (fieldDef.type) {
                 case dataTypes.STRING :
                     property.type = dataTypes.STRING.getType();
                     break;
-                case 'integer' :
+                case dataTypes.INTEGER :
                     property.type = dataTypes.INTEGER.getType();
+                    break;
+                case dataTypes.ID :
+                    property.type = dataTypes.ID.getType();
                     break;
                 case 'boolean' :
                     property.type = Boolean;
                     break;
                 case 'reference' :
-                    if(fieldDef.ref) {
+                    if (fieldDef.ref) {
                         property.type = mongoose.Schema.Types.ObjectId;
                         property.ref = fieldDef.ref;
                     } else
