@@ -16,7 +16,7 @@ function getField(fieldName) {
             return fields[i];
     }
 }
-function getFieldElement(field) {
+function getFieldFromElement(field) {
     let i;
     for (i = 0; i < formElements.length; i++) {
         if (formElements[i].element.name === field.name)
@@ -215,7 +215,7 @@ function getElementsForSection(sectionId) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
 <script>
-    window.fs = new FormScript(<%- JSON.stringify(fields.filter(f => getFieldElement(f))) %>);
+    window.fs = new FormScript(<%- JSON.stringify(fields.filter(f => getFieldFromElement(f))) %>);
 
     var clientScripts = [];
 

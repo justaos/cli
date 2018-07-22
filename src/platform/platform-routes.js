@@ -70,11 +70,15 @@ module.exports = function (platform) {
 
     router.get('/p/:collection/list', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
-        ps.getListFormData(req.params.collection, req.query, function (collection, data, fields) {
+        ps.getListFormResources(req.params.collection, req.query, function (collection, data, fields, listView, listElements) {
             res.render('pages/list/list', {
                 collection: collection,
                 data: data,
                 fields: fields,
+
+                listView: listView,
+                listElements: listElements,
+
                 moment: moment,
                 layout: 'layouts/no-header-layout',
                 user: req.user
@@ -89,14 +93,39 @@ module.exports = function (platform) {
         let ps = new PlatformService(req.user);
         ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView,
                                                              formSections, formElements) {
-            ps.populateOptions(fields, collection.name).then(function () {
+            res.render('pages/form/form', {
+                collection: {
+                    label: collection.label,
+                    name: collection.name
+                },
+                fields: fields,
+                item: {},
+                clientScripts: clientScripts,
+
+                formView: formView,
+                formSections: formSections,
+                formElements: formElements,
+
+                moment: moment,
+
+                user: req.user,
+
+                layout: 'layouts/no-header-layout'
+            });
+        });
+    });
+
+    router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
+        let ps = new PlatformService(req.user);
+        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView, formSections, formElements) {
+            ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
                 res.render('pages/form/form', {
                     collection: {
                         label: collection.label,
                         name: collection.name
                     },
                     fields: fields,
-                    item: {},
+                    item: item.toObject(),
                     clientScripts: clientScripts,
 
                     formView: formView,
@@ -108,36 +137,6 @@ module.exports = function (platform) {
                     user: req.user,
 
                     layout: 'layouts/no-header-layout'
-                });
-            });
-        });
-    });
-
-    router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
-        let ps = new PlatformService(req.user);
-        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts, formView,
-                                                             formSections, formElements) {
-            ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
-                ps.populateOptions(fields, collection.name).then(function () {
-                    res.render('pages/form/form', {
-                        collection: {
-                            label: collection.label,
-                            name: collection.name
-                        },
-                        fields: fields,
-                        item: item.toObject(),
-                        clientScripts: clientScripts,
-
-                        formView: formView,
-                        formSections: formSections,
-                        formElements: formElements,
-
-                        moment: moment,
-
-                        user: req.user,
-
-                        layout: 'layouts/no-header-layout'
-                    });
                 });
             });
         });

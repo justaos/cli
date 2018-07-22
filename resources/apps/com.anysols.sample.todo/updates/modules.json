@@ -2,17 +2,11 @@
   "collection": "p_module",
   "records": [
     {
-      "id": "5b16e136b675ab6406000001",
-      "label": "Todo",
-      "ref_menu": "5b16e0bfe02440982a000001"
-    },
-    {
       "id": "5b16e0cc9626929434000001",
       "label": "Create New",
       "order": 100,
       "type": "new",
       "ref_collection": "todo",
-      "parent": "5b16e136b675ab6406000001",
       "ref_menu": "5b16e0bfe02440982a000001"
     },
     {
@@ -21,7 +15,6 @@
       "order": 200,
       "type": "list",
       "ref_collection": "todo",
-      "parent": "5b16e136b675ab6406000001",
       "ref_menu": "5b16e0bfe02440982a000001"
     },
     {
@@ -30,7 +23,6 @@
       "order": 300,
       "type": "url",
       "url": "/ui/com.anysols.sample.todo/",
-      "parent": "5b16e136b675ab6406000001",
       "ref_menu": "5b16e0bfe02440982a000001"
     }
   ]

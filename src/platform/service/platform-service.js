@@ -146,14 +146,6 @@ class PlatformService extends BaseService {
         });
     }
 
-    async getCollectionFieldsAndScripts(collectionName, callBack) {
-        let collection = this.getCollectionByName(collectionName);
-        let fields = this.getFieldsForCollection(collectionName);
-        let clientScripts = this.getClientScriptsForCollection(collectionName);
-        let result = {collection: await collection, fields: await fields, clientScripts: await clientScripts};
-        callBack(result.collection, result.fields, result.clientScripts);
-    }
-
     async getFormResources(collectionName, callBack) {
         let collection = this.getCollectionByName(collectionName);
         let fields = this.getFieldsForCollection(collectionName);
@@ -163,14 +155,49 @@ class PlatformService extends BaseService {
             view: defaultView.id,
             ref_collection: collectionName
         }).exec();
-        let formSections = await (this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
+        let formSections = await this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
             sort: {order: 1}
-        }).exec());
+        }).exec();
         let formElements = this.getModel('p_form_element').skipPopulation().find({form_section: {$in: formSections.map(fs => fs.id)}}, null, {
             lean: true,
             sort: {order: 1}
         }).exec();
-        callBack(await collection, await fields, await clientScripts, formView, formSections, await formElements);
+
+        fields = await fields;
+        await this.populateOptions(fields, collectionName);
+
+        callBack(await collection, fields, await clientScripts, formView, formSections, await formElements);
+    }
+
+    async getListFormResources(collectionName, query, callBack) {
+        let that = this;
+        let conditions = {}, options;
+        if (query.sort) {
+            options = {};
+            options.sort = JSON.parse(query.sort);
+        }
+        if (query.conditions) {
+            conditions = JSON.parse(query.conditions);
+        }
+        let collectionModel = that.getModel(collectionName);
+        let records = collectionModel.find(conditions, null, options).exec();
+        let collection = this.getCollectionByName(collectionName);
+        let fields = this.getFieldsForCollection(collectionName);
+
+        let defaultView = await this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
+        let listView = await this.getModel('p_list').skipPopulation().findOne({
+            view: defaultView.id,
+            ref_collection: collectionName
+        }).exec();
+        let listElements = this.getModel('p_list_element').skipPopulation().find({list: listView.id}, null, {
+            lean: true,
+            sort: {order: 1}
+        }).exec();
+
+        let result = {collection: await collection, fields: await fields, records: await records};
+        await this.populateOptions(result.fields, collectionName);
+
+        callBack(result.collection, result.records, result.fields, listView, await listElements);
     }
 
     populateOptions(fields, collectionName) {
@@ -206,12 +233,7 @@ class PlatformService extends BaseService {
                 let dfd = Q.defer();
                 promises.push(dfd.promise);
                 that.getDisplayFieldForCollection(field.ref).then(function (displayValueField) {
-                    if (displayValueField)
-                        field.display_value_field = displayValueField.toObject();
-                    else {
-                        field.display_value_field = {};
-                        field.display_value_field.name = "id";
-                    }
+                    field.display_value_field = displayValueField.toObject();
                     dfd.resolve();
                 });
             }
@@ -253,52 +275,6 @@ class PlatformService extends BaseService {
             cb(err);
         });
     }
-
-    getListFormData(collectionName, query, cb, fail) {
-        let that = this;
-        this.getCollectionByName(collectionName).then(function (collection) {
-            that.getFieldsForCollection(collectionName).then(function (fields) {
-                let conditions = {}, options;
-                if (query.sort) {
-                    options = {};
-                    options.sort = JSON.parse(query.sort);
-                }
-                if (query.conditions) {
-                    conditions = JSON.parse(query.conditions);
-                }
-                let collectionModel = that.getModel(collectionName);
-                let colQuery = collectionModel.find(conditions, null, options);
-                let promises = [];
-                fields.forEach(function (field) {
-                    if (field.type === 'reference' && field.ref) {
-                        let dfd = Q.defer();
-                        promises.push(dfd.promise);
-                        that.getDisplayFieldForCollection(field.ref).then(function (displayValueField) {
-                            if (displayValueField)
-                                field.display_value_field = displayValueField.toObject();
-                            else {
-                                field.display_value_field = {};
-                                field.display_value_field.name = "id";
-                            }
-                            dfd.resolve();
-                        });
-                    }
-                });
-                Q.all(promises).then(function () {
-                    colQuery.exec(function (err, data) {
-                        if (err)
-                            console.log(err);
-                        let collectionObj = {
-                            label: collection.label,
-                            name: collection.name
-                        };
-                        cb(collectionObj, data, fields);
-                    });
-                });
-            });
-        });
-    }
-
 
     findRecordById(modelName, id) {
         let model = this.getModel(modelName);

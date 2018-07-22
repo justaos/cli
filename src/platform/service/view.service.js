@@ -35,6 +35,7 @@ class ViewService extends BaseService {
         promises.push(viewModel.findOne({name: 'default_view'}).exec());
         Q.all(promises).then(function (res) {
             that.createDefaultFormView(res[0], res[1], res[2]);
+            that.createDefaultListView(res[0], res[1], res[2]);
         })
     }
 
@@ -60,7 +61,6 @@ class ViewService extends BaseService {
                 let order = 100;
                 fields.forEach(function (field) {
                     if (!findDefaultField(field.name)) {
-                        order += 100;
                         formElementModel.upsert({
                             form_section: formSection.id,
                             element: field.name
@@ -70,10 +70,41 @@ class ViewService extends BaseService {
                             order: order,
                             type: 'element'
                         }).exec();
+                        order += 100;
                     }
                 })
             });
         })
+    }
+
+    createDefaultListView(collection, fields, defaultView) {
+        let listModel = this.getModel('p_list');
+        let listElementModel = this.getModel('p_list_element');
+
+        listModel.upsert({
+            ref_collection: collection.name,
+            view: defaultView.id
+        }, {
+            ref_collection: collection.name,
+            view: defaultView.id
+        }).exec(function (err, listView) {
+            let order = 100;
+            fields.forEach(function (field) {
+                if (!findDefaultField(field.name) && field.type !== "password") {
+                    listElementModel.upsert({
+                        list: listView.id,
+                        element: field.name
+                    }, {
+                        list: listView.id,
+                        element: field.name,
+                        order: order,
+                        type: 'element'
+                    }).exec();
+                    order += 100;
+                }
+            })
+        });
+
     }
 }
 

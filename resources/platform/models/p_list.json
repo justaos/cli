@@ -5,7 +5,8 @@
     {
       "label": "Collection",
       "name": "ref_collection",
-      "type": "collection"
+      "type": "collection",
+      "display_value": true
     },
     {
       "name": "view",

@@ -1,8 +1,18 @@
 <link href="/ui/styles/list.css" rel="stylesheet">
+<%
+function getField(fieldName) {
+    let i;
+    for (i = 0; i < fields.length; i++) {
+        if (fields[i].name === fieldName)
+            return fields[i];
+    }
+}
+listElements.forEach(function (listElement) {
+    listElement.element = getField(listElement.element);
+});
+%>
 <div class="list-page">
-
     <%- include('./list-navigation') %>
-
     <main>
         <div class="container-fluid">
             <div class="filters-applied m-1 d-none">
@@ -22,14 +32,11 @@
                                             class="sr-only"></span></label>
                             </div>
                         </th>
-                        <% fields.forEach(function(field){ %>
-                        <% if(field.type == 'password'){ %>
-                        <!-- skipped <%= field.name %> -->
-                        <% } else { %>
+                        <% listElements.forEach(function(listElement){ let field = listElement.element; %>
                         <th id="col-header-<%= field.name %>" class="col-header" data-col="<%= field.name %>"><span
                                     class="col-title"><%= field.label %></span> <i
                                     class="fas sort-icon float-right d-none"></i></th>
-                        <% }}); %>
+                        <% }); %>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,13 +51,15 @@
                                             class="sr-only"></span></label>
                             </div>
                         </td>
-                        <% fields.forEach(function(field){ %>
-                        <% if(field.type == 'password'){ %>
-                        <!-- skipped <%= field.name %> -->
-                        <% } else if(field.type == 'date'){ %>
+                        <% listElements.forEach(function(listElement){ let field = listElement.element; %>
+
+                        <!-- date -->
+                        <% if(field.type == 'date'){ %>
                         <td>
                             <%= new moment(record[field.name]).format('DD-MMM-YYYY h:mm A') %>
                         </td>
+
+                        <!-- reference -->
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
@@ -59,6 +68,7 @@
                             </a>
                             <% } %>
                         </td>
+
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
