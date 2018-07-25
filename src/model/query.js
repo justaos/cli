@@ -25,8 +25,8 @@ class Query {
             this.query.exec().then(function (docs) {
                 businessRuleAfterExection(docs);
                 dfd.resolve(docs);
-            }, function (err) {
-                logger.error(err);
+            }).catch(function (err) {
+                dfd.reject(err);
             });
             return dfd.promise;
         }

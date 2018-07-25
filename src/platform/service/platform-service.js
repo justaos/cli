@@ -101,45 +101,29 @@ class PlatformService extends BaseService {
         });
     }
 
-    getMenuAndModules(menuId, cb) {
+    async getMenuAndModules(menuId, callBack) {
         let that = this;
-        let promises = [];
-        let menuDfd = Q.defer();
-        promises.push(menuDfd.promise);
-        this.getModel('p_menu').findById(menuId).exec(function (err, menu) {
-            if (err) {
-                cb(err)
-            } else {
-                menuDfd.resolve(menu);
-            }
-        });
+        let menu = await this.getModel('p_menu').findById(menuId).exec();
+        let modules = await this.getModel('p_module').skipPopulation().find({ref_menu: menuId}, null, {sort: {order: 1}}).exec();
 
-        let moduleModel = this.getModel('p_module');
-        moduleModel.skipPopulation();
-        promises.push(moduleModel.find({ref_menu: menuId}, null, {sort: {order: 1}}).exec());
+        if (menu) {
+            modules = modules.map(module => {
+                let m = module.toObject();
+                if (m.type === 'list') {
+                    m.url = '/p/' + m.ref_collection + '/list';
+                } else if (m.type === 'new') {
+                    m.url = '/p/' + m.ref_collection + '/new';
+                }
+                return m;
+            });
 
-        Q.all(promises).then(function (responses) {
-            let menu = responses[0];
-            let modules = responses[1];
-            if (menu && modules) {
-                modules = modules.map(module => {
-                    let m = module.toObject();
-                    if (m.type === 'list') {
-                        m.url = '/p/' + m.ref_collection + '/list';
-                    } else if (m.type === 'new') {
-                        m.url = '/p/' + m.ref_collection + '/new';
-                    }
-                    return m;
-                });
+            that.filterBasedOnAccess('p_module', modules, function (modules) {
+                modules = dsUtils.flatToHierarchy(modules);
+                callBack(menu, modules);
+            });
 
-                that.filterBasedOnAccess('p_module', modules, function (modules) {
-                    modules = dsUtils.flatToHierarchy(modules);
-                    cb(menu, modules);
-                });
-
-            } else
-                cb(null);
-        });
+        } else
+            throw new Error("Menu not found");
     }
 
     executeRestApi(req, res, cb) {
@@ -158,40 +142,51 @@ class PlatformService extends BaseService {
         let collectionPromise = this.getCollectionByName(collectionName);
         let fieldsPromise = this.getFieldsForCollection(collectionName);
         let clientScriptsPromise = this.getClientScriptsForCollection(collectionName);
-        let defaultView = await this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
+        let defaultView = await
+            this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
         let formView = await this.getModel('p_form').skipPopulation().findOne({
-            view: defaultView.id,
-            ref_collection: collectionName
-        }).exec();
-        let formSections = await this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
-            sort: {order: 1}
-        }).exec();
+                view: defaultView.id,
+                ref_collection: collectionName
+            }).exec();
+        let formSections = await
+            this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
+                sort: {order: 1}
+            }).exec();
         let formElementsPromise = this.getModel('p_form_element').skipPopulation().find({form_section: {$in: formSections.map(fs => fs.id)}}, null, {
             lean: true,
             sort: {order: 1}
         }).exec();
 
 
-        let fields = await fieldsPromise;
-        await this.populateOptions(fields, collectionName);
+        let fields = await
+            fieldsPromise;
+        await
+            this.populateOptions(fields, collectionName);
 
-        callBack(await collectionPromise, fields, await clientScriptsPromise, formView, formSections, await formElementsPromise);
+        callBack(await
+            collectionPromise, fields, await
+            clientScriptsPromise, formView, formSections, await
+            formElementsPromise
+        )
+        ;
     }
 
     async getRelatedLists(collectionName, defaultViewId, current, callBack) {
-        let relatedList = await this.getModel('p_related_list').skipPopulation().findOne({
-            view: defaultViewId,
-            ref_collection: collectionName
-        }).exec();
+        let relatedList = await
+            this.getModel('p_related_list').skipPopulation().findOne({
+                view: defaultViewId,
+                ref_collection: collectionName
+            }).exec();
 
         let relatedListElements;
         if (relatedList) {
-            relatedListElements = await this.getModel('p_related_list_element').skipPopulation().find({
-                related_list: relatedList.id
-            }, null, {
-                lean: true,
-                sort: {order: 1}
-            }).exec();
+            relatedListElements = await
+                this.getModel('p_related_list_element').skipPopulation().find({
+                    related_list: relatedList.id
+                }, null, {
+                    lean: true,
+                    sort: {order: 1}
+                }).exec();
             relatedListElements.forEach(function (relatedListElement) {
                 if (relatedListElement.filter) {
                     let ctx = vm.createContext({current});
@@ -219,20 +214,25 @@ class PlatformService extends BaseService {
         let collection = this.getCollectionByName(collectionName);
         let fields = this.getFieldsForCollection(collectionName);
 
-        let defaultView = await this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
-        let listView = await this.getModel('p_list').skipPopulation().findOne({
-            view: defaultView.id,
-            ref_collection: collectionName
-        }).exec();
+        let defaultView = await
+            this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
+        let listView = await
+            this.getModel('p_list').skipPopulation().findOne({
+                view: defaultView.id,
+                ref_collection: collectionName
+            }).exec();
         let listElements = this.getModel('p_list_element').skipPopulation().find({list: listView.id}, null, {
             lean: true,
             sort: {order: 1}
         }).exec();
 
         let result = {collection: await collection, fields: await fields, records: await records};
-        await this.populateOptions(result.fields, collectionName);
-
-        callBack(result.collection, result.records, result.fields, listView, await listElements);
+        await
+            this.populateOptions(result.fields, collectionName);
+        callBack(null, result.collection, result.records, result.fields, listView, await
+            listElements
+        )
+        ;
     }
 
     populateOptions(fields, collectionName) {

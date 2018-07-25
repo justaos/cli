@@ -52,6 +52,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
+    "commander": "^2.16.0",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
     "copy-dir": "^0.3.0",
@@ -61,6 +62,7 @@
     "express-ejs-layouts": "^2.4.0",
     "express-winston": "^2.5.0",
     "glob": "^7.1.2",
+    "inquirer": "^6.0.0",
     "istanbul": "^0.4.5",
     "js2xmlparser": "^3.0.0",
     "jsonfile": "^4.0.0",

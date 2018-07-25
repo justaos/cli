@@ -32,25 +32,20 @@ module.exports = function (platform) {
         storeController.storeAppInstall(platform, req, res)
     });
 
-    router.get('/menu/:id', authenticate, function (req, res) {
-            let ps = new PlatformService(req.user);
-            ps.getMenuAndModules(req.params.id, function (menu, modules) {
-                if (!menu || menu instanceof Error) {
-                    res.status('404').render('404');
-                } else {
-                    res.render('pages/menu', {
-                        menu: menu,
-                        url: req.query.url,
-                        modules: modules,
-                        layout: 'layouts/layout',
-                        user: req.user
-                    });
-                }
-
+    router.get('/menu/:id', authenticate, function (req, res, next) {
+        let ps = new PlatformService(req.user);
+        ps.getMenuAndModules(req.params.id, function (menu, modules) {
+            res.render('pages/menu', {
+                menu: menu,
+                url: req.query.url,
+                modules: modules,
+                layout: 'layouts/layout',
+                user: req.user
             });
-        }
-    )
-    ;
+        }).catch(function (err) {
+            next(err);
+        });
+    });
 
     router.get('/no-menu', authenticate, function (req, res) {
         res.render('pages/menu', {
@@ -72,9 +67,9 @@ module.exports = function (platform) {
         });
     });
 
-    router.get('/p/:collection/list', authenticate, function (req, res) {
+    router.get('/p/:collection/list', authenticate, function (req, res, next) {
         let ps = new PlatformService(req.user);
-        ps.getListFormResources(req.params.collection, req.query, function (collection, data, fields, listView, listElements) {
+        ps.getListFormResources(req.params.collection, req.query, function (err, collection, data, fields, listView, listElements) {
             res.render('pages/list/list', {
                 collection: collection,
                 data: data,
@@ -87,13 +82,13 @@ module.exports = function (platform) {
                 layout: 'layouts/no-header-layout',
                 user: req.user
             });
-        }, function () {
-            res.render('404');
+        }).catch(function (err) {
+            next(err);
         });
     });
 
 
-    router.get('/p/:collection/new', authenticate, function (req, res) {
+    router.get('/p/:collection/new', authenticate, function (req, res, next) {
         let ps = new PlatformService(req.user);
         ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
                                                              formView, formSections, formElements) {
@@ -118,10 +113,12 @@ module.exports = function (platform) {
 
                 layout: 'layouts/no-header-layout'
             });
+        }).catch(function (err) {
+            next(err);
         });
     });
 
-    router.get('/p/:collection/edit/:id', authenticate, function (req, res) {
+    router.get('/p/:collection/edit/:id', authenticate, function (req, res, next) {
         let ps = new PlatformService(req.user);
         ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
                                                              formView, formSections, formElements) {
@@ -152,6 +149,8 @@ module.exports = function (platform) {
                 });
             })
 
+        }).catch(function (err) {
+            next(err);
         });
     });
 
