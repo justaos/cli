@@ -1,5 +1,6 @@
 var FormScript = /** @class */ (function () {
     function FormScript(fields, formType) {
+        this.callBacks = [];
         this.fields = fields;
         this.formType = formType;
         this.fieldMap = fields.reduce(function (map, field) {
@@ -12,6 +13,7 @@ var FormScript = /** @class */ (function () {
             that.setMandatory(field.name, field.mandatory);
             that.setReadOnly(field.name, field.read_only);
         });
+        this._attachListeners();
     }
     FormScript.prototype.isCreateForm = function () {
         return this.formType === 'create';
@@ -57,6 +59,17 @@ var FormScript = /** @class */ (function () {
         }
         else {
             console.warn("No such field - " + fieldName);
+        }
+    };
+    FormScript.prototype.setDisplay = function (fieldName, display) {
+        var element = this.getElement(fieldName);
+        if (element.length) {
+            if (display) {
+                element.closest('.form-group').removeClass('d-none');
+            }
+            else {
+                element.closest('.form-group').addClass('d-none');
+            }
         }
     };
     FormScript.prototype.getElement = function (fieldName) {
@@ -106,7 +119,29 @@ var FormScript = /** @class */ (function () {
             return map;
         }, {});
     };
-    ;
+    FormScript.prototype._attachListeners = function () {
+        var that = this;
+        this.fields.forEach(function (field) {
+            if (field.type === 'script') {
+                // @ts-ignore
+                //  window.editors[fieldName].setValue(value);
+            }
+            else {
+                that.getElement(field.name).on('change', function () {
+                    that.fireCallBacks(field);
+                });
+            }
+        });
+    };
+    FormScript.prototype.fireCallBacks = function (field) {
+        var that = this;
+        that.callBacks.forEach(function (callBack) {
+            callBack(field, that.getValue(field.name));
+        });
+    };
+    FormScript.prototype.onChange = function (callBack) {
+        this.callBacks.push(callBack);
+    };
     return FormScript;
 }());
 // @ts-ignore

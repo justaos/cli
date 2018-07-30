@@ -6,11 +6,14 @@
       "name": "todo_text",
       "type": "string",
       "display_value": true,
-      "mandatory": true
+      "mandatory": true,
+      "order": 100
     },
     {
       "name": "status",
       "type": "option",
+      "default_value": "new",
+      "order": 200,
       "options": [
         {
           "order": "100",

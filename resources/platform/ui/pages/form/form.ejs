@@ -36,13 +36,17 @@ function getElementsForSection(sectionId) {
             <div id="alert-zone">
 
             </div>
-            <form id="view-form" class="needs-validation mt-4" novalidate>
+            <form id="form" class="needs-validation mt-4" novalidate>
 
                 <% formSections.forEach(function(formSection){ %>
                 <section id="<%= formSection.id %>" class="row">
-                    <% getElementsForSection(formSection.id).forEach(function(formElement){ let field = getField(formElement.element); %>
-                    <div class="col-sm-12 <% if(formElement.type !== 'two_column'){ %>col-sm-6<% } %>">
-                        <%- include('./field', {field: field, vertical: (formElement.type == 'two_column')}) %>
+                    <% getElementsForSection(formSection.id).forEach(function(formElement){
+                        let field = getField(formElement.element);
+                        let singleColumn = (formSection.column_type === 'single_column')
+                        let vertical = (!singleColumn || field.type === 'script')
+                    %>
+                    <div class="<% if(singleColumn){ %>col-sm-12 <% } else { %>col-sm-6<% } %>">
+                        <%- include('./field', {field: field, vertical: vertical}) %>
                     </div>
                     <% }); %>
                 </section>
@@ -50,7 +54,7 @@ function getElementsForSection(sectionId) {
                 <section class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-outline-primary">Save</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary submit-action">Submit</button>
                         </div>
                     </div>
                 </section>
@@ -87,7 +91,7 @@ function getElementsForSection(sectionId) {
         'use strict';
         window.addEventListener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            let form = document.getElementById('view-form');
+            let form = document.getElementById('form');
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -117,7 +121,16 @@ function getElementsForSection(sectionId) {
                 form.classList.add('was-validated');
 
             }, false);
+
+            $('.submit-action').on('click', function () {
+                var evt = document.createEvent("Event");
+                evt.initEvent("submit", true, true);
+                form.dispatchEvent(evt);
+            });
+
         }, false);
+
+
     })();
 </script>
 
@@ -233,6 +246,9 @@ function getElementsForSection(sectionId) {
     clientScripts.push(clientScript);
     if (clientScript.type === 'on_load')
         clientScript.script();
-
+    else if (clientScript.type === 'on_change')
+        fs.onChange(function (field, value) {
+            clientScript.script(field, value);
+        });
     <% }) %>
 </script>

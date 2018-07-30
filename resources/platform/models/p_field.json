@@ -32,12 +32,6 @@
           "value": "integer"
         },
         {
-          "order": "300",
-          "language": "en",
-          "label": "Reference",
-          "value": "reference"
-        },
-        {
           "order": "400",
           "language": "en",
           "label": "Boolean",
@@ -50,10 +44,28 @@
           "value": "date"
         },
         {
-          "order": "500",
+          "order": "600",
           "language": "en",
           "label": "Script",
           "value": "script"
+        },
+        {
+          "order": "700",
+          "language": "en",
+          "label": "Option",
+          "value": "option"
+        },
+        {
+          "order": "800",
+          "language": "en",
+          "label": "Reference",
+          "value": "reference"
+        },
+        {
+          "order": "900",
+          "language": "en",
+          "label": "Collection",
+          "value": "collection"
         }
       ],
       "order": 300

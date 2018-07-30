@@ -17,13 +17,14 @@ class FormScript {
             that.setMandatory(field.name, field.mandatory);
             that.setReadOnly(field.name, field.read_only);
         });
+        this._attachListeners();
     }
 
-    isCreateForm(){
+    isCreateForm() {
         return this.formType === 'create';
     }
 
-    isEditForm(){
+    isEditForm() {
         return this.formType === 'edit';
     }
 
@@ -62,6 +63,17 @@ class FormScript {
             }
         } else {
             console.warn("No such field - " + fieldName)
+        }
+    }
+
+    setDisplay(fieldName, display) {
+        var element = this.getElement(fieldName);
+        if (element.length) {
+            if (display) {
+                element.closest('.form-group').removeClass('d-none');
+            } else {
+                element.closest('.form-group').addClass('d-none');
+            }
         }
     }
 
@@ -110,13 +122,41 @@ class FormScript {
         }
     }
 
+
     getRecord() {
         let that = this;
         return this.fields.reduce(function (map, field) {
             map[field.name] = that.getValue(field.name);
             return map;
         }, {});
-    };
+    }
+
+    _attachListeners() {
+        var that = this;
+        this.fields.forEach(function (field) {
+            if (field.type === 'script') {
+                // @ts-ignore
+                //  window.editors[fieldName].setValue(value);
+            } else {
+                that.getElement(field.name).on('change', function () {
+                    that.fireCallBacks(field);
+                });
+            }
+        });
+    }
+
+    fireCallBacks(field) {
+        let that = this;
+        that.callBacks.forEach(function (callBack) {
+            callBack(field, that.getValue(field.name));
+        });
+    }
+
+    callBacks: any = [];
+
+    onChange(callBack) {
+        this.callBacks.push(callBack);
+    }
 }
 
 // @ts-ignore

@@ -31,12 +31,6 @@
           "language": "en",
           "label": "onChange",
           "value": "on_change"
-        },
-        {
-          "order": "300",
-          "language": "en",
-          "label": "onSubmit",
-          "value": "on_submit"
         }
       ]
     },

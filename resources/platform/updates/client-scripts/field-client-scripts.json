@@ -9,6 +9,15 @@
       "name": "edit_form_disable",
       "order": 100,
       "id": "5b5eed469288f11d7445289c"
+    },
+    {
+      "name": "Field type change",
+      "short_description": "",
+      "script": "function onChange(field, value) {\n    if (field.name === 'type') {\n        setDisplaysBasedOnType(value);\n    }\n}\n\n// On load code\nfunction setDisplaysBasedOnType(value) {\n    fs.setDisplay('ref', value === 'reference');\n    fs.setDisplay('length', value === 'string');\n}\n\nsetDisplaysBasedOnType(fs.getValue('type'));",
+      "order": null,
+      "type": "on_change",
+      "ref_collection": "p_field",
+      "id": "5b5efbc72d9bbf037472c6a6"
     }
   ]
 }

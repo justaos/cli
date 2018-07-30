@@ -16,7 +16,7 @@
       "name": "column_type",
       "type": "option",
       "default_value": "single_column",
-      "option": [
+      "options": [
         {
           "order": "100",
           "language": "en",

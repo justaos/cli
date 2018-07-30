@@ -59,7 +59,8 @@ class ViewService extends BaseService {
                         name: "default"
                     }, {
                         form: formView.id,
-                        name: "default"
+                        name: "default",
+                        column_type: 'single_column'
                     }).exec(function (err, formSection) {
                         fields.forEach(function (field, index) {
                             if (!findDefaultField(field.name)) {
