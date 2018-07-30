@@ -1,8 +1,12 @@
 <link href="/ui/styles/list.css" rel="stylesheet">
-<% if(pageUrl.searchParams.get('target_window') === 'parent') { %>
-<base target="_parent">
-<% } %>
-<%
+<% if (pageUrl.searchParams.get('target_window') === 'parent') {
+    targetWindow = '_parent';
+    redirectUrl = pageUrl.searchParams.get('target_url');
+} else {
+    targetWindow = "_self";
+    redirectUrl = pageUrl.url;
+}
+
 function getField(fieldName) {
     let i;
     for (i = 0; i < fields.length; i++) {
@@ -66,7 +70,7 @@ listElements.forEach(function (listElement) {
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= pageUrl.href %>">
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= redirectUrl %>" target="<%=targetWindow%>">
                                 <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
@@ -83,7 +87,7 @@ listElements.forEach(function (listElement) {
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= pageUrl.href %>"><%= record[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>" target="<%=targetWindow%>"><%= record[field.name] %></a>
                             <% } else { %>
                             <%= record[field.name] %>
                             <% } %>
@@ -100,7 +104,7 @@ listElements.forEach(function (listElement) {
     </main>
 </div>
 <div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item cm-open" href="#">Open</a>
+    <a class="dropdown-item cm-open" href="#" target="<%=targetWindow%>">Open</a>
     <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
     <a class="dropdown-item cm-export-json" href="#" target="_blank">Export JSON</a>
     <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
@@ -252,9 +256,9 @@ listElements.forEach(function (listElement) {
                 top: top,
                 left: left
             });
-            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
-            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
-            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
+            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
+            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
+            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
             $(".context-menu .cm-copy-id").on('click', function (e) {
                 e.preventDefault();
                 copyToClipboard($(that).data('id'));

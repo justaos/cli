@@ -3,7 +3,7 @@
         <%= collection.label %>
     </h4>
     <form class="form-inline">
-        <a href="/p/<%= collection.name %>/create?redirect=<%= pageUrl.href %>" class="btn btn-sm btn-link">
+        <a href="/p/<%= collection.name %>/create?redirect=<%= redirectUrl %>" target="<%=targetWindow%>" class="btn btn-sm btn-link">
             <i class="fas fa-plus"></i>
         </a>
     </form>

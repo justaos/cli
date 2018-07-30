@@ -30,6 +30,7 @@ class FormController {
 
     createView(req, res, next) {
         let ps = new PlatformService(req.user);
+        let pageUrl = new url.URL(req.protocol + '://' + req.get('host') + req.originalUrl);
         ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
                                                              formView, formSections, formElements) {
 
@@ -55,7 +56,8 @@ class FormController {
                 user: req.user,
 
                 layout: 'layouts/no-header-layout',
-                form: 'create'
+                form: 'create',
+                pageUrl: pageUrl
             });
         }).catch(function (err) {
             next(err);
@@ -64,6 +66,7 @@ class FormController {
 
     editView(req, res, next) {
         let ps = new PlatformService(req.user);
+        let pageUrl = new url.URL(req.protocol + '://' + req.get('host') + req.originalUrl);
         ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
                                                              formView, formSections, formElements) {
             ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
@@ -89,7 +92,8 @@ class FormController {
                         user: req.user,
 
                         layout: 'layouts/no-header-layout',
-                        form: 'edit'
+                        form: 'edit',
+                        pageUrl: pageUrl
                     });
                 });
             })
