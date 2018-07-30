@@ -5,7 +5,7 @@
       "id": "5b16e0cc9626929434000001",
       "label": "Create New",
       "order": 100,
-      "type": "new",
+      "type": "create",
       "ref_collection": "todo",
       "ref_menu": "5b16e0bfe02440982a000001"
     },

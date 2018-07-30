@@ -1,0 +1,14 @@
+{
+  "collection": "p_client_script",
+  "records": [
+    {
+      "type": "on_load",
+      "ref_collection": "p_collection",
+      "short_description": "Disable name field on edit form",
+      "script": "function onLoad() {\n    if (fs.isEditForm()) {\n        ['name', 'type'].forEach(function (fieldName){\n            fs.setMandatory(fieldName, false);\n            fs.setReadOnly(fieldName, true);\n        });\n    }\n}",
+      "name": "edit_form_disable",
+      "order": 100,
+      "id": "5b5ee60bd925ca06e0a6de83"
+    }
+  ]
+}

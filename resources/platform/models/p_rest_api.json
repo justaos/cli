@@ -5,15 +5,18 @@
     {
       "name": "name",
       "type": "string",
-      "display_value": true
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "url",
-      "type": "string"
+      "type": "string",
+      "order": 200
     },
     {
       "name": "method",
       "type": "option",
+      "order": 300,
       "options": [
         {
           "order": "100",
@@ -44,7 +47,8 @@
     {
       "name": "script",
       "type": "script",
-      "default_value": "(function(req, res){\r\n    // write you code here\r\n    var data = {};\r\n    res.send(data);\r\n})(req, res);"
+      "default_value": "(function(req, res){\r\n    // write you code here\r\n    var data = {};\r\n    res.send(data);\r\n})(req, res);",
+      "order": 400
     }
   ]
 }

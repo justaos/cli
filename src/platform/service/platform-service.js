@@ -24,7 +24,7 @@ class PlatformService extends BaseService {
     }
 
     static loadUpdates(path) {
-        return modelUtils.loadDataFromPath(path + '/updates/**.json');
+        return modelUtils.loadDataFromPath(path + '/updates/**/*.json');
     }
 
     getMenus(cb) {
@@ -111,8 +111,8 @@ class PlatformService extends BaseService {
                 let m = module.toObject();
                 if (m.type === 'list') {
                     m.url = '/p/' + m.ref_collection + '/list';
-                } else if (m.type === 'new') {
-                    m.url = '/p/' + m.ref_collection + '/new';
+                } else if (m.type === 'create') {
+                    m.url = '/p/' + m.ref_collection + '/create';
                 }
                 return m;
             });

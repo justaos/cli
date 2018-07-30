@@ -5,20 +5,19 @@
     {
       "name": "label",
       "type": "string",
-      "display_value": true
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "name",
-      "type": "string"
-    },
-    {
-      "label": "Collection",
-      "name": "ref_collection",
-      "type": "collection"
+      "type": "string",
+      "order": 200,
+      "mandatory": true
     },
     {
       "name": "type",
       "type": "option",
+      "default_value": "string",
       "options": [
         {
           "order": "100",
@@ -56,38 +55,58 @@
           "label": "Script",
           "value": "script"
         }
-      ]
+      ],
+      "order": 300
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection",
+      "order": 400
     },
     {
       "name": "display_value",
-      "type": "boolean"
+      "type": "boolean",
+      "order": 500
     },
     {
+      "label": "Reference",
       "name": "ref",
-      "type": "string"
+      "type": "collection",
+      "order": 600
     },
     {
       "name": "length",
-      "type": "integer"
+      "type": "integer",
+      "order": 700
     },
     {
       "name": "default_value",
       "type": "string",
-      "length": 1000
+      "length": 1000,
+      "order": 800
     },
     {
       "name": "read_only",
       "type": "boolean",
-      "hint": "This is applied on form element, not on database"
+      "hint": "This is applied on form element, not on database",
+      "order": 900
     },
     {
       "name": "mandatory",
       "type": "boolean",
-      "hint": "This is applied on form element, not on database"
+      "hint": "This is applied on form element, not on database",
+      "order": 1000
     },
     {
       "name": "hint",
-      "type": "string"
+      "type": "string",
+      "order": 1100
+    },
+    {
+      "name": "order",
+      "type": "integer",
+      "order": 1200
     }
   ]
 }

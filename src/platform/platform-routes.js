@@ -1,8 +1,7 @@
 const authenticate = require('../config/authenticate');
-const Q = require('q');
 const PlatformService = require('./service/platform-service');
-const storeController = require('./controller/store.ctrl');
-const moment = require('moment');
+const formCtrl = require('./controller/form.ctrl');
+const storeCtrl = require('./controller/store.ctrl');
 
 module.exports = function (platform) {
 
@@ -24,12 +23,12 @@ module.exports = function (platform) {
         next();
     });
 
-    router.get('/store', authenticate, storeController.store);
+    router.get('/store', authenticate, storeCtrl.store);
 
-    router.get('/store/:id', authenticate, storeController.storeApp);
+    router.get('/store/:id', authenticate, storeCtrl.storeApp);
 
     router.post('/store/:id/install', authenticate, function (req, res) {
-        storeController.storeAppInstall(platform, req, res)
+        storeCtrl.storeAppInstall(platform, req, res)
     });
 
     router.get('/menu/:id', authenticate, function (req, res, next) {
@@ -67,115 +66,15 @@ module.exports = function (platform) {
         });
     });
 
-    router.get('/p/:collection/list', authenticate, function (req, res, next) {
-        let ps = new PlatformService(req.user);
-        ps.getListFormResources(req.params.collection, req.query, function (err, collection, data, fields, listView, listElements) {
-            res.render('pages/list/list', {
-                collection: collection,
-                data: data,
-                fields: fields,
+    router.get('/p/:collection/list', authenticate, formCtrl.listView);
 
-                listView: listView,
-                listElements: listElements,
+    router.get('/p/:collection/create', authenticate, formCtrl.createView);
 
-                moment: moment,
-                layout: 'layouts/no-header-layout',
-                user: req.user
-            });
-        }).catch(function (err) {
-            next(err);
-        });
-    });
+    router.get('/p/:collection/edit/:id', authenticate, formCtrl.editView);
 
+    router.post('/p/:collection', authenticate, formCtrl.formSubmit);
 
-    router.get('/p/:collection/new', authenticate, function (req, res, next) {
-        let ps = new PlatformService(req.user);
-        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
-                                                             formView, formSections, formElements) {
-            res.render('pages/form/form', {
-                collection: {
-                    label: collection.label,
-                    name: collection.name
-                },
-                fields: fields,
-                item: {},
-                clientScripts: clientScripts,
-
-                formView: formView,
-                formSections: formSections,
-                formElements: formElements,
-                relatedList: null,
-                relatedListElements: null,
-
-                moment: moment,
-
-                user: req.user,
-
-                layout: 'layouts/no-header-layout'
-            });
-        }).catch(function (err) {
-            next(err);
-        });
-    });
-
-    router.get('/p/:collection/edit/:id', authenticate, function (req, res, next) {
-        let ps = new PlatformService(req.user);
-        ps.getFormResources(req.params.collection, function (collection, fields, clientScripts,
-                                                             formView, formSections, formElements) {
-            ps.findRecordById(req.params.collection, req.params.id).then(function (item) {
-                ps.getRelatedLists(req.params.collection, formView.view, item, function (relatedList, relatedListElements) {
-
-                    res.render('pages/form/form', {
-                        collection: {
-                            label: collection.label,
-                            name: collection.name
-                        },
-                        fields: fields,
-                        item: item.toObject(),
-                        clientScripts: clientScripts,
-
-                        formView: formView,
-                        formSections: formSections,
-                        formElements: formElements,
-                        relatedList: relatedList,
-                        relatedListElements: relatedListElements,
-
-                        moment: moment,
-
-                        user: req.user,
-
-                        layout: 'layouts/no-header-layout'
-                    });
-                });
-            })
-
-        }).catch(function (err) {
-            next(err);
-        });
-    });
-
-    router.post('/p/:collection', authenticate, function (req, res) {
-        let ps = new PlatformService(req.user);
-        if (!req.body.id) {
-            ps.createRecord(req.params.collection, req.body).then(function () {
-                res.send();
-            });
-        } else {
-            ps.updateRecord(req.params.collection, req.body).then(function () {
-                res.send();
-            });
-        }
-    });
-
-    router.post('/p/:collection/action', authenticate, function (req, res) {
-        let ps = new PlatformService(req.user);
-        ps.executeAction(req.params.collection, req.body.items, function (err) {
-            if (err)
-                res.status(404).render('404');
-            else
-                res.send();
-        });
-    });
+    router.post('/p/:collection/action', authenticate, formCtrl.formAction);
 
     router.post('/p/:collection/search', authenticate, function (req, res) {
         let ps = new PlatformService(req.user);
@@ -215,11 +114,4 @@ module.exports = function (platform) {
 
     return router;
 
-}
-;
-/*
-  const url = require('url');
-  let referer = req.header('Referer');
-  let refererUrl = new url.URL(referer);
-  console.log(refererUrl.searchParams.get('test'));
-  */
+};

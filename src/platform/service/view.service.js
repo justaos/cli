@@ -31,9 +31,10 @@ class ViewService extends BaseService {
         let viewModel = this.getModel('p_view');
         let promises = [];
         promises.push(collectionModel.findOne({name: this.collectionName}).exec());
-        promises.push(fieldModel.find({ref_collection: this.collectionName}).exec());
+        promises.push(fieldModel.find({ref_collection: this.collectionName}, null, {sort: {order: 1}}).exec());
         promises.push(viewModel.findOne({name: 'default_view'}).exec());
         Q.all(promises).then(function (res) {
+            //sort fields based on order
             that.createDefaultFormView(res[0], res[1], res[2]);
             that.createDefaultListView(res[0], res[1], res[2]);
         })
@@ -44,67 +45,70 @@ class ViewService extends BaseService {
         let formSectionModel = this.getModel('p_form_section');
         let formElementModel = this.getModel('p_form_element');
 
-        formModel.upsert({
+        formModel.findOne({
             ref_collection: collection.name,
             view: defaultView.id
-        }, {
-            ref_collection: collection.name,
-            view: defaultView.id
-        }).exec(function (err, formView) {
-            formSectionModel.upsert({
-                form: formView.id,
-                name: "default"
-            }, {
-                form: formView.id,
-                name: "default"
-            }).exec(function (err, formSection) {
-                let order = 100;
-                fields.forEach(function (field) {
-                    if (!findDefaultField(field.name)) {
-                        formElementModel.upsert({
-                            form_section: formSection.id,
-                            element: field.name
-                        }, {
-                            form_section: formSection.id,
-                            element: field.name,
-                            order: order,
-                            type: 'element'
-                        }).exec();
-                        order += 100;
-                    }
-                })
-            });
-        })
+        }).exec(function (err, record) {
+            if (!record) {
+                formModel.create({
+                    ref_collection: collection.name,
+                    view: defaultView.id
+                }).then(function (formView) {
+                    formSectionModel.upsert({
+                        form: formView.id,
+                        name: "default"
+                    }, {
+                        form: formView.id,
+                        name: "default"
+                    }).exec(function (err, formSection) {
+                        fields.forEach(function (field, index) {
+                            if (!findDefaultField(field.name)) {
+                                formElementModel.upsert({
+                                    form_section: formSection.id,
+                                    element: field.name
+                                }, {
+                                    form_section: formSection.id,
+                                    element: field.name,
+                                    order: (index + 1) * 100,
+                                    type: 'element'
+                                }).exec();
+                            }
+                        })
+                    });
+                });
+            }
+        });
     }
 
     createDefaultListView(collection, fields, defaultView) {
         let listModel = this.getModel('p_list');
         let listElementModel = this.getModel('p_list_element');
 
-        listModel.upsert({
+        listModel.findOne({
             ref_collection: collection.name,
             view: defaultView.id
-        }, {
-            ref_collection: collection.name,
-            view: defaultView.id
-        }).exec(function (err, listView) {
-            let order = 100;
-            fields.forEach(function (field) {
-                if (!findDefaultField(field.name) && field.type !== "password") {
-                    listElementModel.upsert({
-                        list: listView.id,
-                        element: field.name
-                    }, {
-                        list: listView.id,
-                        element: field.name,
-                        order: order,
-                        type: 'element'
-                    }).exec();
-                    order += 100;
-                }
-            })
+        }).exec(function (err, record) {
+            if (!record) {
+                listModel.create({
+                    ref_collection: collection.name,
+                    view: defaultView.id
+                }).then(function (listView) {
+                    fields.forEach(function (field, index) {
+                        if (!findDefaultField(field.name) && field.type !== "password") {
+                            listElementModel.upsert({
+                                list: listView.id,
+                                element: field.name
+                            }, {
+                                list: listView.id,
+                                element: field.name,
+                                order: (index + 1) * 100,
+                                type: 'element'
+                            }).exec();
+                        }
+                    })
+                });
+            }
         });
-
     }
 }
 

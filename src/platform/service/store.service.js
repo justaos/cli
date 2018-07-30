@@ -41,10 +41,14 @@ class StoreService extends BaseService {
         applicationModel.findById(appId).exec((err, application) => {
             let schemaDefinitions = StoreService.readModelsForPackage(application.package);
             modelUtils.loadSchemasIntoStore(schemaDefinitions);
-            StoreService.loadDataForPackage(application.package);
+            let promises = [];
+
+            let dataPromise = StoreService.loadDataForPackage(application.package);
+            promises.push(dataPromise);
+
             if (loadSampleData)
                 StoreService.loadSampleDataForPackage(application.package);
-            let promises = [];
+
             schemaDefinitions.forEach((def) => {
                 promises.push(platform.populateSysData(def));
             });
@@ -72,11 +76,11 @@ class StoreService extends BaseService {
     }
 
     static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**.json');
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**/*.json');
     }
 
     static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**.json');
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**/*.json');
     }
 }
 

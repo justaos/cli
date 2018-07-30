@@ -10,13 +10,13 @@ function converter(collectionDef) {
                 return;
             }
             switch (fieldDef.type) {
-                case dataTypes.STRING :
+                case 'string' :
                     property.type = dataTypes.STRING.getType();
                     break;
-                case dataTypes.INTEGER :
+                case 'integer' :
                     property.type = dataTypes.INTEGER.getType();
                     break;
-                case dataTypes.ID :
+                case 'id' :
                     property.type = dataTypes.ID.getType();
                     break;
                 case 'boolean' :

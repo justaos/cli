@@ -19,18 +19,13 @@ function getField(fieldName) {
 function getFieldFromElement(field) {
     let i;
     for (i = 0; i < formElements.length; i++) {
-        if (formElements[i].element.name === field.name)
+        if (formElements[i].element === field.name)
             return field;
     }
 }
 
 function getElementsForSection(sectionId) {
-    return formElements.filter(function (formElement) {
-        if (formElement.form_section == sectionId) {
-            formElement.element = getField(formElement.element);
-            return true;
-        }
-    })
+    return formElements.filter((formElement) => formElement.form_section == sectionId)
 }
 %>
 
@@ -45,117 +40,9 @@ function getElementsForSection(sectionId) {
 
                 <% formSections.forEach(function(formSection){ %>
                 <section id="<%= formSection.id %>" class="row">
-                    <% getElementsForSection(formSection.id).forEach(function(formElement){ let field = formElement.element; %>
-                    <div class="col-md-12">
-                        <div class="form-group row no-gutters">
-                            <label for="form-<%= field.name %>"
-                                   class="col-sm-2 col-form-label col-form-label"><%= field.label %>
-
-                                <% if(field.hint){ %>
-                                <span rel="tooltip" data-toggle="tooltip" data-placement="right"
-                                      title="<%= field.hint %>">
-                                <i class="fas fa-question-circle fa-xs"></i>
-                            </span>
-                                <% } %>
-                            </label>
-                            <div class="col-sm-8">
-
-                                <!-- integer field -->
-                                <% if(field.type == 'integer'){ %>
-                                <input type="number" class="form-control" id="form-<%= field.name %>"
-                                       name="<%= field.name %>"
-                                       value="<%= item[field.name] %>"
-                                       placeholder="<%= field.label %>">
-
-                                <!-- date field -->
-                                <% } else if(field.type == 'date'){ %>
-                                <input type="text" class="form-control" id="form-<%= field.name %>"
-                                       name="<%= field.name %>"
-                                       value="<%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>"
-                                       placeholder="<%= field.label %>">
-
-                                <!-- integer field -->
-                                <% } else if(field.type == 'password'){ %>
-                                <input type="password" class="form-control" id="form-<%= field.name %>"
-                                       name="<%= field.name %>"
-                                       value=""
-                                       placeholder="<%= field.label %>">
-
-                                <!-- boolean field -->
-                                <% } else if(field.type == 'boolean'){ %>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input item-checkbox"
-                                           id="form-<%= field.name %>"
-                                           name="<%= field.name %>"
-                                           <% if(item[field.name]){ %>checked="checked"
-                                            <% } %>
-                                           placeholder="<%= field.label %>">
-                                    <label class="custom-control-label" for="form-<%= field.name %>"><span
-                                                class="sr-only"></span></label>
-                                </div>
-
-                                <!-- script field -->
-                                <% } else if(field.type == 'script' || field.type == 'mixed'){ %>
-                                <div class="script-editor" id="form-<%= field.name %>" data-col-name="<%= field.name %>"
-                                     style="height: 500px;border:1px solid grey;"></div>
-
-
-                                <!-- option field -->
-                                <% } else if(field.type == 'option'){ %>
-                                <select class="form-control select-option" data-live-search="true"
-                                        id="form-<%= field.name %>" title="Choose one of the following..."
-                                        data-col-name="<%= field.name %>" name="<%= field.name %>">
-
-                                    <% if(field.options) field.options.forEach(function(option){ %>
-                                    <option value="<%= option.value %>"
-                                            <% if(option.value === item[field.name]){ %>selected="selected"
-                                            <% } %>
-                                    ><%= option.label %></option>
-                                    <% }); %>
-                                </select>
-
-                                <!-- collection field -->
-                                <% } else if(field.type == 'collection'){ %>
-                                <select class="form-control select-collection" data-live-search="true"
-                                        id="form-<%= field.name %>" title="Choose one of the following..."
-                                        data-col-name="<%= field.name %>" name="<%= field.name %>">
-
-                                    <% if(field.options) field.options.forEach(function(option){ %>
-                                    <option value="<%= option.name %>"
-                                            <% if(option.name === item[field.name]){ %>selected="selected"
-                                            <% } %>
-                                    ><%= option.label %></option>
-                                    <% }); %>
-                                </select>
-
-                                <!-- reference field -->
-                                <% } else if(field.type == 'reference' && field.ref){ %>
-
-                                <select class="form-control select-reference" data-live-search="true"
-                                        id="form-<%= field.name %>"
-                                        data-col-name="<%= field.name %>" name="<%= field.name %>">
-                                    <% if(item[field.name]){ %>
-
-                                    <option value="<%= item[field.name].id %>"
-                                            selected="selected"><%= item[field.name][field.display_value_field.name] %></option>
-                                    <% } %>
-                                </select>
-                                <% } else if(field.type == 'string' && field.length > 256){ %>
-                                <textarea type="text" class="form-control" id="form-<%= field.name %>"
-                                          name="<%= field.name %>"
-                                          placeholder="<%= field.label %>"><%= item[field.name] %></textarea>
-                                <% } else { %>
-                                <input type="text" class="form-control" id="form-<%= field.name %>"
-                                       name="<%= field.name %>"
-                                       value="<%= item[field.name] %>"
-                                       placeholder="<%= field.label %>">
-                                <% } %>
-                                <div class="invalid-feedback">
-                                    Please provide a <%= field.label %>.
-                                </div>
-                            </div>
-                            <div class="col-sm-2"></div>
-                        </div>
+                    <% getElementsForSection(formSection.id).forEach(function(formElement){ let field = getField(formElement.element); %>
+                    <div class="col-sm-12 <% if(formElement.type !== 'two_column'){ %>col-sm-6<% } %>">
+                        <%- include('./field', {field: field, vertical: (formElement.type == 'two_column')}) %>
                     </div>
                     <% }); %>
                 </section>
@@ -185,7 +72,8 @@ function getElementsForSection(sectionId) {
                 <% relatedListElements.forEach(function(relatedListElement, index){ %>
                 <div class="tab-pane fade <% if(!index){ %>show active<% } %>" id="nav-home" role="tabpanel"
                      aria-labelledby="nav-home-tab">
-                    <iframe class="related-list-iframe" src='/p/<%= relatedListElement.ref_collection %>/list?<% if(relatedListElement.conditions){ %>conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
+                    <iframe class="related-list-iframe"
+                            src='/p/<%= relatedListElement.ref_collection %>/list?<% if(relatedListElement.conditions){ %>conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
                 </div>
                 <% }); %>
             </div>
@@ -238,28 +126,15 @@ function getElementsForSection(sectionId) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
 <script>
-    window.fs = new FormScript(<%- JSON.stringify(fields.filter(f => getFieldFromElement(f))) %>);
-
-    var clientScripts = [];
-
-    var clientScript;
-    <% clientScripts.forEach(function(clientScript){ %>
-    clientScript = <%- JSON.stringify(clientScript) %>;
-    clientScript.script = <%- clientScript.script %>;
-    clientScripts.push(clientScript);
-    clientScript.script();
-    <% }) %>
-
+    window.fs = new FormScript(<%- JSON.stringify(fields.filter(f => getFieldFromElement(f))) %>, '<%= form %>');
 </script>
 <script>
-    monaco.languages.typescript.javascriptDefaults.addExtraLib([
-        'declare class Facts {',
-        '    /**',
-        '     * Returns the next fact',
-        '     */',
-        '    static next():string',
-        '}'
-    ].join('\n'));
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+    <%- include('../../scripts/form-script.d.ts') %>
+    `, 'form-script.d.ts');
+    monaco.languages.typescript.javascriptDefaults.addExtraLib('declare const fs: FormScript;', 'global.d.ts');
+
+
     window.editors = [];
     var item = <%- JSON.stringify(item) %>;
     var fields = <%- JSON.stringify(fields) %>;
@@ -274,8 +149,9 @@ function getElementsForSection(sectionId) {
     }
 
     document.querySelectorAll('.script-editor').forEach(function (element) {
-        window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
-            value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : findField(element.getAttribute('data-col-name')).default_value,
+        var fieldName = $(element).data('field');
+        window.editors[fieldName] = monaco.editor.create(element, {
+            value: item[fieldName],
             language: 'javascript',
             theme: 'vs-dark',
             formatOnType: true
@@ -325,7 +201,7 @@ function getElementsForSection(sectionId) {
         });
 
         $('select.select-reference').each(function () {
-            var fieldName = $(this).data('col-name');
+            var fieldName = $(this).data('field');
             $(this).selectpicker().ajaxSelectPicker({
                 ajax: {
                     url: '/p/<%= collection.name %>/search',
@@ -345,4 +221,18 @@ function getElementsForSection(sectionId) {
             $('#form-parent').append("<option>test</option>")
         });
     });
+</script>
+<script>
+    var clientScripts = [];
+
+    var clientScript;
+    <% clientScripts.forEach(function(clientScript){ %>
+
+    clientScript = <%- JSON.stringify(clientScript) %>;
+    clientScript.script = <%- clientScript.script %>;
+    clientScripts.push(clientScript);
+    if (clientScript.type === 'on_load')
+        clientScript.script();
+
+    <% }) %>
 </script>

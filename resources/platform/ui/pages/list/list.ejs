@@ -63,16 +63,24 @@ listElements.forEach(function (listElement) {
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=/p/<%= collection.name %>/list">
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= page_url %>">
                                 <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
                         </td>
 
+                        <!-- reference -->
+                        <% } else if(field.type == 'option'){ %>
+                        <td>
+                            <% if(field.options) field.options.forEach(function(option){ if(option.value === record[field.name]){ %>
+                            <%= option.label %>
+                            <% }}); %>
+                        </td>
+
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=/p/<%= collection.name %>/list"><%= record[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= page_url %>"><%= record[field.name] %></a>
                             <% } else { %>
                             <%= record[field.name] %>
                             <% } %>
@@ -95,6 +103,14 @@ listElements.forEach(function (listElement) {
     <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
 </div>
 <script>
+    var fields = <%- JSON.stringify(fields) %>;
+
+    function findField(fieldName) {
+        return fields.find(function (field) {
+            return field.name === fieldName;
+        })
+    }
+
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
         let $table = $('.responsive-table');
@@ -185,11 +201,13 @@ listElements.forEach(function (listElement) {
 
         var conditions = JSON.parse(new URL(window.location.href).searchParams.get('conditions'));
         if (conditions) {
-            var conditionKeys = Object.keys(conditions);
-            $('.filters-applied').removeClass('d-none');
-            conditionKeys.forEach(function (condition) {
-                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">' + condition + '=' + (conditions[condition].$regex || conditions[condition])+ ' <i class="fas fa-times"></i></a>')
-            });
+            var fieldNames = Object.keys(conditions);
+            if (fieldNames.length) {
+                $('.filters-applied').removeClass('d-none');
+                fieldNames.forEach(function (fieldName) {
+                    $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1" data-field="' + fieldName + '">' + findField(fieldName).label + '=' + (conditions[fieldName].$regex || conditions[fieldName]) + ' <i class="fas fa-times remove-filter"></i></a>')
+                });
+            }
         }
 
 
@@ -197,15 +215,24 @@ listElements.forEach(function (listElement) {
 
         $searchInputForm.on('submit', function (e) {
             e.preventDefault();
-            var field = $(this).find('.selected-option').data('selected');
+            var fieldName = $(this).find('.selected-option').data('selected');
             var value = $(this).find('input').val();
             if (!conditions) {
                 conditions = {};
             }
-            conditions[field] = {"$regex": value, "$options": "i"};
+            conditions[fieldName] = {"$regex": value, "$options": "i"};
             currentUrl.searchParams.set('conditions', JSON.stringify(conditions));
             window.location.href = currentUrl.href;
         });
+
+        $(document).on('click', '.remove-filter', function () {
+            var fieldName = $(this).closest('.badge').data('field');
+            if (conditions) {
+                delete conditions[fieldName];
+                currentUrl.searchParams.set('conditions', JSON.stringify(conditions));
+                window.location.href = currentUrl.href;
+            }
+        })
 
         $('#search-input-form .dropdown-item').on('click', function () {
             let $selectedOption = $searchInputForm.find('.selected-option');
@@ -222,9 +249,9 @@ listElements.forEach(function (listElement) {
                 top: top,
                 left: left
             });
-            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
-            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
-            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id'));
+            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= page_url %>";
+            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= page_url %>";
+            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= page_url %>";
             $(".context-menu .cm-copy-id").on('click', function (e) {
                 e.preventDefault();
                 copyToClipboard($(that).data('id'));

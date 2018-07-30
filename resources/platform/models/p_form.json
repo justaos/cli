@@ -6,12 +6,14 @@
       "label": "Collection",
       "name": "ref_collection",
       "type": "collection",
-      "display_value": true
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "view",
       "type": "reference",
-      "ref": "p_view"
+      "ref": "p_view",
+      "order": 200
     }
   ]
 }

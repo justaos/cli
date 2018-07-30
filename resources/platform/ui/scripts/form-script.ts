@@ -1,5 +1,9 @@
-var FormScript = /** @class */ (function () {
-    function FormScript(fields, formType) {
+class FormScript {
+    fields: any;
+    fieldMap: any;
+    formType: any;
+
+    constructor(fields, formType) {
         this.fields = fields;
         this.formType = formType;
         this.fieldMap = fields.reduce(function (map, field) {
@@ -7,110 +11,118 @@ var FormScript = /** @class */ (function () {
             map[field.name].element = $('#form-' + field.name);
             return map;
         }, {});
-        var that = this;
+
+        let that = this;
         this.fields.forEach(function (field) {
             that.setMandatory(field.name, field.mandatory);
             that.setReadOnly(field.name, field.read_only);
         });
     }
-    FormScript.prototype.isCreateForm = function () {
+
+    isCreateForm(){
         return this.formType === 'create';
-    };
-    FormScript.prototype.isEditForm = function () {
+    }
+
+    isEditForm(){
         return this.formType === 'edit';
-    };
-    FormScript.prototype.getLabel = function (fieldName) {
+    }
+
+    getLabel(fieldName) {
         return this.fieldMap[fieldName].label;
-    };
-    FormScript.prototype.getValue = function (fieldName) {
+    }
+
+    getValue(fieldName) {
         var field = this.fieldMap[fieldName];
         if (field) {
             if (field.type === 'boolean') {
                 return this.getElement(fieldName).prop('checked');
-            }
-            else if (field.type === 'script') {
+            } else if (field.type === 'script') {
                 // @ts-ignore
                 return window.editors[fieldName].getValue();
-            }
-            else {
+            } else {
                 return this.getElement(fieldName).val();
             }
-        }
-        else {
+        } else {
             console.warn("No such field - " + fieldName);
             return '';
         }
-    };
-    FormScript.prototype.setValue = function (fieldName, value) {
+    }
+
+
+    setValue(fieldName, value) {
         var field = this.fieldMap[fieldName];
         if (field) {
             if (field.type === 'boolean') {
                 this.getElement(fieldName).prop('checked', value);
-            }
-            else if (field.type === 'script') {
+            } else if (field.type === 'script') {
                 // @ts-ignore
                 window.editors[fieldName].setValue(value);
-            }
-            else {
+            } else {
                 this.getElement(fieldName).val(value);
             }
+        } else {
+            console.warn("No such field - " + fieldName)
         }
-        else {
-            console.warn("No such field - " + fieldName);
-        }
-    };
-    FormScript.prototype.getElement = function (fieldName) {
+    }
+
+    getElement(fieldName) {
         return $('#form-' + fieldName);
-    };
-    FormScript.prototype.addErrorMessage = function (htmlMessage) {
+    }
+
+    addErrorMessage(htmlMessage) {
         $('#alert-zone').append('<div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">' +
             htmlMessage +
             '    <button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
             '        <span aria-hidden="true">&times;</span>' +
             '    </button>' +
             '    </div>');
-    };
-    FormScript.prototype.setMandatory = function (fieldName, mandatory) {
+    }
+
+
+    setMandatory(fieldName, mandatory) {
         var element = this.getElement(fieldName);
         if (element.length) {
             if (mandatory) {
                 element.closest('.form-group').addClass('required');
                 element.prop('required', true);
-            }
-            else {
+            } else {
                 element.closest('.form-group').removeClass('required');
                 element.prop('required', false);
             }
         }
-    };
-    FormScript.prototype.isMandatory = function (fieldName) {
+    }
+
+
+    isMandatory(fieldName) {
         var element = this.getElement(fieldName);
         if (element.length) {
             return element.prop('required');
         }
-    };
-    FormScript.prototype.setReadOnly = function (fieldName, readOnly) {
+    }
+
+    setReadOnly(fieldName, readOnly) {
         var element = this.getElement(fieldName);
         if (element.length) {
             if (readOnly && this.isMandatory(fieldName)) {
                 this.addErrorMessage(this.fieldMap[fieldName].label + ' : mandatory field cannot be made read-only');
-            }
-            else
+            } else
                 element.prop('disabled', readOnly);
         }
-    };
-    FormScript.prototype.getRecord = function () {
-        var that = this;
+    }
+
+    getRecord() {
+        let that = this;
         return this.fields.reduce(function (map, field) {
             map[field.name] = that.getValue(field.name);
             return map;
         }, {});
     };
-    ;
-    return FormScript;
-}());
+}
+
 // @ts-ignore
-(function (window, $) {
+((window, $) => {
+
     // @ts-ignore
     window.FormScript = FormScript;
+
 })(window, $);
