@@ -64,7 +64,6 @@ function getElementsForSection(sectionId) {
             <h4>Related lists</h4>
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-
                     <% relatedListElements.forEach(function(relatedListElement, index){ %>
                     <a class="nav-item nav-link <% if(!index){ %>active<% } %>" id="nav-home-tab" data-toggle="tab"
                        href="#nav-home" role="tab"
@@ -77,7 +76,7 @@ function getElementsForSection(sectionId) {
                 <div class="tab-pane fade <% if(!index){ %>show active<% } %>" id="nav-home" role="tabpanel"
                      aria-labelledby="nav-home-tab">
                     <iframe class="related-list-iframe"
-                            src='/p/<%= relatedListElement.ref_collection %>/list?<% if(relatedListElement.conditions){ %>conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
+                            src='/p/<%= relatedListElement.ref_collection %>/list?&target_window=parent<% if(relatedListElement.conditions){ %>&conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
                 </div>
                 <% }); %>
             </div>

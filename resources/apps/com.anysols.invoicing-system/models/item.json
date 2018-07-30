@@ -5,16 +5,19 @@
     {
       "name": "invoice",
       "type": "reference",
-      "ref": "invoice"
+      "ref": "invoice",
+      "order": 100
     },
     {
       "name": "product",
       "type": "reference",
-      "ref": "invoice_product"
+      "ref": "invoice_product",
+      "order": 200
     },
     {
       "name": "quality",
-      "type": "integer"
+      "type": "integer",
+      "order": 300
     }
   ]
 }

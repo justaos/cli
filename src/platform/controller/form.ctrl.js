@@ -1,11 +1,13 @@
 'use strict';
 const PlatformService = require('../service/platform-service');
 const moment = require('moment');
+const url = require('url');
 
 class FormController {
 
     listView(req, res, next) {
         let ps = new PlatformService(req.user);
+        let pageUrl = new url.URL(req.protocol + '://' + req.get('host') + req.originalUrl);
         ps.getListFormResources(req.params.collection, req.query, function (err, collection, data, fields, listView, listElements) {
             res.render('pages/list/list', {
                 collection: collection,
@@ -18,7 +20,7 @@ class FormController {
                 moment: moment,
                 layout: 'layouts/no-header-layout',
                 user: req.user,
-                page_url: req.originalUrl
+                pageUrl: pageUrl
             });
         }).catch(function (err) {
             next(err);

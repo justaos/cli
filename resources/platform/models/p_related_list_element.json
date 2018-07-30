@@ -4,25 +4,32 @@
   "fields": [
     {
       "name": "name",
-      "type": "string"
+      "type": "string",
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "related_list",
       "type": "reference",
-      "ref": "p_related_list"
+      "ref": "p_related_list",
+      "order": 200
     },
     {
       "label": "Collection",
       "name": "ref_collection",
-      "type": "collection"
+      "type": "collection",
+      "order": 300
     },
     {
       "name": "filter",
-      "type": "script"
+      "type": "script",
+      "display_value": "function filter(current) {\r\n    return {}; // return filter object\r\n}",
+      "order": 400
     },
     {
       "name": "order",
-      "type": "integer"
+      "type": "integer",
+      "order": 500
     }
   ]
 }

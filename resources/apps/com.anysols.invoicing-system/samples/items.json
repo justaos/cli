@@ -1,0 +1,11 @@
+{
+  "collection": "invoice_item",
+  "records": [
+    {
+      "quality": 20,
+      "invoice": "5b5f13f33ed4ed2ea4029dbc",
+      "product": "5b5f1b77980f7035a42d0579",
+      "id": "5b5f1820f5cc8c28089e24dd"
+    }
+  ]
+}

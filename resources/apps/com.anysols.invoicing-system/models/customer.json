@@ -2,19 +2,26 @@
   "name": "invoice_customer",
   "label": "Customer",
   "fields": [
-	{
-	  "name": "first_name",
-	  "type": "string",
-	  "display_value": true
-	},{
-	  "name": "last_name",
-	  "type": "string"
-	}, {
-	  "name": "city",
-	  "type": "reference"
-	},
- {
-	  "name": "country",
-	  "type": "string"
-	}]
+    {
+      "name": "first_name",
+      "type": "string",
+      "display_value": true,
+      "order": 100
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "order": 200
+    },
+    {
+      "name": "city",
+      "type": "reference",
+      "order": 300
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "order": 400
+    }
+  ]
 }

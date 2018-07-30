@@ -1,4 +1,7 @@
 <link href="/ui/styles/list.css" rel="stylesheet">
+<% if(pageUrl.searchParams.get('target_window') === 'parent') { %>
+<base target="_parent">
+<% } %>
 <%
 function getField(fieldName) {
     let i;
@@ -63,7 +66,7 @@ listElements.forEach(function (listElement) {
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= page_url %>">
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= pageUrl.href %>">
                                 <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
@@ -80,7 +83,7 @@ listElements.forEach(function (listElement) {
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= page_url %>"><%= record[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= pageUrl.href %>"><%= record[field.name] %></a>
                             <% } else { %>
                             <%= record[field.name] %>
                             <% } %>
@@ -249,9 +252,9 @@ listElements.forEach(function (listElement) {
                 top: top,
                 left: left
             });
-            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= page_url %>";
-            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= page_url %>";
-            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= page_url %>";
+            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
+            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
+            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= pageUrl.href %>";
             $(".context-menu .cm-copy-id").on('click', function (e) {
                 e.preventDefault();
                 copyToClipboard($(that).data('id'));

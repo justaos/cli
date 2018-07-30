@@ -1,0 +1,17 @@
+{
+  "collection": "p_related_list_element",
+  "records": [
+    {
+      "related_list": "5b5f11250f94242944c0cc34",
+      "filter": "function filter(current) {\r\n    return {\r\n        invoice: current.id\r\n    };\r\n}",
+      "name": "invoice item",
+      "order": null,
+      "ref_collection": "invoice_item",
+      "created_by": "5b37598359a01c43346f8632",
+      "updated_by": "5b37598359a01c43346f8632",
+      "created_at": "2018-07-30T13:54:16.381Z",
+      "updated_at": "2018-07-30T13:55:19.786Z",
+      "id": "5b5f1888f5cc8c28089e24de"
+    }
+  ]
+}

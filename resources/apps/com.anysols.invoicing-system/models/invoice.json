@@ -3,10 +3,16 @@
   "label": "Invoice",
   "fields": [
     {
+      "name": "number",
+      "type": "string",
+      "display_value": true,
+      "order": 100
+    },
+    {
       "name": "customer",
       "type": "reference",
       "ref": "invoice_customer",
-      "display_value": true
+      "order": 200
     }
   ]
 }
