@@ -11,8 +11,8 @@
   "app": {
 	"name": "Anysols - Platform for Business applications",
 	"port": 8080,
-	"cookieName": "myCookie",
-	"cookieSecret": "boom",
-	"tokenExpiration": 7200000
+	"cookieName": "x-auth-token",
+	"cookieSecret": "anysolsindia",
+	"tokenExpiration": 86400000
   }
 }

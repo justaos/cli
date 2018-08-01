@@ -58,6 +58,14 @@
       "ref_menu": "5b15588ef362641220dfebc1"
     },
     {
+      "id": "5b5fcd7327e0d6a430000001",
+      "label": "Server Script / Business Rule",
+      "order": 750,
+      "type": "list",
+      "ref_collection": "p_server_script",
+      "ref_menu": "5b15588ef362641220dfebc1"
+    },
+    {
       "id": "5b52dc2fe71e4db033000001",
       "label": "UI Tools",
       "order": 800,

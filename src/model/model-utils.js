@@ -50,19 +50,20 @@ let ModelUtils = {
             if (collections.length) {
                 let promises = [];
                 collections.forEach((collection) => {
-
-                    let collectionDef = {
-                        'name': collection.name,
-                        'label': collection.label,
-                        'fields': []
-                    };
-                    let fieldDfd = Q.defer();
-                    promises.push(fieldDfd.promise);
-                    p_field.find({ref_collection: collection.name}).exec((err, fields) => {
-                        collectionDef.fields = fields.map(field => field.toObject());
-                        loadSchemaFn(collectionDef);
-                        fieldDfd.resolve();
-                    });
+                    if(collection.name !== 'p_collection' && collection.name !== 'p_field' && collection.name !== 'p_option'){
+                        let collectionDef = {
+                            'name': collection.name,
+                            'label': collection.label,
+                            'fields': []
+                        };
+                        let fieldDfd = Q.defer();
+                        promises.push(fieldDfd.promise);
+                        p_field.find({ref_collection: collection.name}).exec((err, fields) => {
+                            collectionDef.fields = fields.map(field => field.toObject());
+                            loadSchemaFn(collectionDef);
+                            fieldDfd.resolve();
+                        });
+                    }
                 });
                 Q.all(promises).then(dfd.resolve);
             }
@@ -76,13 +77,13 @@ let ModelUtils = {
 function loadSchemaFactory(conn, backlog) {
     return function loadSchema(schemaDefinition) {
         let schema = jsonToSchemaConverter(schemaDefinition);
-        logger.info('model', 'loading : ' + schemaDefinition.name);
         if (!schemaDefinition.extends) {
             if (!conn.models[schemaDefinition.name]) {
                 conn.model(schemaDefinition.name, schema, schemaDefinition.name);
                 conn.models[schemaDefinition.name].definition = schemaDefinition;
+                logger.info('model-utils (loadSchemaFactory) ::', ' loaded ' + schemaDefinition.name);
             } else {
-                logger.info('Model already loaded : ' + schemaDefinition.name);
+                logger.info('model-utils (loadSchemaFactory) ::', ' model already loaded : ' + schemaDefinition.name);
             }
         }
         else {

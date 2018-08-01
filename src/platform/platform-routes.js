@@ -1,5 +1,5 @@
 const authenticate = require('../config/authenticate');
-const PlatformService = require('./service/platform-service');
+const PlatformService = require('./service/platform.service');
 const formCtrl = require('./controller/form.ctrl');
 const storeCtrl = require('./controller/store.ctrl');
 

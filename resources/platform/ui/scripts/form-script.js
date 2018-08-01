@@ -3,6 +3,7 @@ var FormScript = /** @class */ (function () {
         this.callBacks = [];
         this.fields = fields;
         this.formType = formType;
+        this.form = document.getElementById('form');
         this.fieldMap = fields.reduce(function (map, field) {
             map[field.name] = field;
             map[field.name].element = $('#form-' + field.name);
@@ -76,12 +77,16 @@ var FormScript = /** @class */ (function () {
         return $('#form-' + fieldName);
     };
     FormScript.prototype.addErrorMessage = function (htmlMessage) {
-        $('#alert-zone').append('<div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">' +
+        $('#alert-zone').append('<div class="alert alert-danger alert-dismissible fade show mt-2 form-alert" role="alert">' +
             htmlMessage +
             '    <button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
             '        <span aria-hidden="true">&times;</span>' +
             '    </button>' +
             '    </div>');
+    };
+    FormScript.prototype.clearAlertMessages = function () {
+        // @ts-ignore
+        $('.form-alert').alert("close");
     };
     FormScript.prototype.setMandatory = function (fieldName, mandatory) {
         var element = this.getElement(fieldName);
@@ -141,6 +146,12 @@ var FormScript = /** @class */ (function () {
     };
     FormScript.prototype.onChange = function (callBack) {
         this.callBacks.push(callBack);
+    };
+    FormScript.prototype.submit = function () {
+        this.clearAlertMessages();
+        var evt = document.createEvent("Event");
+        evt.initEvent("submit", true, true);
+        this.form.dispatchEvent(evt);
     };
     return FormScript;
 }());

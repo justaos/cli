@@ -1,25 +1,3 @@
-function getCookie(name) {
-    var nameEQ = escape(name) + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ')
-            c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0)
-            return unescape(c.substring(nameEQ.length, c.length));
-    }
-    return null;
-}
-
-window.onfocus = function () {
-    if (!getCookie('x-authenticated')) {
-        if (window.parent)
-            window.parent.location.reload();
-        else
-            window.location.reload();
-    }
-};
-
 window.toast = swal.mixin({
     toast: true,
     position: 'top-end',

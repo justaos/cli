@@ -2,10 +2,12 @@ class FormScript {
     fields: any;
     fieldMap: any;
     formType: any;
+    form: any;
 
     constructor(fields, formType) {
         this.fields = fields;
         this.formType = formType;
+        this.form = document.getElementById('form');
         this.fieldMap = fields.reduce(function (map, field) {
             map[field.name] = field;
             map[field.name].element = $('#form-' + field.name);
@@ -82,7 +84,7 @@ class FormScript {
     }
 
     addErrorMessage(htmlMessage) {
-        $('#alert-zone').append('<div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">' +
+        $('#alert-zone').append('<div class="alert alert-danger alert-dismissible fade show mt-2 form-alert" role="alert">' +
             htmlMessage +
             '    <button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
             '        <span aria-hidden="true">&times;</span>' +
@@ -90,6 +92,10 @@ class FormScript {
             '    </div>');
     }
 
+    clearAlertMessages() {
+        // @ts-ignore
+        $('.form-alert').alert("close");
+    }
 
     setMandatory(fieldName, mandatory) {
         var element = this.getElement(fieldName);
@@ -156,6 +162,13 @@ class FormScript {
 
     onChange(callBack) {
         this.callBacks.push(callBack);
+    }
+
+    submit() {
+        this.clearAlertMessages();
+        var evt = document.createEvent("Event");
+        evt.initEvent("submit", true, true);
+        this.form.dispatchEvent(evt);
     }
 }
 

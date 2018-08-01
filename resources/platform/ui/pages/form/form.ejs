@@ -114,7 +114,7 @@ function getElementsForSection(sectionId) {
                         else
                             window.location.reload();
                     }, function (err) {
-                        alert(err.responseJSON.original.sqlMessage);
+                        fs.addErrorMessage(`${err.responseJSON.message} ( ${err.responseJSON.details.filepath} : ${err.responseJSON.details.line} : ${err.responseJSON.details.column} )`);
                     });
                 }
                 form.classList.add('was-validated');
@@ -122,9 +122,7 @@ function getElementsForSection(sectionId) {
             }, false);
 
             $('.submit-action').on('click', function () {
-                var evt = document.createEvent("Event");
-                evt.initEvent("submit", true, true);
-                form.dispatchEvent(evt);
+                fs.submit();
             });
 
         }, false);
@@ -202,7 +200,7 @@ function getElementsForSection(sectionId) {
     });
 
     // In your Javascript (external .js resource or <script> tag)
-    $(document).ready(function () {
+    $(function () {
 
         $('select.select-option').each(function () {
             $(this).selectpicker({noneSelectedText: 'Insert Placeholder text'});
@@ -230,7 +228,6 @@ function getElementsForSection(sectionId) {
                     emptyTitle: 'Search for item...'
                 }
             });
-            $('#form-parent').append("<option>test</option>")
         });
     });
 </script>

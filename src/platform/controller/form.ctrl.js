@@ -1,5 +1,5 @@
 'use strict';
-const PlatformService = require('../service/platform-service');
+const PlatformService = require('../service/platform.service');
 const moment = require('moment');
 const url = require('url');
 
@@ -103,15 +103,19 @@ class FormController {
         });
     }
 
-    formSubmit(req, res) {
+    formSubmit(req, res, next) {
         let ps = new PlatformService(req.user);
         if (!req.body.id) {
             ps.createRecord(req.params.collection, req.body).then(function () {
                 res.send();
+            }).catch(err => {
+                next(err);
             });
         } else {
             ps.updateRecord(req.params.collection, req.body).then(function () {
                 res.send();
+            }).catch(err => {
+                next(err);
             });
         }
     }

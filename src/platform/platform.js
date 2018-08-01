@@ -16,7 +16,7 @@ const constants = require('./platform-constants');
 
 let Model = ModelSessionFactory.createModelWithSession();
 
-const PlatformService = require('./service/platform-service');
+const PlatformService = require('./service/platform.service');
 const ViewService = require('./service/view.service');
 
 

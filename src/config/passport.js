@@ -6,6 +6,7 @@ const Q = require('q');
 
 const hashUtils = require('../utils/hash-utils');
 const Model = require('../model/index');
+const config = require('../config/config');
 
 const JWTStrategy = passportJWT.Strategy;
 
@@ -35,10 +36,10 @@ module.exports = function () {
             jwtFromRequest: function (req) {
                 let token = null;
                 if (req && req.cookies)
-                    token = req.cookies['x-auth-token'];
+                    token = req.cookies[config.app.cookieName];
                 return token;
             },
-            secretOrKey: process.env.JWT_SECRET || 'secret'
+            secretOrKey: config.app.cookieSecret || 'secret'
         },
         function (jwtPayload, cb) {
 

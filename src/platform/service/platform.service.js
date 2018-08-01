@@ -9,7 +9,7 @@ const vm = require('vm');
 const mongoose = require('mongoose');
 const js2xmlparser = require('js2xmlparser');
 
-const BaseService = require('./base-service');
+const BaseService = require('./base.service');
 
 const constants = require('../platform-constants');
 
@@ -145,9 +145,9 @@ class PlatformService extends BaseService {
         let defaultView = await
             this.getModel('p_view').skipPopulation().findOne({name: 'default_view'}).exec();
         let formView = await this.getModel('p_form').skipPopulation().findOne({
-                view: defaultView.id,
-                ref_collection: collectionName
-            }).exec();
+            view: defaultView.id,
+            ref_collection: collectionName
+        }).exec();
         let formSections = await
             this.getModel('p_form_section').skipPopulation().find({form: formView.id}, null, {
                 sort: {order: 1}
@@ -221,18 +221,15 @@ class PlatformService extends BaseService {
                 view: defaultView.id,
                 ref_collection: collectionName
             }).exec();
+
         let listElements = this.getModel('p_list_element').skipPopulation().find({list: listView.id}, null, {
             lean: true,
             sort: {order: 1}
         }).exec();
 
         let result = {collection: await collection, fields: await fields, records: await records};
-        await
-            this.populateOptions(result.fields, collectionName);
-        callBack(null, result.collection, result.records, result.fields, listView, await
-            listElements
-        )
-        ;
+        await this.populateOptions(result.fields, collectionName);
+        callBack(null, result.collection, result.records, result.fields, listView, await listElements);
     }
 
     populateOptions(fields, collectionName) {

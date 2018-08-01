@@ -14,8 +14,12 @@ function getField(fieldName) {
             return fields[i];
     }
 }
+
+var hasDisplayValue = false;
 listElements.forEach(function (listElement) {
     listElement.element = getField(listElement.element);
+    if (listElement.element.display_value)
+        hasDisplayValue = true;
 });
 %>
 <div class="list-page">
@@ -32,17 +36,26 @@ listElements.forEach(function (listElement) {
                 <table class="responsive-table table table-hover">
                     <thead>
                     <tr>
-                        <th>
+                        <th style="width: 1em;">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="select-all-checkbox">
                                 <label class="custom-control-label" for="select-all-checkbox"><span
                                             class="sr-only"></span></label>
                             </div>
                         </th>
+                        <% if(!hasDisplayValue){ %>
+                        <th style="width: 1em;">
+                            <i class="fas fa-link"></i>
+                        </th>
+                        <% } %>
                         <% listElements.forEach(function(listElement){ let field = listElement.element; %>
                         <th id="col-header-<%= field.name %>" class="col-header" data-col="<%= field.name %>"><span
                                     class="col-title"><%= field.label %></span> <i
-                                    class="fas sort-icon float-right d-none"></i></th>
+                                    class="fas sort-icon float-right d-none"></i>
+                            <% if(field.display_value) { %>
+                            <i class="fas fa-link"></i>
+                            <% } %>
+                        </th>
                         <% }); %>
                     </tr>
                     </thead>
@@ -58,6 +71,16 @@ listElements.forEach(function (listElement) {
                                             class="sr-only"></span></label>
                             </div>
                         </td>
+
+                        <% if(!hasDisplayValue){ %>
+                        <td>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </td>
+                        <% } %>
+
                         <% listElements.forEach(function(listElement){ let field = listElement.element; %>
 
                         <!-- date -->
@@ -70,7 +93,8 @@ listElements.forEach(function (listElement) {
                         <% } else if(field.type == 'reference' && field.ref){ %>
                         <td>
                             <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= redirectUrl %>" target="<%=targetWindow%>">
+                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
                                 <%= record[field.name][field.display_value_field.name] %>
                             </a>
                             <% } %>
@@ -87,7 +111,10 @@ listElements.forEach(function (listElement) {
                         <% } else { %>
                         <td>
                             <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>" target="<%=targetWindow%>"><%= record[field.name] %></a>
+                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
+                                <%= record[field.name] %>
+                            </a>
                             <% } else { %>
                             <%= record[field.name] %>
                             <% } %>
@@ -104,7 +131,6 @@ listElements.forEach(function (listElement) {
     </main>
 </div>
 <div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item cm-open" href="#" target="<%=targetWindow%>">Open</a>
     <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
     <a class="dropdown-item cm-export-json" href="#" target="_blank">Export JSON</a>
     <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
@@ -256,7 +282,6 @@ listElements.forEach(function (listElement) {
                 top: top,
                 left: left
             });
-            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
             $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
             $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
             $(".context-menu .cm-copy-id").on('click', function (e) {

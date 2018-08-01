@@ -1,5 +1,6 @@
 const DatabaseConnector = require('../config/database-connector');
 const Query = require('./query');
+const Q = require('q');
 
 let privateData = new WeakMap();
 
@@ -16,7 +17,7 @@ class Model {
     }
 
     getName() {
-        return privateData.get(this).modelName;
+        return privateData.get(this).collectionName;
     }
 
     getDefinition() {
@@ -29,6 +30,21 @@ class Model {
          */
         return null;
     }
+
+    getInterceptor() {
+        let that = this;
+        /*
+         * To be over written in ModelSession class.
+         */
+        return {
+            intercept: function (operation, when, docs) {
+                let dfd = Q.defer();
+                dfd.resolve(docs);
+                return dfd.promise;
+            }
+        };
+    }
+
 
     _populateReferenceFields(query, options) {
         if (!this.skipPopulate) {
@@ -53,6 +69,7 @@ class Model {
      * @return {Promise}
      */
     create(docs, options) {
+        let that = this;
         let user = this.getSessionUser();
         if (user) {
             if (Array.isArray(docs))
@@ -65,7 +82,22 @@ class Model {
                 docs.updated_by = user.id;
             }
         }
-        return getModel(this).create(docs, options);
+        let dfd = Q.defer();
+        that.getInterceptor().intercept('create', 'before', docs).then(function (docs) {
+            getModel(that).create(docs, options).then(function (docs) {
+                let args = arguments;
+                that.getInterceptor().intercept('create', 'after', docs).then(function () {
+                    dfd.resolve.apply(null, args);
+                }).catch(function (err) {
+                    dfd.reject(err);
+                });
+            }).catch(function (err) {
+                dfd.reject(err);
+            });
+        }).catch(function (err) {
+            dfd.reject(err);
+        });
+        return dfd.promise;
     }
 
     /**
