@@ -1,27 +1,25 @@
 const program = require('commander');
-/*
-const DatabaseConnector = require("./src/config/database-connector");
+const config = require('./src/config/config');
+
+const DatabaseConnector = require("anysols-model").DatabaseConnector;
 const mongoose = require('mongoose');
 
-const db = new DatabaseConnector();
+const db = new DatabaseConnector(config.db);
 db.connect().then(() => {
-    DatabaseConnector.setInstance(db);
     const Schema = new mongoose.Schema({
         fullname: {type: String, required: true},
-        username: { type: String, required: true },
+        username: {type: String, required: true},
         friends: [
-            { type: mongoose.Schema.ObjectId, ref: 'User' }
+            {type: mongoose.Schema.ObjectId, ref: 'User'}
         ]
     });
 
     db.getConnection().model('User', Schema);
 
-    db.getConnection().models['User'].
-    find({ }).
-    populate().exec(function(err, users){
-        console.log(users[1].friends[0])
-    })
-});*/
+    let User = db.getConnection().model('User');
+    console.log(new User().isNew);
+});
+/*
 
 
 program
@@ -33,4 +31,4 @@ program
     });
 
 
-program.parse(process.argv);
+program.parse(process.argv);*/

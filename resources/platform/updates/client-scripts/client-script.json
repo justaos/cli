@@ -4,7 +4,7 @@
     {
       "name": "Client Script Type Change",
       "short_description": "On Client Script type change, reset 'script' field",
-      "script": "function onChange(field, value) {\n    if (field.name === 'type') {\n        if (value === 'on_load') {\n            fs.setValue('script', \"function onLoad() {\\n // write your code here \\n}\");\n        } else if (value === 'on_change') {\n            fs.setValue('script', \"function onChange(field, value) {\\n // write your code here \\n}\");     \n        }\n    }\n}",
+      "script": "(function onLoad() {\n    // write your onLoad code here \n    return function onChange(field, value) {\n        if (field.name === 'type') {\n            if (value === 'on_load') {\n                fs.setValue('script', \"(function onLoad() {\\n    // write your code here \\n})();\");\n            } else if (value === 'on_change') {\n                fs.setValue('script', \"(function onLoad() {\\n    // write your onLoad code here \\n    return function onChange(field, value) {\\n        // write your onChange code here \\n    };\\n})();\");     \n            } else if (value === 'on_submit') {\n                fs.setValue('script', \"(function onLoad() {\\n    // write your onLoad code here \\n    return function onSubmit(resolve, reject) {\\n        resolve();\\n    };\\n})();\",);\n            }\n        }\n    };\n})();",
       "order": 100,
       "type": "on_change",
       "ref_collection": "p_client_script",
@@ -12,3 +12,4 @@
     }
   ]
 }
+

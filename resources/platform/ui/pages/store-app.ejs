@@ -1,48 +1,50 @@
 <%- include('../partials/header-navigation') %>
 <% if(application){ %>
 <script>
-  window.APPLICATION = <%- JSON.stringify(application || null) %>;
-  $(document).ready(function() {
-    let description = window.APPLICATION.description;
-    let $description = $('#app-description');
-    description = description.split('.');
-    $description.text(description[0] + '.');
-    if (description.length > 1) {
-      description.shift();
-      description = description.join('.');
-      $description.append('<span class="more-content d-none">' + description +
-          '</span> <a class="read-more" href="javascript:void(0)">more</a>');
-    }
-    $('.read-more').on('click', function() {
-      $(this).remove();
-      $('.more-content').removeClass('d-none');
-    });
-    $('#btn-install').on('click', function() {
-      let that = this;
-      $(that).prop('disabled', true);
-      $('.load-bar').removeClass('d-none');
-      var data = {sample: $('#sample-data').prop('checked')};
-      $.ajax({
-        url: '/store/' + window.APPLICATION.id + '/install',
-        type: 'post',
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function (data) {
-          swal({
-            title: 'Success',
-            text: 'Installation completed',
-            type: 'success',
-            button: 'Ok'
-          });
-        },
-        data: JSON.stringify(data)
-      }).always(function() {
-        $(that).prop('disabled', false);
-        $('.load-bar').addClass('d-none');
-      });
+    window.APPLICATION = <%- JSON.stringify(application.toObject() || null) %>;
+    $(document).ready(function () {
+        let description = window.APPLICATION.description;
+        let $description = $('#app-description');
+        description = description.split('.');
+        $description.text(description[0] + '.');
+        if (description.length > 1) {
+            description.shift();
+            description = description.join('.');
+            $description.append('<span class="more-content d-none">' + description +
+                '</span> <a class="read-more" href="javascript:void(0)">more</a>');
+        }
+        $('.read-more').on('click', function () {
+            $(this).remove();
+            $('.more-content').removeClass('d-none');
+        });
+        $('#btn-install').on('click', function () {
+            let that = this;
+            $(that).prop('disabled', true);
+            $('.load-bar').removeClass('d-none');
+            var data = {sample: $('#sample-data').prop('checked')};
+            $.ajax({
+                url: '/store/' + window.APPLICATION.id + '/install',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    swal({
+                        title: 'Success',
+                        text: 'Installation completed',
+                        type: 'success',
+                        button: 'Ok'
+                    }).then(function(){
+                        window.location.reload();
+                    });
+                },
+                data: JSON.stringify(data)
+            }).always(function () {
+                $(that).prop('disabled', false);
+                $('.load-bar').addClass('d-none');
+            });
 
+        });
     });
-  });
 </script>
 <main role="main">
 
@@ -53,7 +55,7 @@
                     <img src="/assets/img/app.png" class="img-fluid">
                 </div>
                 <div class="col-md-9">
-                    <h1 class="display-4"><%= application.name %></h1>
+                    <h1 class="display-4"><%= application.get('name') %></h1>
                     <p id="app-description"></p>
                     <div>
                         <div class="form-check">
@@ -65,11 +67,10 @@
                         <br/>
                     </div>
 
-                    <p>Current Version : <%= application.version %></p>
+                    <p>Current Version : <%= application.get('version') %></p>
 
-                    <% if(application.installed_version) { %>
-
-                    <p>Installed Version : <%= application.installed_version %></p>
+                    <% if(application.get('installed_version')) { %>
+                    <p>Installed Version : <%= application.get('installed_version') %></p>
                     <% } %>
 
                     <div class="load-bar d-none">

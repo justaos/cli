@@ -15,52 +15,49 @@ class StoreService extends BaseService {
     }
 
     getApplications(cb) {
-        let applicationModel = this.getModel('p_application');
-        applicationModel.find({}, null, {sort: {order: 1}}).exec(function (err, applications) {
-            if (err)
-                logger.error(err);
-            else cb(applications);
+        let Application = this._as.model('p_application');
+        Application.find({}, null, {sort: {order: 1}}).exec().then(function (applications) {
+            cb(applications);
         });
     }
 
     getApplicationById(id, cb) {
-        let applicationModel = this.getModel('p_application');
-        applicationModel.findById(id).exec(function (err, application) {
-            if (err)
-                logger.error(err);
-            else cb(application);
+        let Application = this._as.model('p_application');
+        Application.findById(id).exec().then(function (application) {
+            cb(application);
         });
     }
 
     installApplication(appId, loadSampleData, platform) {
+        logger.info('STARTED INSTALLING');
         let that = this;
         let dfd = Q.defer();
-        logger.info('STARTED INSTALLING');
-
-        let applicationModel = this.getModel('p_application');
-        applicationModel.findById(appId).exec((err, application) => {
-            let schemaDefinitions = StoreService.readModelsForPackage(application.package);
+        let Application = this._as.model('p_application');
+        Application.findById(appId).exec().then((application) => {
+            let pkg = application.get('package');
+            let schemaDefinitions = StoreService.readModelsForPackage(pkg);
             modelUtils.loadSchemasIntoStore(schemaDefinitions);
-            let promises = [];
 
-            let dataPromise = StoreService.loadDataForPackage(application.package);
-            promises.push(dataPromise);
+            let promises = [];
+            promises.push(StoreService.loadDataForPackage(pkg));
 
             if (loadSampleData)
-                StoreService.loadSampleDataForPackage(application.package);
+                StoreService.loadSampleDataForPackage(pkg);
 
             schemaDefinitions.forEach((def) => {
                 promises.push(platform.populateSysData(def));
             });
-            application.installed_version = application.version;
+
+            application.set('installed_version', application.get('version'));
             promises.push(application.save());
-            Q.all(promises).then(function () {
+
+            Q.all(promises).then(() => {
                 schemaDefinitions.forEach((def) => {
-                    new ViewService(null, def.name).createDefaultView();
+                    new ViewService(that.sessionUser, def.name).createDefaultView();
                 });
                 dfd.resolve();
             });
-            platform.serveStaticFiles(application.package);
+            platform.serveStaticFiles(pkg);
         });
         return dfd.promise;
     }

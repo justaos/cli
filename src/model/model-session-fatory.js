@@ -1,29 +1,13 @@
-const Model = require('./model');
+const Model = require('anysols-model').Model;
+const DatabaseConnector = require('anysols-model').DatabaseConnector;
 
 class ModelSessionFactory {
 
     static createModelWithSession(sessionUser) {
         class ModelSession extends Model {
-            constructor(modelName) {
-                super(modelName);
-            }
-
-            getSessionUser() {
-                return sessionUser;
-            }
-
-            getInterceptor() {
-                let that = this;
-                /*
-                 * To be over written in ModelSession class.
-                 */
-                return {
-                    intercept: function (operation, when, docs) {
-                        let dfd = Q.defer();
-                        dfd.resolve(docs);
-                        return dfd.promise;
-                    }
-                };
+            constructor(collectionName) {
+                let model = DatabaseConnector.getInstance().getConnection().model(collectionName);
+                super(model);
             }
         }
 

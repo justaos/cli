@@ -7,17 +7,18 @@ const logger = require('../config/logger');
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 
-const DatabaseConnector = require('../config/database-connector');
-const ModelSessionFactory = require('../model/model-session-fatory');
+const DatabaseConnector = require('anysols-model').DatabaseConnector;
 
 const modelUtils = require('../model/model-utils');
 const platformRoutes = require('./platform-routes');
 const constants = require('./platform-constants');
 
-let Model = ModelSessionFactory.createModelWithSession();
+const ModelBuilder = require('anysols-model').ModelBuilder;
+const model = new ModelBuilder().build();
 
 const PlatformService = require('./service/platform.service');
 const ViewService = require('./service/view.service');
+const config = require('./../config/config');
 
 
 class Platform {
@@ -28,9 +29,8 @@ class Platform {
 
     initialize() {
         let dfd = Q.defer();
-        const db = new DatabaseConnector();
+        const db = new DatabaseConnector(config.db);
         db.connect().then(() => {
-            DatabaseConnector.setInstance(db);
             dfd.resolve(db);
         }, dfd.reject);
         return dfd.promise;
@@ -56,22 +56,22 @@ class Platform {
 
     populateSysData(collectionDef) {
         let dfd = Q.defer();
-        let p_field = new Model(constants.model.FIELD);
-        let p_option = new Model(constants.model.OPTION);
+        let Field = model(constants.model.FIELD);
+        let Option = model(constants.model.OPTION);
         Platform.upsertCollection(collectionDef).then(function (collectionRecord) {
             let promises = [];
             collectionDef.fields.forEach(function (field) {
                 if (!field.label) {
                     field.label = stringUtils.underscoreToCamelCase(field.name);
                 }
-                field.ref_collection = collectionRecord.name;
+                field.ref_collection = collectionRecord.get('name');
 
-                promises.push(p_field.upsert({name: field.name, ref_collection: collectionRecord.name}, field).exec());
+                promises.push(Field.upsert({name: field.name, ref_collection: collectionRecord.get('name')}, field).exec());
                 if (field.type === 'option' && field.options)
                     field.options.forEach(function (optionRecord) {
-                        optionRecord.ref_collection = collectionRecord.name;
+                        optionRecord.ref_collection = collectionRecord.get('name');
                         optionRecord.field = field.name;
-                        promises.push(p_option.upsert({
+                        promises.push(Option.upsert({
                             ref_collection: optionRecord.ref_collection,
                             field: optionRecord.field,
                             label: optionRecord.label
@@ -86,8 +86,8 @@ class Platform {
 
 
     static upsertCollection(collectionDef) {
-        let p_collection = new Model(constants.model.COLLECTION);
-        return p_collection.upsert({name: collectionDef.name}, {
+        let Collection = model(constants.model.COLLECTION);
+        return Collection.upsert({name: collectionDef.name}, {
             name: collectionDef.name,
             label: collectionDef.label
         }).exec();
@@ -96,10 +96,10 @@ class Platform {
     scanApplications() {
         let that = this;
         logger.info('Scanning for apps');
-        let applicationModel = new Model(constants.model.APPLICATION);
+        let Application = model(constants.model.APPLICATION);
         glob.sync(constants.path.APPS + '/**/config.json').forEach(file => {
             let config = fileUtils.readJsonFileSync(file);
-            applicationModel.upsert({package: config.package}, config).exec();
+            Application.upsert({package: config.package}, config).exec();
             that.serveStaticFiles(config.package);
         });
     }

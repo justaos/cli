@@ -1,16 +1,11 @@
-const ModelSessionFactory = require('../../model/model-session-fatory');
+const AnysolsSession = require('../anysols-session');
 
 class BaseService {
 
     constructor(user) {
         this.sessionUser = user;
-        this.Model = ModelSessionFactory.createModelWithSession(user);
+        this._as = new AnysolsSession(user);
     }
-
-    getModel(modelName) {
-        return new this.Model(modelName);
-    }
-
 }
 
 module.exports = BaseService;

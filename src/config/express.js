@@ -68,13 +68,17 @@ module.exports = function (app, router) {
         logger.error(err.stack);
 
         function thisLine(err) {
-            const regex = /\((.*):(\d+):(\d+)\)$/
+            const regex = /\((.*):(\d+):(\d+)\)$/;
             const match = regex.exec(err.stack.split("\n")[2]);
-            return {
-                filepath: match[1],
-                line: match[2],
-                column: match[3]
-            };
+            if (match && match.length >= 3) {
+                return {
+                    filepath: match[1] ? match[1] : '',
+                    line: match[2] ? match[2] : '',
+                    column: match[3] ? match[3] : ''
+                }
+            }
+            return;
+
         }
 
         if (req.headers['content-type'] === 'application/json') {

@@ -1,8 +1,9 @@
 const Q = require('q');
 const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
-const Model = require('./index');
-const DatabaseConnector = require('../config/database-connector');
+const ModelBuilder = require('anysols-model').ModelBuilder;
+const model = new ModelBuilder().build();
+const DatabaseConnector = require('anysols-model').DatabaseConnector;
 const glob = require('glob');
 const fileUtils = require('../utils/file-utils');
 
@@ -16,13 +17,13 @@ let ModelUtils = {
     },
 
     loadData(data) {
-        let model = new Model(data.collection);
+        let Model = model(data.collection);
         if (data.record)
-            return model.upsert({_id: data.record.id}, data.record).exec();
+            return Model.upsert({_id: data.record.id}, data.record).exec();
         else if (data.records) {
             let promises = [];
             data.records.forEach(function (record) {
-                promises.push(model.upsert({_id: record.id}, record).exec());
+                promises.push(Model.upsert({_id: record.id}, record).exec());
             });
             return Q.all(promises);
         }
@@ -44,13 +45,14 @@ let ModelUtils = {
         let conn = DatabaseConnector.getInstance().getConnection();
         let backlog = {};
         let loadSchemaFn = loadSchemaFactory(conn, backlog);
-        let p_collection = new Model('p_collection');
-        let p_field = new Model('p_field');
-        p_collection.find({}).exec((err, collections) => {
+        let Collection = model('p_collection');
+        let Field = model('p_field');
+        Collection.find({}).exec().then((collections) => {
             if (collections.length) {
                 let promises = [];
-                collections.forEach((collection) => {
-                    if(collection.name !== 'p_collection' && collection.name !== 'p_field' && collection.name !== 'p_option'){
+                collections.forEach((collectionRecord) => {
+                    let collection = collectionRecord.toObject();
+                    if (collection.name !== 'p_collection' && collection.name !== 'p_field' && collection.name !== 'p_option') {
                         let collectionDef = {
                             'name': collection.name,
                             'label': collection.label,
@@ -58,7 +60,7 @@ let ModelUtils = {
                         };
                         let fieldDfd = Q.defer();
                         promises.push(fieldDfd.promise);
-                        p_field.find({ref_collection: collection.name}).exec((err, fields) => {
+                        Field.find({ref_collection: collection.name}).exec().then((fields) => {
                             collectionDef.fields = fields.map(field => field.toObject());
                             loadSchemaFn(collectionDef);
                             fieldDfd.resolve();

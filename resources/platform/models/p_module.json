@@ -40,8 +40,8 @@
         {
           "order": "200",
           "language": "en",
-          "label": "NEW",
-          "value": "new"
+          "label": "CREATE",
+          "value": "create"
         },
         {
           "order": "300",

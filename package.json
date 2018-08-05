@@ -1,8 +1,8 @@
 {
   "name": "anysols",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "description": "Sleek and powerful platform for faster and easier application development.",
-  "main": "app.js",
+  "main": "./src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "mongod": "bin\\mongod.cmd",
@@ -50,6 +50,7 @@
   },
   "homepage": "https://anysols.com",
   "dependencies": {
+    "anysols-model": "github:anysols/anysols-model#0.6.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "commander": "^2.16.0",
@@ -71,7 +72,7 @@
     "lodash": "^4.17.5",
     "memory-cache": "^0.2.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.0.15",
+    "mongoose": "^5.2.6",
     "mongoose-schema-extend": "^0.2.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",

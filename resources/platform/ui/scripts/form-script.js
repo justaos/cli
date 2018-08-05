@@ -1,6 +1,7 @@
 var FormScript = /** @class */ (function () {
     function FormScript(fields, formType) {
-        this.callBacks = [];
+        this.changeCallbacks = [];
+        this.submitCallbacks = [];
         this.fields = fields;
         this.formType = formType;
         this.form = document.getElementById('form');
@@ -140,18 +141,32 @@ var FormScript = /** @class */ (function () {
     };
     FormScript.prototype.fireCallBacks = function (field) {
         var that = this;
-        that.callBacks.forEach(function (callBack) {
+        that.changeCallbacks.forEach(function (callBack) {
             callBack(field, that.getValue(field.name));
         });
     };
     FormScript.prototype.onChange = function (callBack) {
-        this.callBacks.push(callBack);
+        this.changeCallbacks.push(callBack);
+    };
+    FormScript.prototype.onSubmit = function (callBack) {
+        this.submitCallbacks.push(callBack);
     };
     FormScript.prototype.submit = function () {
-        this.clearAlertMessages();
-        var evt = document.createEvent("Event");
-        evt.initEvent("submit", true, true);
-        this.form.dispatchEvent(evt);
+        var that = this;
+        var promises = [];
+        this.submitCallbacks.forEach(function (callBack) {
+            // @ts-ignore
+            promises.push(new Promise(function (resolve, reject) {
+                callBack(resolve, reject);
+            }));
+        });
+        // @ts-ignore
+        Promise.all(promises).then(function () {
+            that.clearAlertMessages();
+            var evt = document.createEvent("Event");
+            evt.initEvent("submit", true, true);
+            that.form.dispatchEvent(evt);
+        });
     };
     return FormScript;
 }());

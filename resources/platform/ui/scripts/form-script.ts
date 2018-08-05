@@ -153,22 +153,42 @@ class FormScript {
 
     fireCallBacks(field) {
         let that = this;
-        that.callBacks.forEach(function (callBack) {
+        that.changeCallbacks.forEach(function (callBack) {
             callBack(field, that.getValue(field.name));
         });
     }
 
-    callBacks: any = [];
+    changeCallbacks: any = [];
 
     onChange(callBack) {
-        this.callBacks.push(callBack);
+        this.changeCallbacks.push(callBack);
+    }
+
+    submitCallbacks: any = [];
+
+    onSubmit(callBack) {
+        this.submitCallbacks.push(callBack);
     }
 
     submit() {
-        this.clearAlertMessages();
-        var evt = document.createEvent("Event");
-        evt.initEvent("submit", true, true);
-        this.form.dispatchEvent(evt);
+        var that = this;
+        var promises = [];
+        this.submitCallbacks.forEach(function (callBack) {
+            // @ts-ignore
+            promises.push(new Promise((resolve, reject)=>{
+                callBack(resolve, reject);
+            }));
+
+        });
+
+        // @ts-ignore
+        Promise.all(promises).then(function(){
+            that.clearAlertMessages();
+            var evt = document.createEvent("Event");
+            evt.initEvent("submit", true, true);
+            that.form.dispatchEvent(evt);
+        });
+
     }
 }
 

@@ -68,7 +68,7 @@
     {
       "name": "script",
       "type": "script",
-      "default_value": "function execute() {\n // write your code here \n}",
+      "default_value": "(function execute(current, resolve, reject) {\n    // write your code here \n    resolve();\n})(current, resolve, reject);",
       "order": 1000
     }
   ]

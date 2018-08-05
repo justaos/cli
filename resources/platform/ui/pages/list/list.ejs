@@ -4,20 +4,21 @@
     redirectUrl = pageUrl.searchParams.get('target_url');
 } else {
     targetWindow = "_self";
-    redirectUrl = pageUrl.url;
+    redirectUrl = pageUrl.href;
 }
 
 function getField(fieldName) {
     let i;
     for (i = 0; i < fields.length; i++) {
-        if (fields[i].name === fieldName)
+        if (fields[i].get('name') === fieldName)
             return fields[i];
     }
 }
 
 var hasDisplayValue = false;
 listElements.forEach(function (listElement) {
-    listElement.element = getField(listElement.element);
+
+    listElement.element = getField(listElement.get('element'));
     if (listElement.element.display_value)
         hasDisplayValue = true;
 });
@@ -48,11 +49,12 @@ listElements.forEach(function (listElement) {
                             <i class="fas fa-link"></i>
                         </th>
                         <% } %>
-                        <% listElements.forEach(function(listElement){ let field = listElement.element; %>
-                        <th id="col-header-<%= field.name %>" class="col-header" data-col="<%= field.name %>"><span
-                                    class="col-title"><%= field.label %></span> <i
+                        <% listElements.forEach(function(listElement){ let field = listElement.element %>
+                        <th id="col-header-<%= field.get('name') %>" class="col-header"
+                            data-col="<%= field.get('name') %>"><span
+                                    class="col-title"><%= field.get('label') %></span> <i
                                     class="fas sort-icon float-right d-none"></i>
-                            <% if(field.display_value) { %>
+                            <% if(field.get('display_value')) { %>
                             <i class="fas fa-link"></i>
                             <% } %>
                         </th>
@@ -61,20 +63,20 @@ listElements.forEach(function (listElement) {
                     </thead>
                     <tbody>
                     <% data.forEach(function(record){ %>
-                    <tr class="record" data-id="<%= record.id %>">
+                    <tr class="record" data-id="<%= record.getID() %>">
                         <td>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input record-checkbox"
-                                       value="<%= record.id %>"
-                                       id="checkbox-<%= record.id %>">
-                                <label class="custom-control-label" for="checkbox-<%= record.id %>"><span
+                                       value="<%= record.getID() %>"
+                                       id="checkbox-<%= record.getID() %>">
+                                <label class="custom-control-label" for="checkbox-<%= record.getID() %>"><span
                                             class="sr-only"></span></label>
                             </div>
                         </td>
 
                         <% if(!hasDisplayValue){ %>
                         <td>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>"
+                            <a href="/p/<%= collection.name %>/edit/<%= record.getID() %>?redirect=<%= redirectUrl %>"
                                target="<%= targetWindow %>">
                                 <i class="fas fa-link"></i>
                             </a>
@@ -84,39 +86,39 @@ listElements.forEach(function (listElement) {
                         <% listElements.forEach(function(listElement){ let field = listElement.element; %>
 
                         <!-- date -->
-                        <% if(field.type == 'date'){ %>
+                        <% if(field.get('type') == 'date'){ %>
                         <td>
-                            <%= new moment(record[field.name]).format('DD-MMM-YYYY h:mm A') %>
+                            <%= new moment(record.get(field.get('name'))).format('DD-MMM-YYYY h:mm A') %>
                         </td>
 
                         <!-- reference -->
-                        <% } else if(field.type == 'reference' && field.ref){ %>
+                        <% } else if(field.get('type') == 'reference' && field.get('ref')){ %>
                         <td>
-                            <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>?redirect=<%= redirectUrl %>"
+                            <% if(record.get(field.get('name'))) { %>
+                            <a href="/p/<%= field.get('ref') %>/edit/<%= record.get(field.get('name'))['id'] %>?redirect=<%= redirectUrl %>"
                                target="<%= targetWindow %>">
-                                <%= record[field.name][field.display_value_field.name] %>
+                                <%= record.get(field.get('name'))[field.display_value_field.get('name')] %>
                             </a>
                             <% } %>
                         </td>
 
-                        <!-- reference -->
-                        <% } else if(field.type == 'option'){ %>
+                        <!-- option -->
+                        <% } else if(field.get('type') == 'option'){ %>
                         <td>
-                            <% if(field.options) field.options.forEach(function(option){ if(option.value === record[field.name]){ %>
+                            <% if(field.options) field.options.forEach(function(option){ if(option.value === record.get(field.get('name'))){ %>
                             <%= option.label %>
                             <% }}); %>
                         </td>
 
                         <% } else { %>
                         <td>
-                            <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>?redirect=<%= redirectUrl %>"
+                            <% if(field.get('display_value')) { %>
+                            <a href="/p/<%= collection.name %>/edit/<%= record.getID() %>?redirect=<%= redirectUrl %>"
                                target="<%= targetWindow %>">
-                                <%= record[field.name] %>
+                                <%= record.get(field.get('name')) %>
                             </a>
                             <% } else { %>
-                            <%= record[field.name] %>
+                            <%= record.get(field.get('name')) %>
                             <% } %>
                         </td>
                         <% }}); %>

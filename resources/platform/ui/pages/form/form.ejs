@@ -12,20 +12,20 @@
 function getField(fieldName) {
     let i;
     for (i = 0; i < fields.length; i++) {
-        if (fields[i].name === fieldName)
+        if (fields[i].get('name') === fieldName)
             return fields[i];
     }
 }
 function getFieldFromElement(field) {
     let i;
     for (i = 0; i < formElements.length; i++) {
-        if (formElements[i].element === field.name)
+        if (formElements[i].get('element') === field.get('name'))
             return field;
     }
 }
 
 function getElementsForSection(sectionId) {
-    return formElements.filter((formElement) => formElement.form_section == sectionId)
+    return formElements.filter((formElement) => formElement.get('form_section') == sectionId + '')
 }
 %>
 
@@ -39,10 +39,10 @@ function getElementsForSection(sectionId) {
             <form id="form" class="needs-validation mt-4" novalidate>
 
                 <% formSections.forEach(function(formSection){ %>
-                <section id="<%= formSection.id %>" class="row">
-                    <% getElementsForSection(formSection.id).forEach(function(formElement){
-                        let field = getField(formElement.element);
-                        let singleColumn = (formSection.column_type === 'single_column')
+                <section id="<%= formSection.getID() %>" class="row">
+                    <% getElementsForSection(formSection.getID()).forEach(function(formElement){
+                        let field = getField(formElement.get('element'));
+                        let singleColumn = (formSection.get('column_type') === 'single_column')
                         let vertical = (!singleColumn || field.type === 'script')
                     %>
                     <div class="<% if(singleColumn){ %>col-sm-12 <% } else { %>col-sm-6<% } %>">
@@ -67,7 +67,7 @@ function getElementsForSection(sectionId) {
                     <% relatedListElements.forEach(function(relatedListElement, index){ %>
                     <a class="nav-item nav-link <% if(!index){ %>active<% } %>" id="nav-home-tab" data-toggle="tab"
                        href="#nav-home" role="tab"
-                       aria-controls="nav-home" aria-selected="true"><%= relatedListElement.name %></a>
+                       aria-controls="nav-home" aria-selected="true"><%= relatedListElement.get('name') %></a>
                     <% }); %>
                 </div>
             </nav>
@@ -76,7 +76,7 @@ function getElementsForSection(sectionId) {
                 <div class="tab-pane fade <% if(!index){ %>show active<% } %>" id="nav-home" role="tabpanel"
                      aria-labelledby="nav-home-tab">
                     <iframe class="related-list-iframe"
-                            src='/p/<%= relatedListElement.ref_collection %>/list?&target_window=parent&target_url=<%= pageUrl.href %> <% if(relatedListElement.conditions){ %>&conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
+                            src='/p/<%= relatedListElement.get('ref_collection') %>/list?&target_window=parent&target_url=<%= pageUrl.href %> <% if(relatedListElement.get('conditions')){ %>&conditions=<%= JSON.stringify(relatedListElement.get('conditions')) %> <% } %>'></iframe>
                 </div>
                 <% }); %>
             </div>
@@ -97,8 +97,8 @@ function getElementsForSection(sectionId) {
                 if (form.checkValidity() === true) {
                     let formObj = fs.getRecord();
 
-                    <% if(item.id) { %>
-                    formObj.id = <%- JSON.stringify(item.id) %>;
+                    <% if(record.getID) { %>
+                    formObj.id = '<%= record.getID() %>';
                     <% } %>
 
                     var redirect = new URL(window.location.href).searchParams.get('redirect');
@@ -114,7 +114,11 @@ function getElementsForSection(sectionId) {
                         else
                             window.location.reload();
                     }, function (err) {
-                        fs.addErrorMessage(`${err.responseJSON.message} ( ${err.responseJSON.details.filepath} : ${err.responseJSON.details.line} : ${err.responseJSON.details.column} )`);
+                        let message = `${err.responseJSON.message}`;
+                        if (err.responseJSON.details) {
+                            message += `(${err.responseJSON.details.filepath} : ${err.responseJSON.details.line} : ${err.responseJSON.details.column} )`;
+                        }
+                        fs.addErrorMessage(message);
                     });
                 }
                 form.classList.add('was-validated');
@@ -146,7 +150,7 @@ function getElementsForSection(sectionId) {
 
 
     window.editors = [];
-    var item = <%- JSON.stringify(item) %>;
+    var item = <%- JSON.stringify(record) %>;
     var fields = <%- JSON.stringify(fields) %>;
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -234,17 +238,19 @@ function getElementsForSection(sectionId) {
 <script>
     var clientScripts = [];
 
-    var clientScript;
     <% clientScripts.forEach(function(clientScript){ %>
-
-    clientScript = <%- JSON.stringify(clientScript) %>;
-    clientScript.script = <%- clientScript.script %>;
-    clientScripts.push(clientScript);
-    if (clientScript.type === 'on_load')
-        clientScript.script();
-    else if (clientScript.type === 'on_change')
-        fs.onChange(function (field, value) {
-            clientScript.script(field, value);
-        });
+    {
+        let clientScript = <%- JSON.stringify(clientScript) %>;
+        clientScript.script = <%- clientScript.get('script') %>;
+        clientScripts.push(clientScript);
+        if (clientScript.type === 'on_change')
+            fs.onChange(function (field, value) {
+                clientScript.script(field, value);
+            });
+        else if (clientScript.type === 'on_submit')
+            fs.onSubmit(function (resolve, reject) {
+                clientScript.script(resolve, reject);
+            });
+    }
     <% }) %>
 </script>

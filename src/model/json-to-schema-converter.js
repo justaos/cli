@@ -40,7 +40,7 @@ function converter(collectionDef) {
         timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}
     });
     mongooseSchema.virtual('id').set(id => {
-        this._id = new ObjectId(id);
+        this._id = new mongoose.Types.ObjectId(id);
     });
     return mongooseSchema;
 }

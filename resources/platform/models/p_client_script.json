@@ -31,6 +31,12 @@
           "language": "en",
           "label": "onChange",
           "value": "on_change"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "onSubmit",
+          "value": "on_submit"
         }
       ]
     },
@@ -48,7 +54,7 @@
     {
       "name": "script",
       "type": "script",
-      "default_value": "function onLoad() {\n // write your code here \n}",
+      "default_value": "(function onLoad() {\n    // write your code here \n})();",
       "order": 600
     }
   ]

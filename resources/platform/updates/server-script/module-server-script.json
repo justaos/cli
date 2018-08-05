@@ -1,0 +1,18 @@
+{
+  "collection": "p_server_script",
+  "records": [
+    {
+      "short_description": "",
+      "create": false,
+      "delete": false,
+      "type": "after",
+      "script": "(function execute(current, resolve, reject) {\n    if (current.get('type') === 'list' || current.get('type') === 'create') {\n        current.set('url', `/p/${current.get('ref_collection')}/${current.get('type')}`);\n        current.save().then(function () {\n            resolve();\n        });\n    } else {\n        resolve();\n    }\n})(current, resolve, reject);",
+      "ref_collection": "p_module",
+      "read": true,
+      "update": false,
+      "name": "module url setter",
+      "order": null,
+      "id": "5b66864939912535f4a4de54"
+    }
+  ]
+}
