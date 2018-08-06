@@ -15,12 +15,8 @@ function getField(fieldName) {
     }
 }
 
-var hasDisplayValue = false;
 listElements.forEach(function (listElement) {
-
     listElement.element = getField(listElement.get('element'));
-    if (listElement.element.display_value)
-        hasDisplayValue = true;
 });
 %>
 <div class="list-page">
@@ -44,11 +40,9 @@ listElements.forEach(function (listElement) {
                                             class="sr-only"></span></label>
                             </div>
                         </th>
-                        <% if(!hasDisplayValue){ %>
                         <th style="width: 1em;">
                             <i class="fas fa-link"></i>
                         </th>
-                        <% } %>
                         <% listElements.forEach(function(listElement){ let field = listElement.element %>
                         <th id="col-header-<%= field.get('name') %>" class="col-header"
                             data-col="<%= field.get('name') %>"><span
@@ -74,14 +68,12 @@ listElements.forEach(function (listElement) {
                             </div>
                         </td>
 
-                        <% if(!hasDisplayValue){ %>
                         <td>
                             <a href="/p/<%= collection.name %>/edit/<%= record.getID() %>?redirect=<%= redirectUrl %>"
                                target="<%= targetWindow %>">
                                 <i class="fas fa-link"></i>
                             </a>
                         </td>
-                        <% } %>
 
                         <% listElements.forEach(function(listElement){ let field = listElement.element; %>
 

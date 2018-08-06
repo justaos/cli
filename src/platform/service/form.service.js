@@ -148,14 +148,18 @@ class FormService extends BaseService {
                     lean: true,
                     sort: {order: 1}
                 }).exec();
-            relatedListElements.forEach(function (relatedListElement) {
-                if (relatedListElement.filter) {
-                    let ctx = vm.createContext({current});
-                    vm.runInContext(relatedListElement.filter + ' var conditions = filter(current);', ctx);
-                    relatedListElement.conditions = ctx.conditions;
-                }
 
-            })
+            for (let i in relatedListElements) {
+                if (relatedListElements.hasOwnProperty(i)) {
+                    let relatedListElement = relatedListElements[i];
+                    if (relatedListElement.get('filter')) {
+                        relatedListElement.conditions = await (new Promise((resolve, reject) => {
+                            let ctx = vm.createContext({current, resolve, reject});
+                            vm.runInContext(relatedListElement.get('filter'), ctx);
+                        }));
+                    }
+                }
+            }
         }
         callBack(relatedList, relatedListElements);
     }
