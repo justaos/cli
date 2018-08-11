@@ -1,18 +1,15 @@
 const Q = require('q');
-const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
-const ModelBuilder = require('anysols-model').ModelBuilder;
+const {ModelBuilder, ModelService} = require('anysols-model');
 const model = new ModelBuilder().build();
-const DatabaseConnector = require('anysols-model').DatabaseConnector;
 const glob = require('glob');
 const fileUtils = require('../utils/file-utils');
 
 let ModelUtils = {
 
     loadSchemasIntoStore(defs) {
-        let conn = DatabaseConnector.getInstance().getConnection();
         let backlog = {};
-        let loadSchemaFn = loadSchemaFactory(conn, backlog);
+        let loadSchemaFn = loadSchemaFactory(backlog);
         defs.forEach(loadSchemaFn);
     },
 
@@ -42,9 +39,8 @@ let ModelUtils = {
 
     loadSchemasFromDB() {
         let dfd = Q.defer();
-        let conn = DatabaseConnector.getInstance().getConnection();
         let backlog = {};
-        let loadSchemaFn = loadSchemaFactory(conn, backlog);
+        let loadSchemaFn = loadSchemaFactory(backlog);
         let Collection = model('p_collection');
         let Field = model('p_field');
         Collection.find({}).exec().then((collections) => {
@@ -76,28 +72,14 @@ let ModelUtils = {
     }
 };
 
-function loadSchemaFactory(conn, backlog) {
+function loadSchemaFactory(backlog) {
+    let modelService = new ModelService();
     return function loadSchema(schemaDefinition) {
-        let schema = jsonToSchemaConverter(schemaDefinition);
-        if (!schemaDefinition.extends) {
-            if (!conn.models[schemaDefinition.name]) {
-                conn.model(schemaDefinition.name, schema, schemaDefinition.name);
-                conn.models[schemaDefinition.name].definition = schemaDefinition;
-                logger.info('model-utils (loadSchemaFactory) ::', ' loaded ' + schemaDefinition.name);
-            } else {
-                logger.info('model-utils (loadSchemaFactory) ::', ' model already loaded : ' + schemaDefinition.name);
-            }
-        }
-        else {
-            let extendsModel = conn.models[schemaDefinition.extends];
-            if (extendsModel) {
-                conn.model(schemaDefinition.extends).discriminator(schemaDefinition.name, schema);
-            } else {
-                if (!backlog[schemaDefinition.extends]) {
-                    backlog[schemaDefinition.extends] = [];
-                }
-                backlog[schemaDefinition.extends].push(schemaDefinition);
-            }
+        if (!modelService.isModelDefined(schemaDefinition.name)) {
+            modelService.define(schemaDefinition);
+            logger.info('model-utils (loadSchemaFactory) ::', ' loaded ' + schemaDefinition.name);
+        } else {
+            logger.info('model-utils (loadSchemaFactory) ::', ' model already loaded : ' + schemaDefinition.name);
         }
 
         if (backlog[schemaDefinition.name]) {

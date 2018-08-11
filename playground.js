@@ -1,4 +1,4 @@
-const program = require('commander');
+/*const program = require('commander');
 const config = require('./src/config/config');
 
 const DatabaseConnector = require("anysols-model").DatabaseConnector;
@@ -19,7 +19,7 @@ db.connect().then(() => {
     let User = db.getConnection().model('User');
     console.log(new User().isNew);
 });
-/*
+
 
 
 program
@@ -32,3 +32,8 @@ program
 
 
 program.parse(process.argv);*/
+var schedule = require('node-schedule');
+
+var j = schedule.scheduleJob(' */5 * * * * *', function(){
+    console.log('The answer to life, the universe, and everything!');
+});

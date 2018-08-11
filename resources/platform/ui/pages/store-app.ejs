@@ -2,7 +2,7 @@
 <% if(application){ %>
 <script>
     window.APPLICATION = <%- JSON.stringify(application.toObject() || null) %>;
-    $(document).ready(function () {
+    $(function () {
         let description = window.APPLICATION.description;
         let $description = $('#app-description');
         description = description.split('.');
@@ -33,7 +33,7 @@
                         text: 'Installation completed',
                         type: 'success',
                         button: 'Ok'
-                    }).then(function(){
+                    }).then(function () {
                         window.location.reload();
                     });
                 },

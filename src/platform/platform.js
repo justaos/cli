@@ -7,13 +7,12 @@ const logger = require('../config/logger');
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 
-const DatabaseConnector = require('anysols-model').DatabaseConnector;
+const {DatabaseService, ModelBuilder} = require('anysols-model');
 
 const modelUtils = require('../model/model-utils');
 const platformRoutes = require('./platform-routes');
 const constants = require('./platform-constants');
 
-const ModelBuilder = require('anysols-model').ModelBuilder;
 const model = new ModelBuilder().build();
 
 const PlatformService = require('./service/platform.service');
@@ -29,9 +28,12 @@ class Platform {
 
     initialize() {
         let dfd = Q.defer();
-        const db = new DatabaseConnector(config.db);
-        db.connect().then(() => {
-            dfd.resolve(db);
+        DatabaseService.connect(config.db).then(() => {
+            DatabaseService.databaseExists().then(() => {
+                dfd.resolve(true);
+            }, () => {
+                dfd.resolve(false)
+            });
         }, dfd.reject);
         return dfd.promise;
     }
@@ -66,7 +68,10 @@ class Platform {
                 }
                 field.ref_collection = collectionRecord.get('name');
 
-                promises.push(Field.upsert({name: field.name, ref_collection: collectionRecord.get('name')}, field).exec());
+                promises.push(Field.upsert({
+                    name: field.name,
+                    ref_collection: collectionRecord.get('name')
+                }, field).exec());
                 if (field.type === 'option' && field.options)
                     field.options.forEach(function (optionRecord) {
                         optionRecord.ref_collection = collectionRecord.get('name');
@@ -110,10 +115,9 @@ class Platform {
 
     cleanInstall() {
         let that = this;
-        let db = DatabaseConnector.getInstance();
         let dfd = Q.defer();
         logger.info('platform', 'clean installing...');
-        db.dropDatabase().then(function () {
+        DatabaseService.dropDatabase().then(function () {
             let platformSchemaDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.PATFORM_MODELS + '/**.json');
             let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
             platformSchemaDefinitions.forEach(function (modelDef) {

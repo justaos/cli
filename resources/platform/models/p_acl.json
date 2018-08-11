@@ -27,13 +27,13 @@
         {
           "order": "200",
           "language": "en",
-          "label": "Menu",
+          "label": "MENU",
           "value": "p_menu"
         },
         {
           "order": "300",
           "language": "en",
-          "label": "Module",
+          "label": "MODULE",
           "value": "p_module"
         }
       ],

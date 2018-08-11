@@ -5,7 +5,7 @@ const passportJWT = require('passport-jwt');
 const Q = require('q');
 
 const hashUtils = require('../utils/hash-utils');
-const ModelBuilder = require('anysols-model').ModelBuilder;
+const {ModelBuilder} = require('anysols-model');
 const model = new ModelBuilder().build();
 
 const config = require('../config/config');

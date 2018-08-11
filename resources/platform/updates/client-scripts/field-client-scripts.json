@@ -2,22 +2,22 @@
   "collection": "p_client_script",
   "records": [
     {
-      "type": "on_load",
+      "name": "Field type change",
+      "order": null,
       "ref_collection": "p_field",
-      "short_description": "Disable name, type  fields on edit form",
-      "script": "function onLoad() {\n    if (fs.isEditForm()) {\n        ['name', 'type'].forEach(function (fieldName){\n            fs.setMandatory(fieldName, false);\n            fs.setReadOnly(fieldName, true);\n        });\n    }\n}",
-      "name": "edit_form_disable",
-      "order": 100,
-      "id": "5b5eed469288f11d7445289c"
+      "script": "(function onLoad() {\n    function setDisplaysBasedOnType(value) {\n        fs.setDisplay('ref', value === 'reference');\n        fs.setDisplay('length', value === 'string');\n    }\n\n    setDisplaysBasedOnType(fs.getValue('type'));\n\n    return function onChange(field, value) {\n        // write your onChange code here \n        if (field.name === 'type') {\n            setDisplaysBasedOnType(value);\n        }\n    };\n})();",
+      "short_description": "",
+      "type": "on_change",
+      "id": "5b5efbc72d9bbf037472c6a6"
     },
     {
-      "name": "Field type change",
-      "short_description": "",
-      "script": "function onChange(field, value) {\n    if (field.name === 'type') {\n        setDisplaysBasedOnType(value);\n    }\n}\n\n// On load code\nfunction setDisplaysBasedOnType(value) {\n    fs.setDisplay('ref', value === 'reference');\n    fs.setDisplay('length', value === 'string');\n}\n\nsetDisplaysBasedOnType(fs.getValue('type'));",
-      "order": null,
-      "type": "on_change",
+      "name": "edit_form_disable",
+      "order": 100,
       "ref_collection": "p_field",
-      "id": "5b5efbc72d9bbf037472c6a6"
+      "script": "(function onLoad() {\n    if (fs.isEditForm()) {\n        ['name', 'type'].forEach(function (fieldName) {\n            fs.setMandatory(fieldName, false);\n            fs.setReadOnly(fieldName, true);\n        });\n    }\n})();",
+      "short_description": "Disable name, type  fields on edit form",
+      "type": "on_load",
+      "id": "5b5eed469288f11d7445289c"
     }
   ]
 }

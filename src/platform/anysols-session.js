@@ -1,5 +1,4 @@
-const ModelBuilder = require('anysols-model').ModelBuilder;
-const ModelInterceptorProvider = require('anysols-model').ModelInterceptorProvider;
+const {ModelBuilder, ModelInterceptorProvider} = require('anysols-model');
 const UserInterceptor = require('../model/interceptors/user.interceptor');
 const ServiceScriptInterceptor = require('../model/interceptors/server-script.interceptor');
 const js2xmlparser = require('js2xmlparser');

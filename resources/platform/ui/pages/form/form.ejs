@@ -222,9 +222,9 @@ function getElementsForSection(sectionId) {
                     dataType: 'json',
                     data: function () {
                         var params = {
-                            q: '{{{q}}}',
-                            field: fieldName
+                            q: '{{{q}}}'
                         };
+                        params.field = fieldName;
                         return params;
                     }
                 },

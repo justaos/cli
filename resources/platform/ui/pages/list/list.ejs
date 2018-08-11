@@ -40,7 +40,7 @@ listElements.forEach(function (listElement) {
                                             class="sr-only"></span></label>
                             </div>
                         </th>
-                        <th style="width: 1em;">
+                        <th style="width: 3em;">
                             <i class="fas fa-link"></i>
                         </th>
                         <% listElements.forEach(function(listElement){ let field = listElement.element %>
@@ -138,7 +138,7 @@ listElements.forEach(function (listElement) {
         })
     }
 
-    $(document).ready(function () {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         let $table = $('.responsive-table');
         let $thead = $table.find('thead');

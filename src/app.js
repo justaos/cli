@@ -12,23 +12,16 @@ require('./config/express')(app, router);
 
 let platform = new Platform(router);
 
-platform.initialize().then(function(db) {
-  if (clean) {
-    platform.cleanInstall().then(function() {
-      platform.boot();
-    });
-  } else {
-    db.checkDatabase().then(function(){
-      platform.boot();
-    }, function(){
-      platform.cleanInstall().then(function() {
+platform.initialize().then(function (dbExists) {
+    if (clean || !dbExists) {
+        platform.cleanInstall().then(function () {
+            platform.boot();
+        });
+    } else if (dbExists) {
         platform.boot();
-        logger.info('Scanning for apps');
-      });
-    });
-  }
-}, function() {
-  process.exit(0);
+    }
+}, function () {
+    process.exit(0);
 });
 
 passportConfig();
@@ -36,7 +29,7 @@ router.use('/auth', require('./routes/auth'));
 platform.appStarting = false;
 
 router.get('/editor', (req, res, next) => {
-  res.render('editor');
+    res.render('editor');
 });
 
 //start app on mentioned port
@@ -45,5 +38,5 @@ app.listen(config.app.port);
 logger.info('listening on port ' + config.app.port);
 
 process.on('unhandledRejection', function onError(err) {
-  console.error(err);
+    console.error(err);
 });

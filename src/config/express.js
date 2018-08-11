@@ -77,8 +77,6 @@ module.exports = function (app, router) {
                     column: match[3] ? match[3] : ''
                 }
             }
-            return;
-
         }
 
         if (req.headers['content-type'] === 'application/json') {
