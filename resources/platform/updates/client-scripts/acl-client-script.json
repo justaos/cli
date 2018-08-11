@@ -1,14 +1,14 @@
 {
-  "collection": "p_client_script",
-  "records": [
-    {
-      "name": "ACL Type",
-      "type": "on_change",
-      "ref_collection": "p_acl",
-      "script": "(function onLoad() {\n    function setDisplaysBasedOnType(value) {\n        fs.setDisplay('ref_collection', value === 'record');\n    }\n\n    setDisplaysBasedOnType(fs.getValue('type'));\n\n    return function onChange(field, value) {\n        // write your onChange code here \n        if (field.name === 'type') {\n            setDisplaysBasedOnType(value);\n        }\n    };\n})();",
-      "short_description": "",
-      "order": null,
-      "id": "5b6884dec3e11d1884dc0edd"
-    }
-  ]
+    "collection": "p_client_script",
+    "records": [
+        {
+            "name": "ACL Type",
+            "type": "on_change",
+            "ref_collection": "p_acl",
+            "script": "(function onLoad() {\n    function setDisplaysBasedOnType(value) {\n        fs.setDisplay('ref_collection', value === 'record');\n    }\n\n    setDisplaysBasedOnType(fs.getValue('type'));\n\n    return function onChange(field, value) {\n        // write your onChange code here \n        if (field.name === 'type') {\n            setDisplaysBasedOnType(value);\n        }\n    };\n})();",
+            "short_description": "",
+            "order": null,
+            "id": "5b6884dec3e11d1884dc0edd"
+        }
+    ]
 }

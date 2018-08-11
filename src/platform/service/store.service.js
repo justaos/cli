@@ -14,6 +14,24 @@ class StoreService extends BaseService {
         super(user);
     }
 
+    /** helper functions **/
+    static readModelsForPackage(pkg) {
+        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.APPS + '/' + pkg + '/models/**.json');
+        let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
+        modelDefinitions.forEach(function (modelDef) {
+            modelDef.fields = modelDef.fields.concat(defaultFields);
+        });
+        return modelDefinitions;
+    }
+
+    static loadDataForPackage(pkg) {
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**/*.json');
+    }
+
+    static loadSampleDataForPackage(pkg) {
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**/*.json');
+    }
+
     getApplications(cb) {
         let Application = this._as.model('p_application');
         Application.find({}, null, {sort: {order: 1}}).exec().then(function (applications) {
@@ -60,24 +78,6 @@ class StoreService extends BaseService {
             platform.serveStaticFiles(pkg);
         });
         return dfd.promise;
-    }
-
-    /** helper functions **/
-    static readModelsForPackage(pkg) {
-        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.APPS + '/' + pkg + '/models/**.json');
-        let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
-        modelDefinitions.forEach(function (modelDef) {
-            modelDef.fields = modelDef.fields.concat(defaultFields);
-        });
-        return modelDefinitions;
-    }
-
-    static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**/*.json');
-    }
-
-    static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**/*.json');
     }
 }
 

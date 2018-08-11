@@ -1,22 +1,22 @@
 {
-  "name": "invoice_product",
-  "label": "Product",
-  "fields": [
-    {
-      "name": "name",
-      "type": "string",
-      "display_value": true,
-      "order": 100
-    },
-    {
-      "name": "price",
-      "type": "integer",
-      "order": 200
-    },
-    {
-      "name": "vat",
-      "type": "integer",
-      "order": 300
-    }
-  ]
+    "name": "invoice_product",
+    "label": "Product",
+    "fields": [
+        {
+            "name": "name",
+            "type": "string",
+            "display_value": true,
+            "order": 100
+        },
+        {
+            "name": "price",
+            "type": "integer",
+            "order": 200
+        },
+        {
+            "name": "vat",
+            "type": "integer",
+            "order": 300
+        }
+    ]
 }

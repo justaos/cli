@@ -1,10 +1,10 @@
 {
-  "collection": "p_view",
-  "records": [
-    {
-      "id": "5b52ce5a0ced1bf429000001",
-      "label": "Default View",
-      "name": "default_view"
-    }
-  ]
+    "collection": "p_view",
+    "records": [
+        {
+            "id": "5b52ce5a0ced1bf429000001",
+            "label": "Default View",
+            "name": "default_view"
+        }
+    ]
 }

@@ -1,10 +1,10 @@
 {
-  "collection": "p_acl_role",
-  "records": [
-    {
-      "role": "5b31d9d67454bd08144f520b",
-      "acl": "5b50cefac995e81be859d2a1",
-      "id": "5b50cf6ec995e81be859d2a2"
-    }
-  ]
+    "collection": "p_acl_role",
+    "records": [
+        {
+            "role": "5b31d9d67454bd08144f520b",
+            "acl": "5b50cefac995e81be859d2a1",
+            "id": "5b50cf6ec995e81be859d2a2"
+        }
+    ]
 }

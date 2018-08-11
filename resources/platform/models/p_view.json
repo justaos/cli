@@ -1,15 +1,15 @@
 {
-	"name": "p_view",
-	"label": "View",
-	"fields": [
-		{
-			"name": "name",
-			"type": "string"
-		},
-		{
-			"name": "label",
-			"type": "string",
-			"display_value": true
-		}
-	]
+    "name": "p_view",
+    "label": "View",
+    "fields": [
+        {
+            "name": "name",
+            "type": "string"
+        },
+        {
+            "name": "label",
+            "type": "string",
+            "display_value": true
+        }
+    ]
 }

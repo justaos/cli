@@ -3,6 +3,8 @@ class FormScript {
     fieldMap: any;
     formType: any;
     form: any;
+    changeCallbacks: any = [];
+    submitCallbacks: any = [];
 
     constructor(fields, formType) {
         this.fields = fields;
@@ -50,7 +52,6 @@ class FormScript {
             return '';
         }
     }
-
 
     setValue(fieldName, value) {
         var field = this.fieldMap[fieldName];
@@ -110,7 +111,6 @@ class FormScript {
         }
     }
 
-
     isMandatory(fieldName) {
         var element = this.getElement(fieldName);
         if (element.length) {
@@ -127,7 +127,6 @@ class FormScript {
                 element.prop('disabled', readOnly);
         }
     }
-
 
     getRecord() {
         let that = this;
@@ -158,13 +157,9 @@ class FormScript {
         });
     }
 
-    changeCallbacks: any = [];
-
     onChange(callBack) {
         this.changeCallbacks.push(callBack);
     }
-
-    submitCallbacks: any = [];
 
     onSubmit(callBack) {
         this.submitCallbacks.push(callBack);
@@ -175,14 +170,14 @@ class FormScript {
         var promises = [];
         this.submitCallbacks.forEach(function (callBack) {
             // @ts-ignore
-            promises.push(new Promise((resolve, reject)=>{
+            promises.push(new Promise((resolve, reject) => {
                 callBack(resolve, reject);
             }));
 
         });
 
         // @ts-ignore
-        Promise.all(promises).then(function(){
+        Promise.all(promises).then(function () {
             that.clearAlertMessages();
             var evt = document.createEvent("Event");
             evt.initEvent("submit", true, true);
@@ -193,6 +188,8 @@ class FormScript {
 }
 
 // @ts-ignore
+let $ = jQuery;
+
 ((window, $) => {
 
     // @ts-ignore

@@ -1,29 +1,29 @@
 {
-  "collection": "p_related_list_element",
-  "records": [
-    {
-      "name": "Fields",
-      "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        ref_collection: current.get('name')\r\n    });\r\n})(current, resolve, reject)",
-      "ref_collection": "p_field",
-      "order": 100,
-      "related_list": "5b5f27ad19a901298473fb51",
-      "id": "5b67c4e29bd3e2c82f000001"
-    },
-    {
-      "name": "Forms",
-      "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        view: current.getID()\r\n    });\r\n})(current, resolve, reject)",
-      "ref_collection": "p_form",
-      "order": 100,
-      "related_list": "5b67c5ff47d5e8b80b000001",
-      "id": "5b67be037a87a63620d252bc"
-    },
-    {
-      "name": "Lists",
-      "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        view: current.getID()\r\n    });\r\n})(current, resolve, reject)",
-      "ref_collection": "p_list",
-      "order": 200,
-      "related_list": "5b67c5ff47d5e8b80b000001",
-      "id": "5b67be567a87a63620d25422"
-    }
-  ]
+    "collection": "p_related_list_element",
+    "records": [
+        {
+            "name": "Fields",
+            "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        ref_collection: current.get('name')\r\n    });\r\n})(current, resolve, reject)",
+            "ref_collection": "p_field",
+            "order": 100,
+            "related_list": "5b5f27ad19a901298473fb51",
+            "id": "5b67c4e29bd3e2c82f000001"
+        },
+        {
+            "name": "Forms",
+            "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        view: current.getID()\r\n    });\r\n})(current, resolve, reject)",
+            "ref_collection": "p_form",
+            "order": 100,
+            "related_list": "5b67c5ff47d5e8b80b000001",
+            "id": "5b67be037a87a63620d252bc"
+        },
+        {
+            "name": "Lists",
+            "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        view: current.getID()\r\n    });\r\n})(current, resolve, reject)",
+            "ref_collection": "p_list",
+            "order": 200,
+            "related_list": "5b67c5ff47d5e8b80b000001",
+            "id": "5b67be567a87a63620d25422"
+        }
+    ]
 }

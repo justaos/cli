@@ -1,124 +1,124 @@
 {
-  "name": "p_field",
-  "label": "Field",
-  "fields": [
-    {
-      "name": "label",
-      "type": "string",
-      "display_value": true,
-      "order": 100
-    },
-    {
-      "name": "name",
-      "type": "string",
-      "order": 200,
-      "mandatory": true
-    },
-    {
-      "name": "type",
-      "type": "option",
-      "default_value": "string",
-      "options": [
+    "name": "p_field",
+    "label": "Field",
+    "fields": [
         {
-          "order": "100",
-          "language": "en",
-          "label": "String",
-          "value": "string"
+            "name": "label",
+            "type": "string",
+            "display_value": true,
+            "order": 100
         },
         {
-          "order": "200",
-          "language": "en",
-          "label": "Integer",
-          "value": "integer"
+            "name": "name",
+            "type": "string",
+            "order": 200,
+            "mandatory": true
         },
         {
-          "order": "400",
-          "language": "en",
-          "label": "Boolean",
-          "value": "boolean"
+            "name": "type",
+            "type": "option",
+            "default_value": "string",
+            "options": [
+                {
+                    "order": "100",
+                    "language": "en",
+                    "label": "String",
+                    "value": "string"
+                },
+                {
+                    "order": "200",
+                    "language": "en",
+                    "label": "Integer",
+                    "value": "integer"
+                },
+                {
+                    "order": "400",
+                    "language": "en",
+                    "label": "Boolean",
+                    "value": "boolean"
+                },
+                {
+                    "order": "500",
+                    "language": "en",
+                    "label": "Date",
+                    "value": "date"
+                },
+                {
+                    "order": "600",
+                    "language": "en",
+                    "label": "Script",
+                    "value": "script"
+                },
+                {
+                    "order": "700",
+                    "language": "en",
+                    "label": "Option",
+                    "value": "option"
+                },
+                {
+                    "order": "800",
+                    "language": "en",
+                    "label": "Reference",
+                    "value": "reference"
+                },
+                {
+                    "order": "900",
+                    "language": "en",
+                    "label": "Collection",
+                    "value": "collection"
+                }
+            ],
+            "order": 300
         },
         {
-          "order": "500",
-          "language": "en",
-          "label": "Date",
-          "value": "date"
+            "label": "Collection",
+            "name": "ref_collection",
+            "type": "collection",
+            "order": 400
         },
         {
-          "order": "600",
-          "language": "en",
-          "label": "Script",
-          "value": "script"
+            "name": "display_value",
+            "type": "boolean",
+            "order": 500
         },
         {
-          "order": "700",
-          "language": "en",
-          "label": "Option",
-          "value": "option"
+            "label": "Reference",
+            "name": "ref",
+            "type": "collection",
+            "order": 600
         },
         {
-          "order": "800",
-          "language": "en",
-          "label": "Reference",
-          "value": "reference"
+            "name": "length",
+            "type": "integer",
+            "order": 700
         },
         {
-          "order": "900",
-          "language": "en",
-          "label": "Collection",
-          "value": "collection"
+            "name": "default_value",
+            "type": "string",
+            "length": 1000,
+            "order": 800
+        },
+        {
+            "name": "read_only",
+            "type": "boolean",
+            "hint": "This is applied on form element, not on database",
+            "order": 900
+        },
+        {
+            "name": "mandatory",
+            "type": "boolean",
+            "hint": "This is applied on form element, not on database",
+            "order": 1000
+        },
+        {
+            "name": "hint",
+            "type": "string",
+            "order": 1100
+        },
+        {
+            "name": "order",
+            "type": "integer",
+            "order": 1200
         }
-      ],
-      "order": 300
-    },
-    {
-      "label": "Collection",
-      "name": "ref_collection",
-      "type": "collection",
-      "order": 400
-    },
-    {
-      "name": "display_value",
-      "type": "boolean",
-      "order": 500
-    },
-    {
-      "label": "Reference",
-      "name": "ref",
-      "type": "collection",
-      "order": 600
-    },
-    {
-      "name": "length",
-      "type": "integer",
-      "order": 700
-    },
-    {
-      "name": "default_value",
-      "type": "string",
-      "length": 1000,
-      "order": 800
-    },
-    {
-      "name": "read_only",
-      "type": "boolean",
-      "hint": "This is applied on form element, not on database",
-      "order": 900
-    },
-    {
-      "name": "mandatory",
-      "type": "boolean",
-      "hint": "This is applied on form element, not on database",
-      "order": 1000
-    },
-    {
-      "name": "hint",
-      "type": "string",
-      "order": 1100
-    },
-    {
-      "name": "order",
-      "type": "integer",
-      "order": 1200
-    }
-  ]
+    ]
 }

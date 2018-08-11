@@ -26,6 +26,14 @@ class Platform {
         this.router = router;
     }
 
+    static upsertCollection(collectionDef) {
+        let Collection = model(constants.model.COLLECTION);
+        return Collection.upsert({name: collectionDef.name}, {
+            name: collectionDef.name,
+            label: collectionDef.label
+        }).exec();
+    }
+
     initialize() {
         let dfd = Q.defer();
         DatabaseService.connect(config.db).then(() => {
@@ -54,7 +62,6 @@ class Platform {
             logger.logBox();
         });
     }
-
 
     populateSysData(collectionDef) {
         let dfd = Q.defer();
@@ -87,15 +94,6 @@ class Platform {
             Q.all(promises).then(dfd.resolve);
         });
         return dfd.promise;
-    }
-
-
-    static upsertCollection(collectionDef) {
-        let Collection = model(constants.model.COLLECTION);
-        return Collection.upsert({name: collectionDef.name}, {
-            name: collectionDef.name,
-            label: collectionDef.label
-        }).exec();
     }
 
     scanApplications() {

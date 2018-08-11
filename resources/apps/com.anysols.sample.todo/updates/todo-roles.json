@@ -1,10 +1,10 @@
 {
-  "collection": "p_role",
-  "records": [
-    {
-      "id": "5b4b87845152905835000001",
-      "name": "todo_user",
-      "label": "Todo User"
-    }
-  ]
+    "collection": "p_role",
+    "records": [
+        {
+            "id": "5b4b87845152905835000001",
+            "name": "todo_user",
+            "label": "Todo User"
+        }
+    ]
 }

@@ -1,68 +1,68 @@
 {
-  "name": "p_module",
-  "label": "Module",
-  "fields": [
-    {
-      "name": "label",
-      "type": "string",
-      "display_value": true
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "label": "Parent",
-      "name": "parent",
-      "type": "reference",
-      "ref": "p_module"
-    },
-    {
-      "label": "Menu",
-      "name": "ref_menu",
-      "type": "reference",
-      "ref": "p_menu"
-    },
-    {
-      "name": "url",
-      "type": "string"
-    },
-    {
-      "name": "type",
-      "type": "option",
-      "options": [
+    "name": "p_module",
+    "label": "Module",
+    "fields": [
         {
-          "order": "100",
-          "language": "en",
-          "label": "LIST",
-          "value": "list"
+            "name": "label",
+            "type": "string",
+            "display_value": true
         },
         {
-          "order": "200",
-          "language": "en",
-          "label": "CREATE",
-          "value": "create"
+            "name": "name",
+            "type": "string"
         },
         {
-          "order": "300",
-          "language": "en",
-          "label": "URL",
-          "value": "url"
+            "label": "Parent",
+            "name": "parent",
+            "type": "reference",
+            "ref": "p_module"
+        },
+        {
+            "label": "Menu",
+            "name": "ref_menu",
+            "type": "reference",
+            "ref": "p_menu"
+        },
+        {
+            "name": "url",
+            "type": "string"
+        },
+        {
+            "name": "type",
+            "type": "option",
+            "options": [
+                {
+                    "order": "100",
+                    "language": "en",
+                    "label": "LIST",
+                    "value": "list"
+                },
+                {
+                    "order": "200",
+                    "language": "en",
+                    "label": "CREATE",
+                    "value": "create"
+                },
+                {
+                    "order": "300",
+                    "language": "en",
+                    "label": "URL",
+                    "value": "url"
+                }
+            ]
+        },
+        {
+            "label": "Collection",
+            "name": "ref_collection",
+            "type": "collection"
+        },
+        {
+            "name": "order",
+            "type": "integer"
+        },
+        {
+            "name": "hidden",
+            "type": "boolean"
         }
-      ]
-    },
-    {
-      "label": "Collection",
-      "name": "ref_collection",
-      "type": "collection"
-    },
-    {
-      "name": "order",
-      "type": "integer"
-    },
-    {
-      "name": "hidden",
-      "type": "boolean"
-    }
-  ]
+    ]
 }

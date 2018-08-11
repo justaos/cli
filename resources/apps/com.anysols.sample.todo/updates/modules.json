@@ -1,31 +1,31 @@
 {
-  "collection": "p_module",
-  "records": [
-    {
-      "label": "Create New",
-      "order": 100,
-      "ref_collection": "todo",
-      "ref_menu": "5b16e0bfe02440982a000001",
-      "type": "create",
-      "url": "/p/todo/create",
-      "id": "5b16e0cc9626929434000001"
-    },
-    {
-      "label": "List",
-      "order": 200,
-      "ref_collection": "todo",
-      "ref_menu": "5b16e0bfe02440982a000001",
-      "type": "list",
-      "url": "/p/todo/list",
-      "id": "5b16e1706254396839000001"
-    },
-    {
-      "label": "Custom",
-      "order": 300,
-      "ref_menu": "5b16e0bfe02440982a000001",
-      "type": "url",
-      "url": "/ui/com.anysols.sample.todo/",
-      "id": "5b21dfb62df4c91b38d3f321"
-    }
-  ]
+    "collection": "p_module",
+    "records": [
+        {
+            "label": "Create New",
+            "order": 100,
+            "ref_collection": "todo",
+            "ref_menu": "5b16e0bfe02440982a000001",
+            "type": "create",
+            "url": "/p/todo/create",
+            "id": "5b16e0cc9626929434000001"
+        },
+        {
+            "label": "List",
+            "order": 200,
+            "ref_collection": "todo",
+            "ref_menu": "5b16e0bfe02440982a000001",
+            "type": "list",
+            "url": "/p/todo/list",
+            "id": "5b16e1706254396839000001"
+        },
+        {
+            "label": "Custom",
+            "order": 300,
+            "ref_menu": "5b16e0bfe02440982a000001",
+            "type": "url",
+            "url": "/ui/com.anysols.sample.todo/",
+            "id": "5b21dfb62df4c91b38d3f321"
+        }
+    ]
 }

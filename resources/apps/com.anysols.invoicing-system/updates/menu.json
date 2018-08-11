@@ -1,8 +1,8 @@
 {
-  "collection": "p_menu",
-  "record": {
-    "id": "5b4643f45383c8b831000001",
-    "label": "Invoicing Application",
-    "description": "Speed Up Your Invoice Processing with Invoice Management"
-  }
+    "collection": "p_menu",
+    "record": {
+        "id": "5b4643f45383c8b831000001",
+        "label": "Invoicing Application",
+        "description": "Speed Up Your Invoice Processing with Invoice Management"
+    }
 }
