@@ -9,7 +9,7 @@ const fileUtils = require('../utils/file-utils');
 
 const {DatabaseService, ModelBuilder} = require('anysols-model');
 
-const modelUtils = require('../model/model-utils');
+const modelUtils = require('./model-utils');
 const platformRoutes = require('./platform-routes');
 const constants = require('./platform-constants');
 

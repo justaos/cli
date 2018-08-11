@@ -1,0 +1,19 @@
+{
+  "name": "p_job",
+  "label": "Job",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "cron",
+      "type": "string"
+    },
+    {
+      "name": "script",
+      "type": "script"
+    }
+  ]
+}

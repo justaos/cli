@@ -1,27 +1,25 @@
 const config = require('../config/config');
 
-const constants = {};
-
 /**
  * Platform model names
  */
-constants.model = {};
-constants.model.ACL = 'p_acl';
-constants.model.APPLICATION = 'p_application';
-constants.model.COLLECTION = 'p_collection';
-constants.model.FIELD = 'p_field';
-constants.model.OPTION = 'p_option';
+let model = {};
+model.ACL = 'p_acl';
+model.APPLICATION = 'p_application';
+model.COLLECTION = 'p_collection';
+model.FIELD = 'p_field';
+model.OPTION = 'p_option';
 
 
-constants.path = {};
-constants.path.APPS = config.cwd + '/resources/apps';
+let path = {};
+path.APPS = config.cwd + '/resources/apps';
 
-constants.path.PATFORM_RESOUCES = config.root + '/resources/platform';
-constants.path.DEFAULT_FIELDS = constants.path.PATFORM_RESOUCES + '/default-fields.json';
-constants.path.PATFORM_MODELS = constants.path.PATFORM_RESOUCES + '/models';
+path.PATFORM_RESOUCES = config.root + '/resources/platform';
+path.DEFAULT_FIELDS = path.PATFORM_RESOUCES + '/default-fields.json';
+path.PATFORM_MODELS = path.PATFORM_RESOUCES + '/models';
 
-constants.path.P_COLLECTION_MODEL = constants.path.PATFORM_MODELS + '/' + constants.model.COLLECTION + '.json';
-constants.path.P_FIELD_MODEL = constants.path.PATFORM_MODELS + '/' + constants.model.FIELD + '.json';
-constants.path.P_OPTION_MODEL = constants.path.PATFORM_MODELS + '/' + constants.model.OPTION + '.json';
+path.P_COLLECTION_MODEL = path.PATFORM_MODELS + '/' + model.COLLECTION + '.json';
+path.P_FIELD_MODEL = path.PATFORM_MODELS + '/' + model.FIELD + '.json';
+path.P_OPTION_MODEL = path.PATFORM_MODELS + '/' + model.OPTION + '.json';
 
-module.exports = constants;
+module.exports = {model, path};

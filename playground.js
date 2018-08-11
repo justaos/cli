@@ -1,4 +1,5 @@
-/*const program = require('commander');
+/*
+const program = require('commander');
 const config = require('./src/config/config');
 
 const DatabaseConnector = require("anysols-model").DatabaseConnector;
@@ -30,10 +31,19 @@ program
         console.log('test');
     });
 
-
 program.parse(process.argv);*/
-var schedule = require('node-schedule');
+var cron = require('cron');
 
-var j = schedule.scheduleJob(' */5 * * * * *', function(){
-    console.log('The answer to life, the universe, and everything!');
+var job1 = new cron.CronJob(' 0/2 * * * * *', function () {
+    console.log('job 1 ticked');
+}, function () {
+    console.log("stoped");
 });
+job1.start();
+
+setTimeout(function () {
+    job1.stop();
+}, 60 * 1000);
+
+
+console.log('job1 status', job1.running);
