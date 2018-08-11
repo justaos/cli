@@ -5,12 +5,14 @@
     {
       "name": "name",
       "type": "string",
-      "display_value": true
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "short_description",
       "type": "string",
-      "length": 500
+      "length": 500,
+      "order": 200
     },
     {
       "name": "type",
@@ -25,29 +27,33 @@
         {
           "order": "200",
           "language": "en",
-          "label": "Menu",
+          "label": "MENU",
           "value": "p_menu"
         },
         {
           "order": "300",
           "language": "en",
-          "label": "Module",
+          "label": "MODULE",
           "value": "p_module"
         }
-      ]
+      ],
+      "order": 300
     },
     {
       "label": "Collection",
       "name": "ref_collection",
-      "type": "collection"
+      "type": "collection",
+      "order": 400
     },
     {
       "name": "field",
-      "type": "string"
+      "type": "string",
+      "order": 500
     },
     {
       "name": "record_id",
-      "type": "string"
+      "type": "string",
+      "order": 600
     },
     {
       "name": "access",
@@ -77,7 +83,8 @@
           "label": "DELETE",
           "value": "delete"
         }
-      ]
+      ],
+      "order": 700
     }
   ]
 }

@@ -5,11 +5,14 @@
     {
       "name": "label",
       "type": "string",
-      "display_value": true
+      "display_value": true,
+      "order": 100
     },
     {
       "name": "name",
-      "type": "string"
+      "type": "string",
+      "order": 200,
+      "mandatory": true
     }
   ]
 }

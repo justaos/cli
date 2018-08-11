@@ -1,0 +1,172 @@
+{
+  "collection": "p_module",
+  "records": [
+    {
+      "label": "Collection",
+      "order": 100,
+      "ref_collection": "p_collection",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_collection/list",
+      "id": "5b15588ef362641220dfebc5"
+    },
+    {
+      "label": "Field",
+      "order": 200,
+      "ref_collection": "p_field",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_field/list",
+      "id": "5b15588ef362641220dfebc3"
+    },
+    {
+      "label": "Menu",
+      "order": 300,
+      "ref_collection": "p_menu",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_menu/list",
+      "id": "5b15588ef362641220dfebc2"
+    },
+    {
+      "label": "Module",
+      "order": 400,
+      "ref_collection": "p_module",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_module/list",
+      "id": "5b15588ef362641220dfebc4"
+    },
+    {
+      "label": "Access Control (ACL)",
+      "order": 400,
+      "ref_collection": "p_acl",
+      "ref_menu": "5b15588ef362641220dfebc0",
+      "type": "list",
+      "url": "/p/p_acl/list",
+      "id": "5b4b850da261d4e818000001"
+    },
+    {
+      "label": "Option",
+      "order": 500,
+      "ref_collection": "p_option",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_option/list",
+      "id": "5b372b99fe7f152d70825f4a"
+    },
+    {
+      "label": "Rest API",
+      "order": 600,
+      "ref_collection": "p_rest_api",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_rest_api/list",
+      "id": "5b273a6fd24fdf2fb4f0aa77"
+    },
+    {
+      "label": "Client Script",
+      "order": 700,
+      "ref_collection": "p_client_script",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_client_script/list",
+      "id": "5b52049bd9ad2bd804000001"
+    },
+    {
+      "label": "Server Script / Business Rule",
+      "order": 750,
+      "ref_collection": "p_server_script",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_server_script/list",
+      "id": "5b5fcd7327e0d6a430000001"
+    },
+    {
+      "label": "UI Tools",
+      "order": 800,
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "id": "5b52dc2fe71e4db033000001"
+    },
+    {
+      "label": "View",
+      "order": 900,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_view",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_view/list",
+      "id": "5b52dc8de4565da824000001"
+    },
+    {
+      "label": "Form",
+      "order": 1000,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_form",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_form/list",
+      "id": "5b52dd129758a11836000001"
+    },
+    {
+      "label": "Form Section",
+      "order": 1100,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_form_section",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_form_section/list",
+      "id": "5b52e08c33063b3834000001"
+    },
+    {
+      "label": "Form Element",
+      "order": 1200,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_form_element",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_form_element/list",
+      "id": "5b52e4b7929c9efc1d000001"
+    },
+    {
+      "label": "List",
+      "order": 1300,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_list",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_list/list",
+      "id": "5b536ce0830f176c15000001"
+    },
+    {
+      "label": "List Element",
+      "order": 1400,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_list_element",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_list_element/list",
+      "id": "5b5456ad4ec5de1c34000001"
+    },
+    {
+      "label": "Related List",
+      "order": 1500,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_related_list",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_related_list/list",
+      "id": "5b5456b4559d1ba025000001"
+    },
+    {
+      "label": "Related List Element",
+      "order": 1600,
+      "parent": "5b52dc2fe71e4db033000001",
+      "ref_collection": "p_related_list_element",
+      "ref_menu": "5b15588ef362641220dfebc1",
+      "type": "list",
+      "url": "/p/p_related_list_element/list",
+      "id": "5b536cc6e3a80e7037000001"
+    }
+  ]
+}

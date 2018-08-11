@@ -1,0 +1,35 @@
+{
+  "name": "p_related_list_element",
+  "label": "Related List Element",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true,
+      "order": 100
+    },
+    {
+      "name": "related_list",
+      "type": "reference",
+      "ref": "p_related_list",
+      "order": 200
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection",
+      "order": 300
+    },
+    {
+      "name": "filter",
+      "type": "script",
+      "default_value": "(function filter(current, resolve, reject) {\r\n    resolve({});// return filter object\r\n})(current, resolve, reject)",
+      "order": 400
+    },
+    {
+      "name": "order",
+      "type": "integer",
+      "order": 500
+    }
+  ]
+}

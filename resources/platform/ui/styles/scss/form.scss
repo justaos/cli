@@ -21,6 +21,28 @@ body {
       content: "*";
       color: red;
     }
+
+    .form-control:disabled, .form-control[readonly] {
+      background: #f8f9fa;
+      border-color: #f8f9fa;
+      cursor: no-drop;
+      color: #212529;
+    }
+
+    .select-collection, .select-option, .select-reference {
+      .btn-light:not(.disabled) {
+        background: white;
+        border: 1px solid #ced4da;
+      }
+    }
+
+    .related-list-iframe {
+      width: 100%;
+      height: 20em;
+      display: block;
+      border: 1px solid #dee2e6;
+    }
+
   }
 
   .shadow {
@@ -28,4 +50,5 @@ body {
     -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
   }
+
 }

@@ -1,0 +1,61 @@
+{
+  "name": "p_client_script",
+  "label": "Client Script",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true,
+      "order": 100
+    },
+    {
+      "name": "short_description",
+      "type": "string",
+      "length": 200,
+      "order": 200
+    },
+    {
+      "name": "type",
+      "type": "option",
+      "default_value": "on_load",
+      "order": 300,
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "onLoad",
+          "value": "on_load"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "onChange",
+          "value": "on_change"
+        },
+        {
+          "order": "300",
+          "language": "en",
+          "label": "onSubmit",
+          "value": "on_submit"
+        }
+      ]
+    },
+    {
+      "name": "order",
+      "type": "integer",
+      "order": 400
+    },
+    {
+      "label": "Collection",
+      "name": "ref_collection",
+      "type": "collection",
+      "order": 500
+    },
+    {
+      "name": "script",
+      "type": "script",
+      "default_value": "(function onLoad() {\n    // write your code here \n})();",
+      "order": 600
+    }
+  ]
+}

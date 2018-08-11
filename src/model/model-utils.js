@@ -1,28 +1,26 @@
 const Q = require('q');
-const jsonToSchemaConverter = require('./json-to-schema-converter');
 const logger = require('../config/logger');
-const Model = require('./index');
-const DatabaseConnector = require('../config/database-connector');
+const {ModelBuilder, ModelService} = require('anysols-model');
+const model = new ModelBuilder().build();
 const glob = require('glob');
 const fileUtils = require('../utils/file-utils');
 
 let ModelUtils = {
 
     loadSchemasIntoStore(defs) {
-        let conn = DatabaseConnector.getInstance().getConnection();
         let backlog = {};
-        let loadSchemaFn = loadSchemaFactory(conn, backlog);
+        let loadSchemaFn = loadSchemaFactory(backlog);
         defs.forEach(loadSchemaFn);
     },
 
     loadData(data) {
-        let model = new Model(data.collection);
+        let Model = model(data.collection);
         if (data.record)
-            return model.upsert({_id: data.record.id}, data.record).exec();
+            return Model.upsert({_id: data.record.id}, data.record).exec();
         else if (data.records) {
             let promises = [];
             data.records.forEach(function (record) {
-                promises.push(model.upsert({_id: record.id}, record).exec());
+                promises.push(Model.upsert({_id: record.id}, record).exec());
             });
             return Q.all(promises);
         }
@@ -30,36 +28,40 @@ let ModelUtils = {
 
     loadDataFromPath(path) {
         let that = this;
+        let promises = [];
         glob.sync(path).forEach(function (file) {
             let data = fileUtils.readJsonFileSync(file);
-            that.loadData(data);
+            let promise = that.loadData(data);
+            promises.push(promise);
         });
+        return Q.all(promises);
     },
 
     loadSchemasFromDB() {
         let dfd = Q.defer();
-        let conn = DatabaseConnector.getInstance().getConnection();
         let backlog = {};
-        let loadSchemaFn = loadSchemaFactory(conn, backlog);
-        let p_collection = new Model('p_collection');
-        let p_field = new Model('p_field');
-        p_collection.find({}).exec((err, collections) => {
+        let loadSchemaFn = loadSchemaFactory(backlog);
+        let Collection = model('p_collection');
+        let Field = model('p_field');
+        Collection.find({}).exec().then((collections) => {
             if (collections.length) {
                 let promises = [];
-                collections.forEach((collection) => {
-
-                    let collectionDef = {
-                        'name': collection.name,
-                        'label': collection.label,
-                        'fields': []
-                    };
-                    let fieldDfd = Q.defer();
-                    promises.push(fieldDfd.promise);
-                    p_field.find({ref_collection: collection.name}).exec((err, fields) => {
-                        collectionDef.fields = fields.map(field => field.toObject());
-                        loadSchemaFn(collectionDef);
-                        fieldDfd.resolve();
-                    });
+                collections.forEach((collectionRecord) => {
+                    let collection = collectionRecord.toObject();
+                    if (collection.name !== 'p_collection' && collection.name !== 'p_field' && collection.name !== 'p_option') {
+                        let collectionDef = {
+                            'name': collection.name,
+                            'label': collection.label,
+                            'fields': []
+                        };
+                        let fieldDfd = Q.defer();
+                        promises.push(fieldDfd.promise);
+                        Field.find({ref_collection: collection.name}).exec().then((fields) => {
+                            collectionDef.fields = fields.map(field => field.toObject());
+                            loadSchemaFn(collectionDef);
+                            fieldDfd.resolve();
+                        });
+                    }
                 });
                 Q.all(promises).then(dfd.resolve);
             }
@@ -70,28 +72,14 @@ let ModelUtils = {
     }
 };
 
-function loadSchemaFactory(conn, backlog) {
+function loadSchemaFactory(backlog) {
+    let modelService = new ModelService();
     return function loadSchema(schemaDefinition) {
-        let schema = jsonToSchemaConverter(schemaDefinition);
-        logger.info('model', 'loading : ' + schemaDefinition.name);
-        if (!schemaDefinition.extends) {
-            if (!conn.models[schemaDefinition.name]) {
-                conn.model(schemaDefinition.name, schema, schemaDefinition.name);
-                conn.models[schemaDefinition.name].definition = schemaDefinition;
-            } else {
-                logger.info('Model already loaded : ' + schemaDefinition.name);
-            }
-        }
-        else {
-            let extendsModel = conn.models[schemaDefinition.extends];
-            if (extendsModel) {
-                conn.model(schemaDefinition.extends).discriminator(schemaDefinition.name, schema);
-            } else {
-                if (!backlog[schemaDefinition.extends]) {
-                    backlog[schemaDefinition.extends] = [];
-                }
-                backlog[schemaDefinition.extends].push(schemaDefinition);
-            }
+        if (!modelService.isModelDefined(schemaDefinition.name)) {
+            modelService.define(schemaDefinition);
+            logger.info('model-utils (loadSchemaFactory) ::', ' loaded ' + schemaDefinition.name);
+        } else {
+            logger.info('model-utils (loadSchemaFactory) ::', ' model already loaded : ' + schemaDefinition.name);
         }
 
         if (backlog[schemaDefinition.name]) {

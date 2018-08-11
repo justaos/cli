@@ -2,34 +2,38 @@
   "name": "todo",
   "label": "Todo",
   "fields": [
-	{
-	  "name": "todo_text",
-	  "type": "string",
-	  "display_value": true
-	},
-	{
-	  "name": "status",
-	  "type": "option",
-	  "options": [
-		{
-		  "order": "100",
-		  "language": "en",
-		  "label": "NEW",
-		  "value": "new"
-		},
-		{
-		  "order": "100",
-		  "language": "en",
-		  "label": "DONE",
-		  "value": "done"
-		},
-		{
-		  "order": "200",
-		  "language": "en",
-		  "label": "UNDONE",
-		  "value": "undone"
-		}
-	  ]
-	}
+    {
+      "name": "todo_text",
+      "type": "string",
+      "display_value": true,
+      "mandatory": true,
+      "order": 100
+    },
+    {
+      "name": "status",
+      "type": "option",
+      "default_value": "new",
+      "order": 200,
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "NEW",
+          "value": "new"
+        },
+        {
+          "order": "100",
+          "language": "en",
+          "label": "DONE",
+          "value": "done"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "UNDONE",
+          "value": "undone"
+        }
+      ]
+    }
   ]
 }

@@ -1,8 +1,26 @@
 <link href="/ui/styles/list.css" rel="stylesheet">
+<% if (pageUrl.searchParams.get('target_window') === 'parent') {
+    targetWindow = '_parent';
+    redirectUrl = pageUrl.searchParams.get('target_url');
+} else {
+    targetWindow = "_self";
+    redirectUrl = pageUrl.href;
+}
+
+function getField(fieldName) {
+    let i;
+    for (i = 0; i < fields.length; i++) {
+        if (fields[i].get('name') === fieldName)
+            return fields[i];
+    }
+}
+
+listElements.forEach(function (listElement) {
+    listElement.element = getField(listElement.get('element'));
+});
+%>
 <div class="list-page">
-
     <%- include('./list-navigation') %>
-
     <main>
         <div class="container-fluid">
             <div class="filters-applied m-1 d-none">
@@ -15,56 +33,84 @@
                 <table class="responsive-table table table-hover">
                     <thead>
                     <tr>
-                        <th>
+                        <th style="width: 1em;">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="select-all-checkbox">
                                 <label class="custom-control-label" for="select-all-checkbox"><span
                                             class="sr-only"></span></label>
                             </div>
                         </th>
-                        <% fields.forEach(function(field){ %>
-                        <% if(field.type == 'password'){ %>
-                        <!-- skipped <%= field.name %> -->
-                        <% } else { %>
-                        <th id="col-header-<%= field.name %>" class="col-header" data-col="<%= field.name %>"><span
-                                    class="col-title"><%= field.label %></span> <i
-                                    class="fas sort-icon float-right d-none"></i></th>
-                        <% }}); %>
+                        <th style="width: 3em;">
+                            <i class="fas fa-link"></i>
+                        </th>
+                        <% listElements.forEach(function(listElement){ let field = listElement.element %>
+                        <th id="col-header-<%= field.get('name') %>" class="col-header"
+                            data-col="<%= field.get('name') %>"><span
+                                    class="col-title"><%= field.get('label') %></span> <i
+                                    class="fas sort-icon float-right d-none"></i>
+                            <% if(field.get('display_value')) { %>
+                            <i class="fas fa-link"></i>
+                            <% } %>
+                        </th>
+                        <% }); %>
                     </tr>
                     </thead>
                     <tbody>
                     <% data.forEach(function(record){ %>
-                    <tr class="record" data-id="<%= record.id %>">
+                    <tr class="record" data-id="<%= record.getID() %>">
                         <td>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input record-checkbox"
-                                       value="<%= record.id %>"
-                                       id="checkbox-<%= record.id %>">
-                                <label class="custom-control-label" for="checkbox-<%= record.id %>"><span
+                                       value="<%= record.getID() %>"
+                                       id="checkbox-<%= record.getID() %>">
+                                <label class="custom-control-label" for="checkbox-<%= record.getID() %>"><span
                                             class="sr-only"></span></label>
                             </div>
                         </td>
-                        <% fields.forEach(function(field){ %>
-                        <% if(field.type == 'password'){ %>
-                        <!-- skipped <%= field.name %> -->
-                        <% } else if(field.type == 'date'){ %>
+
                         <td>
-                            <%= new moment(record[field.name]).format('DD-MMM-YYYY h:mm A') %>
+                            <a href="/p/<%= collection.name %>/edit/<%= record.getID() %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
+                                <i class="fas fa-link"></i>
+                            </a>
                         </td>
-                        <% } else if(field.type == 'reference' && field.ref){ %>
+
+                        <% listElements.forEach(function(listElement){ let field = listElement.element; %>
+
+                        <!-- date -->
+                        <% if(field.get('type') == 'date'){ %>
                         <td>
-                            <% if(record[field.name]) { %>
-                            <a href="/p/<%= field.ref %>/edit/<%= record[field.name]['id'] %>">
-                                <%= record[field.name][field.display_value_field.name] %>
+                            <%= new moment(record.get(field.get('name'))).format('DD-MMM-YYYY h:mm A') %>
+                        </td>
+
+                        <!-- reference -->
+                        <% } else if(field.get('type') == 'reference' && field.get('ref')){ %>
+                        <td>
+                            <% if(record.get(field.get('name'))) { %>
+                            <a href="/p/<%= field.get('ref') %>/edit/<%= record.get(field.get('name'))['id'] %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
+                                <%= record.get(field.get('name'))[field.display_value_field.get('name')] %>
                             </a>
                             <% } %>
                         </td>
+
+                        <!-- option -->
+                        <% } else if(field.get('type') == 'option'){ %>
+                        <td>
+                            <% if(field.options) field.options.forEach(function(option){ if(option.value === record.get(field.get('name'))){ %>
+                            <%= option.label %>
+                            <% }}); %>
+                        </td>
+
                         <% } else { %>
                         <td>
-                            <% if(field.display_value) { %>
-                            <a href="/p/<%= collection.name %>/edit/<%= record['id'] %>"><%= record[field.name] %></a>
+                            <% if(field.get('display_value')) { %>
+                            <a href="/p/<%= collection.name %>/edit/<%= record.getID() %>?redirect=<%= redirectUrl %>"
+                               target="<%= targetWindow %>">
+                                <%= record.get(field.get('name')) %>
+                            </a>
                             <% } else { %>
-                            <%= record[field.name] %>
+                            <%= record.get(field.get('name')) %>
                             <% } %>
                         </td>
                         <% }}); %>
@@ -79,13 +125,20 @@
     </main>
 </div>
 <div class="dropdown-menu context-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item cm-open" href="#">Open</a>
     <a class="dropdown-item cm-open-in-new-tab" href="#" target="_blank">Open in new tab</a>
     <a class="dropdown-item cm-export-json" href="#" target="_blank">Export JSON</a>
     <a class="dropdown-item cm-copy-id" href="#">Copy ID</a>
 </div>
 <script>
-    $(document).ready(function () {
+    var fields = <%- JSON.stringify(fields) %>;
+
+    function findField(fieldName) {
+        return fields.find(function (field) {
+            return field.name === fieldName;
+        })
+    }
+
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         let $table = $('.responsive-table');
         let $thead = $table.find('thead');
@@ -175,11 +228,13 @@
 
         var conditions = JSON.parse(new URL(window.location.href).searchParams.get('conditions'));
         if (conditions) {
-            var conditionKeys = Object.keys(conditions);
-            $('.filters-applied').removeClass('d-none');
-            conditionKeys.forEach(function (condition) {
-                $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1">' + condition + '=' + conditions[condition].$regex + ' <i class="fas fa-times"></i></a>')
-            });
+            var fieldNames = Object.keys(conditions);
+            if (fieldNames.length) {
+                $('.filters-applied').removeClass('d-none');
+                fieldNames.forEach(function (fieldName) {
+                    $('.filters-applied').append('<a href="#" class="badge badge-primary mx-1" data-field="' + fieldName + '">' + findField(fieldName).label + '=' + (conditions[fieldName].$regex || conditions[fieldName]) + ' <i class="fas fa-times remove-filter"></i></a>')
+                });
+            }
         }
 
 
@@ -187,15 +242,24 @@
 
         $searchInputForm.on('submit', function (e) {
             e.preventDefault();
-            var field = $(this).find('.selected-option').data('selected');
+            var fieldName = $(this).find('.selected-option').data('selected');
             var value = $(this).find('input').val();
             if (!conditions) {
                 conditions = {};
             }
-            conditions[field] = {"$regex": value, "$options": "i"};
+            conditions[fieldName] = {"$regex": value, "$options": "i"};
             currentUrl.searchParams.set('conditions', JSON.stringify(conditions));
             window.location.href = currentUrl.href;
         });
+
+        $(document).on('click', '.remove-filter', function () {
+            var fieldName = $(this).closest('.badge').data('field');
+            if (conditions) {
+                delete conditions[fieldName];
+                currentUrl.searchParams.set('conditions', JSON.stringify(conditions));
+                window.location.href = currentUrl.href;
+            }
+        })
 
         $('#search-input-form .dropdown-item').on('click', function () {
             let $selectedOption = $searchInputForm.find('.selected-option');
@@ -212,9 +276,8 @@
                 top: top,
                 left: left
             });
-            $(".context-menu .cm-open").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
-            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id'));
-            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id'));
+            $(".context-menu .cm-open-in-new-tab").attr('href', "/p/<%= collection.name %>/edit/" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
+            $(".context-menu .cm-export-json").attr('href', "/p/<%= collection.name %>/export?records[]=" + $(this).data('id')) + "?redirect=<%= redirectUrl %>";
             $(".context-menu .cm-copy-id").on('click', function (e) {
                 e.preventDefault();
                 copyToClipboard($(that).data('id'));

@@ -1,0 +1,13 @@
+{
+  "collection": "p_related_list_element",
+  "records": [
+    {
+      "filter": "(function filter(current, resolve, reject) {\r\n    resolve({\r\n        user: current.getID()\r\n    });\r\n})(current, resolve, reject)",
+      "name": "Roles",
+      "order": null,
+      "ref_collection": "p_user_role",
+      "related_list": "5b5f0fab0449851f241778f3",
+      "id": "5b5457f42376e317085c7a2c"
+    }
+  ]
+}

@@ -8,14 +8,6 @@
          "password": "$2a$08$vMFembVGyvU0XS9Y0IpQMu6YmFTo/A5dqv1zRC8PiFVCAXZOmryge",
          "username": "todo.user",
          "id": "5b515b1623542301d833c9e3"
-      },
-      {
-         "first_name": "",
-         "email": "",
-         "last_name": "",
-         "password": "$2a$08$3zjKj39aODorMJNfzI/vHuqi79LfXhz18cgewE6UPXMdTBc/HXLGi",
-         "username": "todo.admin",
-         "id": "5b515b3123542301d833c9e4"
       }
    ]
 }

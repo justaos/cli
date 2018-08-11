@@ -1,12 +1,3 @@
-window.onfocus = function () {
-    if (!Cookies.get('x-authenticated')) {
-        if (window.parent)
-            window.parent.location.reload();
-        else
-            window.location.reload();
-    }
-};
-
 window.toast = swal.mixin({
     toast: true,
     position: 'top-end',

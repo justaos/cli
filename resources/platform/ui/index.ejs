@@ -10,7 +10,7 @@
             </div>
             <h4 class="text-center">Looks like no apps installed here</h4>
             <p class="text-center">The Store has Apps, Plugins and more! Go get your favourite business applications
-                                   from <a href="/store">here</a></p>
+                from <a href="/store">here</a></p>
             <div class="d-flex justify-content-center">
                 <a class="btn btn-primary" href="/store">Get apps from Store <i class="fas fa-angle-right"></i></a>
             </div>
@@ -19,30 +19,30 @@
     <% } else { %>
     <script src="/assets/js/angular.min.js"></script>
     <script>
-      angular.module('indexApp', []).controller('indexAppController', function($scope) {
-        $scope.menus = <%- JSON.stringify(menus) %>;
-      }).directive('asMenuItem', function() {
-        return {
-          scope: {
-            menuId: '@',
-            name: '@',
-            icon: '@',
-            description: '@'
-          },
-          replace: true,
-          template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
-          '                <div class="row menu-item box-shadow rounded m-0">\n' +
-          '                    <div class="col-md-4 my-auto">\n' +
-          '                        <i class="menu-icon fas fa-rocket fa-4x" ng-class="icon"></i>\n' +
-          '                    </div>\n' +
-          '                    <div class="col-md-8 my-auto">\n' +
-          '                        <h2 class="h5">{{name}}</h2>\n' +
-          '                        <p class="small mb-1">{{description}}</p>\n' +
-          '                    </div>\n' +
-          '                </div>\n' +
-          '            </a>'
-        };
-      });
+        angular.module('indexApp', []).controller('indexAppController', function ($scope) {
+            $scope.menus = <%- JSON.stringify(menus.map(o => o.toObject())) %>;
+        }).directive('asMenuItem', function () {
+            return {
+                scope: {
+                    menuId: '@',
+                    name: '@',
+                    icon: '@',
+                    description: '@'
+                },
+                replace: true,
+                template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
+                    '                <div class="row menu-item box-shadow rounded m-0">\n' +
+                    '                    <div class="col-md-4 my-auto">\n' +
+                    '                        <i class="menu-icon fas fa-rocket fa-4x" ng-class="icon"></i>\n' +
+                    '                    </div>\n' +
+                    '                    <div class="col-md-8 my-auto">\n' +
+                    '                        <h2 class="h5">{{name}}</h2>\n' +
+                    '                        <p class="small mb-1">{{description}}</p>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </a>'
+            };
+        });
     </script>
     <div class="container-fluid" ng-app="indexApp" ng-controller="indexAppController">
         <div class="row">

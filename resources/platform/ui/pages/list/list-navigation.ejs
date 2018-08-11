@@ -3,7 +3,8 @@
         <%= collection.label %>
     </h4>
     <form class="form-inline">
-        <a href="/p/<%= collection.name %>/new" class="btn btn-sm btn-link">
+        <a href="/p/<%= collection.name %>/create?redirect=<%= redirectUrl %>" target="<%= targetWindow %>"
+           class="btn btn-sm btn-link">
             <i class="fas fa-plus"></i>
         </a>
     </form>
@@ -20,27 +21,28 @@
         </li>
     </ul>
     <% var filteredFields = fields.filter(function (field) {
-        return (field.type !== 'date' && field.type !== 'reference' && field.type !== 'collection')
+        var type = field.get('type');
+        return (type !== 'date' && type !== 'reference' && type !== 'id')
     }); %>
-    <%if(filteredFields.length) {%>
+    <% if(filteredFields.length) { %>
     <form class="form-inline" id="search-input-form">
         <div class="input-group  input-group-sm">
             <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary dropdown-toggle selected-option" type="button"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"
-                        data-selected="<%= filteredFields[0].name %>"><%= filteredFields[0].label %>
+                        data-selected="<%= filteredFields[0].get('name') %>"><%= filteredFields[0].get('label') %>
                 </button>
                 <div class="dropdown-menu">
                     <% filteredFields.forEach(function(field){ %>
-                    <a class="dropdown-item" href="#" data-id="<%= field.name %>"><%= field.label %></a>
+                    <a class="dropdown-item" href="#" data-id="<%= field.get('name') %>"><%= field.get('label') %></a>
                     <% }) %>
                 </div>
             </div>
             <input type="text" class="form-control" aria-label="Text input with dropdown button">
         </div>
     </form>
-    <%}%>
+    <% } %>
     <ul class="navbar-nav">
         <li class="nav-item">
             <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top"

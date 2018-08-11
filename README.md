@@ -35,7 +35,7 @@ https://www.mongodb.com/download-center?#community
 `Note: Check db config in anysols-config.js before running the application.`
 
 ```cmd 
-anysols
+anysols run
 ```
 
 ## Steps to install sample 'TODO' application on platform

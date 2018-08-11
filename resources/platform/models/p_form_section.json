@@ -1,0 +1,35 @@
+{
+  "name": "p_form_section",
+  "label": "Form Section",
+  "fields": [
+    {
+      "name": "form",
+      "type": "reference",
+      "ref": "p_form"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "display_value": true
+    },
+    {
+      "name": "column_type",
+      "type": "option",
+      "default_value": "single_column",
+      "options": [
+        {
+          "order": "100",
+          "language": "en",
+          "label": "Single Column",
+          "value": "single_column"
+        },
+        {
+          "order": "200",
+          "language": "en",
+          "label": "Two Column",
+          "value": "two_column"
+        }
+      ]
+    }
+  ]
+}

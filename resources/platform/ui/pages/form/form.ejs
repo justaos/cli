@@ -7,127 +7,81 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.4/js/ajax-bootstrap-select.min.js"></script>
 <script src="/ui/scripts/form-script.js"></script>
-<script>
-    window.fs = new FormScript(<%- JSON.stringify(fields) %>);
-</script>
+
+<%
+function getField(fieldName) {
+    let i;
+    for (i = 0; i < fields.length; i++) {
+        if (fields[i].get('name') === fieldName)
+            return fields[i];
+    }
+}
+function getFieldFromElement(field) {
+    let i;
+    for (i = 0; i < formElements.length; i++) {
+        if (formElements[i].get('element') === field.get('name'))
+            return field;
+    }
+}
+
+function getElementsForSection(sectionId) {
+    return formElements.filter((formElement) => formElement.get('form_section') == sectionId + '')
+}
+%>
 
 <div class="form-page">
     <%- include('./form-navigation') %>
     <main>
         <div class="container-fluid">
-            <form id="view-form" class="needs-validation row mt-4" novalidate>
-                <% fields.forEach(function(field){ if(field.name != 'id'){ %>
-                <div class="col-md-12">
-                    <div class="form-group row no-gutters">
-                        <label for="form-<%= field.name %>"
-                               class="col-sm-2 col-form-label col-form-label"><%= field.label %></label>
-                        <div class="col-sm-8">
+            <div id="alert-zone">
 
-                            <!-- integer field -->
-                            <% if(field.type == 'integer'){ %>
-                            <input type="number" class="form-control" id="form-<%= field.name %>"
-                                   name="<%= field.name %>"
-                                   value="<%= item[field.name] %>"
-                                   placeholder="<%= field.label %>">
+            </div>
+            <form id="form" class="needs-validation mt-4" novalidate>
 
-                            <!-- date field -->
-                            <% } else if(field.type == 'date'){ %>
-                            <input type="text" disabled class="form-control" id="form-<%= field.name %>"
-                                   name="<%= field.name %>"
-                                   value="<%= new moment(item[field.name]).format('DD-MMM-YYYY h:mm A') %>"
-                                   placeholder="<%= field.label %>">
-
-                            <!-- integer field -->
-                            <% } else if(field.type == 'password'){ %>
-                            <input type="password" class="form-control" id="form-<%= field.name %>"
-                                   name="<%= field.name %>"
-                                   value=""
-                                   placeholder="<%= field.label %>">
-
-                            <!-- boolean field -->
-                            <% } else if(field.type == 'boolean'){ %>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input item-checkbox"
-                                       id="form-<%= field.name %>"
-                                       name="<%= field.name %>"
-                                       <% if(item[field.name]){ %>checked="checked"
-                                        <% } %>
-                                       placeholder="<%= field.label %>">
-                                <label class="custom-control-label" for="form-<%= field.name %>"><span
-                                            class="sr-only"></span></label>
-                            </div>
-
-                            <!-- script field -->
-                            <% } else if(field.type == 'script'){ %>
-                            <div class="script-editor" id="form-<%= field.name %>" data-col-name="<%= field.name %>"
-                                 style="height: 500px;border:1px solid grey;"></div>
-
-
-                            <!-- option field -->
-                            <% } else if(field.type == 'option'){ %>
-                            <select class="form-control select-option" data-live-search="true"
-                                    id="form-<%= field.name %>" title="Choose one of the following..."
-                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
-
-                                <% if(field.options) field.options.forEach(function(option){ %>
-                                <option value="<%= option.value %>"
-                                        <% if(option.value === item[field.name]){ %>selected="selected"
-                                        <% } %>
-                                ><%= option.label %></option>
-                                <% }); %>
-                            </select>
-
-                            <!-- collection field -->
-                            <% } else if(field.type == 'collection'){ %>
-                            <select class="form-control select-collection" data-live-search="true"
-                                    id="form-<%= field.name %>" title="Choose one of the following..."
-                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
-
-                                <% if(field.options) field.options.forEach(function(option){ %>
-                                <option value="<%= option.name %>"
-                                        <% if(option.name === item[field.name]){ %>selected="selected"
-                                        <% } %>
-                                ><%= option.label %></option>
-                                <% }); %>
-                            </select>
-
-                            <!-- reference field -->
-                            <% } else if(field.type == 'reference' && field.ref){ %>
-
-                            <select class="form-control select-reference" data-live-search="true"
-                                    id="form-<%= field.name %>"
-                                    data-col-name="<%= field.name %>" name="<%= field.name %>">
-                                <% if(item[field.name]){ %>
-
-
-                                <option value="<%= item[field.name].id %>"
-                                        selected="selected"><%= item[field.name][field.display_value_field.name] %></option>
-                                <% } %>
-                            </select>
-                            <% } else if(field.type == 'string' && field.length > 256){ %>
-                            <textarea type="text" class="form-control" id="form-<%= field.name %>"
-                                   name="<%= field.name %>"
-                                   placeholder="<%= field.label %>"><%= item[field.name] %></textarea>
-                            <% } else { %>
-                            <input type="text" class="form-control" id="form-<%= field.name %>"
-                                   name="<%= field.name %>"
-                                   value="<%= item[field.name] %>"
-                                   placeholder="<%= field.label %>">
-                            <% } %>
-                            <div class="invalid-feedback">
-                                Please provide a <%= field.label %>.
-                            </div>
+                <% formSections.forEach(function(formSection){ %>
+                <section id="<%= formSection.getID() %>" class="row">
+                    <% getElementsForSection(formSection.getID()).forEach(function(formElement){
+                        let field = getField(formElement.get('element'));
+                        let singleColumn = (formSection.get('column_type') === 'single_column')
+                        let vertical = (!singleColumn || field.type === 'script')
+                    %>
+                    <div class="<% if(singleColumn){ %>col-sm-12 <% } else { %>col-sm-6<% } %>">
+                        <%- include('./field', {field: field, vertical: vertical}) %>
+                    </div>
+                    <% }); %>
+                </section>
+                <% }); %>
+                <section class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-outline-primary submit-action">Submit</button>
                         </div>
-                        <div class="col-sm-2"></div>
                     </div>
-                </div>
-                <% }}); %>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-outline-primary">Save</button>
-                    </div>
-                </div>
+                </section>
             </form>
+
+            <% if(relatedList && relatedListElements.length) { %>
+            <h4>Related lists</h4>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <% relatedListElements.forEach(function(relatedListElement, index){ %>
+                    <a class="nav-item nav-link <% if(!index){ %>active<% } %>" id="nav-home-tab" data-toggle="tab"
+                       href="#nav-home" role="tab"
+                       aria-controls="nav-home" aria-selected="true"><%= relatedListElement.get('name') %></a>
+                    <% }); %>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <% relatedListElements.forEach(function(relatedListElement, index){ %>
+                <div class="tab-pane fade <% if(!index){ %>show active<% } %>" id="nav-home" role="tabpanel"
+                     aria-labelledby="nav-home-tab">
+                    <iframe class="related-list-iframe"
+                            src='/p/<%= relatedListElement.get('ref_collection') %>/list?&target_window=parent&target_url=<%= pageUrl.href %> <% if(relatedListElement.conditions){ %>&conditions=<%= JSON.stringify(relatedListElement.conditions) %> <% } %>'></iframe>
+                </div>
+                <% }); %>
+            </div>
+            <% } %>
+
         </div>
     </main>
 </div>
@@ -136,16 +90,18 @@
         'use strict';
         window.addEventListener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            let form = document.getElementById('view-form');
+            let form = document.getElementById('form');
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 if (form.checkValidity() === true) {
                     let formObj = fs.getRecord();
 
-                    <% if(item.id) { %>
-                    formObj.id = <%- JSON.stringify(item.id) %>;
+                    <% if(record.getID) { %>
+                    formObj.id = '<%= record.getID() %>';
                     <% } %>
+
+                    var redirect = new URL(window.location.href).searchParams.get('redirect');
 
                     $.ajax({
                         url: "/p/<%= collection.name %>",
@@ -153,18 +109,29 @@
                         contentType: 'application/json',
                         type: 'POST'
                     }).then(function (data) {
-                        if (data.redirect)
-                            window.location.href = data.redirect;
+                        if (redirect)
+                            window.location.href = redirect;
                         else
                             window.location.reload();
                     }, function (err) {
-                        alert(err.responseJSON.original.sqlMessage);
+                        let message = `${err.responseJSON.message}`;
+                        if (err.responseJSON.details) {
+                            message += `(${err.responseJSON.details.filepath} : ${err.responseJSON.details.line} : ${err.responseJSON.details.column} )`;
+                        }
+                        fs.addErrorMessage(message);
                     });
                 }
                 form.classList.add('was-validated');
 
             }, false);
+
+            $('.submit-action').on('click', function () {
+                fs.submit();
+            });
+
         }, false);
+
+
     })();
 </script>
 
@@ -173,26 +140,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.nls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.12.0/min/vs/editor/editor.main.js"></script>
 <script>
-    monaco.languages.typescript.javascriptDefaults.addExtraLib([
-        'declare class Facts {',
-        '    /**',
-        '     * Returns the next fact',
-        '     */',
-        '    static next():string',
-        '}'
-    ].join('\n'));
-    window.editors = [];
-    var item = <%- JSON.stringify(item) %>;
-    document.querySelectorAll('.script-editor').forEach(function (element) {
+    window.fs = new FormScript(<%- JSON.stringify(fields.filter(f => getFieldFromElement(f))) %>, '<%= form %>');
+</script>
+<script>
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+    <%- include('../../scripts/form-script.d.ts') %>
+    `, 'form-script.d.ts');
+    monaco.languages.typescript.javascriptDefaults.addExtraLib('declare const fs: FormScript;', 'global.d.ts');
 
-        window.editors[element.getAttribute('data-col-name')] = monaco.editor.create(element, {
-            value: item[element.getAttribute('data-col-name')] ? item[element.getAttribute('data-col-name')] : [
-                '(function(req, res) {',
-                '\t //write you code here;',
-                '})(req, res)'
-            ].join('\n'),
+
+    window.editors = [];
+    var item = <%- JSON.stringify(record) %>;
+    var fields = <%- JSON.stringify(fields) %>;
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+    function findField(fieldName) {
+        return fields.find(function (field) {
+            return field.name === fieldName;
+        })
+    }
+
+    document.querySelectorAll('.script-editor').forEach(function (element) {
+        var fieldName = $(element).data('field');
+        window.editors[fieldName] = monaco.editor.create(element, {
+            value: item[fieldName],
             language: 'javascript',
-            theme: 'vs-dark'
+            theme: 'vs-dark',
+            formatOnType: true
         });
     });
 
@@ -216,7 +192,7 @@
                 contentType: 'application/json',
                 type: 'POST'
             }).then(function (data) {
-                if(window.parent)
+                if (window.parent)
                     window.parent.location.href = window.parent.location.origin + window.parent.location.pathname;
                 else
                     window.location.href = '/';
@@ -228,7 +204,7 @@
     });
 
     // In your Javascript (external .js resource or <script> tag)
-    $(document).ready(function () {
+    $(function () {
 
         $('select.select-option').each(function () {
             $(this).selectpicker({noneSelectedText: 'Insert Placeholder text'});
@@ -239,16 +215,16 @@
         });
 
         $('select.select-reference').each(function () {
-            var fieldName = $(this).data('col-name');
+            var fieldName = $(this).data('field');
             $(this).selectpicker().ajaxSelectPicker({
                 ajax: {
                     url: '/p/<%= collection.name %>/search',
                     dataType: 'json',
                     data: function () {
                         var params = {
-                            q: '{{{q}}}',
-                            field: fieldName
+                            q: '{{{q}}}'
                         };
+                        params.field = fieldName;
                         return params;
                     }
                 },
@@ -256,8 +232,25 @@
                     emptyTitle: 'Search for item...'
                 }
             });
-            $('#form-parent').append("<option>test</option>")
         });
     });
+</script>
+<script>
+    var clientScripts = [];
 
+    <% clientScripts.forEach(function(clientScript){ %>
+    {
+        let clientScript = <%- JSON.stringify(clientScript) %>;
+        clientScript.script = <%- clientScript.get('script') %>;
+        clientScripts.push(clientScript);
+        if (clientScript.type === 'on_change')
+            fs.onChange(function (field, value) {
+                clientScript.script(field, value);
+            });
+        else if (clientScript.type === 'on_submit')
+            fs.onSubmit(function (resolve, reject) {
+                clientScript.script(resolve, reject);
+            });
+    }
+    <% }) %>
 </script>
