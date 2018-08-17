@@ -13,7 +13,7 @@
         if (window.history.pushState) {
             let frameUrl = new URL(obj.contentWindow.location.href);
             let newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?url=' +
-                encodeURIComponent(frameUrl.pathname + frameUrl.search);
+                    encodeURIComponent(frameUrl.pathname + frameUrl.search);
             window.history.pushState({path: newUrl}, '', newUrl);
         }
         if (resize)

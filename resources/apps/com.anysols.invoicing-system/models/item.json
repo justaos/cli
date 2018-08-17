@@ -1,23 +1,23 @@
 {
-  "name": "invoice_item",
-  "label": "Item",
-  "fields": [
-    {
-      "name": "invoice",
-      "type": "reference",
-      "ref": "invoice",
-      "order": 100
-    },
-    {
-      "name": "product",
-      "type": "reference",
-      "ref": "invoice_product",
-      "order": 200
-    },
-    {
-      "name": "quality",
-      "type": "integer",
-      "order": 300
-    }
-  ]
+    "name": "invoice_item",
+    "label": "Item",
+    "fields": [
+        {
+            "name": "invoice",
+            "type": "reference",
+            "ref": "invoice",
+            "order": 100
+        },
+        {
+            "name": "product",
+            "type": "reference",
+            "ref": "invoice_product",
+            "order": 200
+        },
+        {
+            "name": "quality",
+            "type": "integer",
+            "order": 300
+        }
+    ]
 }

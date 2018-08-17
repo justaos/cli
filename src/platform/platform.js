@@ -9,7 +9,7 @@ const fileUtils = require('../utils/file-utils');
 
 const {DatabaseService, ModelBuilder} = require('anysols-model');
 
-const modelUtils = require('../model/model-utils');
+const modelUtils = require('./model-utils');
 const platformRoutes = require('./platform-routes');
 const constants = require('./platform-constants');
 
@@ -24,6 +24,14 @@ class Platform {
 
     constructor(router) {
         this.router = router;
+    }
+
+    static upsertCollection(collectionDef) {
+        let Collection = model(constants.model.COLLECTION);
+        return Collection.upsert({name: collectionDef.name}, {
+            name: collectionDef.name,
+            label: collectionDef.label
+        }).exec();
     }
 
     initialize() {
@@ -54,7 +62,6 @@ class Platform {
             logger.logBox();
         });
     }
-
 
     populateSysData(collectionDef) {
         let dfd = Q.defer();
@@ -87,15 +94,6 @@ class Platform {
             Q.all(promises).then(dfd.resolve);
         });
         return dfd.promise;
-    }
-
-
-    static upsertCollection(collectionDef) {
-        let Collection = model(constants.model.COLLECTION);
-        return Collection.upsert({name: collectionDef.name}, {
-            name: collectionDef.name,
-            label: collectionDef.label
-        }).exec();
     }
 
     scanApplications() {

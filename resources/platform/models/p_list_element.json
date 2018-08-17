@@ -1,29 +1,31 @@
 {
-  "name": "p_list_element",
-  "label": "List Element",
-  "fields": [
-    {
-      "name": "list",
-      "type": "reference",
-      "ref": "p_list"
-    },
-    {
-      "name": "element",
-      "type": "string"
-    },
-    {
-      "name": "order",
-      "type": "integer"
-    },
-    {
-      "name": "type",
-      "type": "option",
-      "options": [{
-        "order": "100",
-        "language": "en",
-        "label": "Element",
-        "value": "element"
-      }]
-    }
-  ]
+    "name": "p_list_element",
+    "label": "List Element",
+    "fields": [
+        {
+            "name": "list",
+            "type": "reference",
+            "ref": "p_list"
+        },
+        {
+            "name": "element",
+            "type": "string"
+        },
+        {
+            "name": "order",
+            "type": "integer"
+        },
+        {
+            "name": "type",
+            "type": "option",
+            "options": [
+                {
+                    "order": "100",
+                    "language": "en",
+                    "label": "Element",
+                    "value": "element"
+                }
+            ]
+        }
+    ]
 }

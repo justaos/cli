@@ -1,40 +1,40 @@
 {
-  "collection": "todo",
-  "records": [
-    {
-      "id": "5ad1976b6738033cd943a92b",
-      "todo_text": "Hit the gym",
-      "status": "new",
-      "created_by": "5b37598359a01c43346f8632",
-      "updated_by": "5b37598359a01c43346f8632"
-    },
-    {
-      "id": "5ad1976b1980d1e6bc222b7b",
-      "todo_text": "Meet the george",
-      "status": "new",
-      "created_by": "5b37598359a01c43346f8632",
-      "updated_by": "5b37598359a01c43346f8632"
-    },
-    {
-      "id": "5ad1976bece284c675aebca4",
-      "todo_text": "Buy Eggs",
-      "status": "done",
-      "created_by": "5b37598359a01c43346f8632",
-      "updated_by": "5b37598359a01c43346f8632"
-    },
-    {
-      "id": "5ad1976b732e7c31f9862894",
-      "todo_text": "Read a book",
-      "status": "done",
-      "created_by": "5b37598359a01c43346f8632",
-      "updated_by": "5b37598359a01c43346f8632"
-    },
-    {
-      "id": "5ad1976babfd333dcfd7addb",
-      "todo_text": "Organize office",
-      "status": "undone",
-      "created_by": "5b37598359a01c43346f8632",
-      "updated_by": "5b37598359a01c43346f8632"
-    }
-  ]
+    "collection": "todo",
+    "records": [
+        {
+            "id": "5ad1976b6738033cd943a92b",
+            "todo_text": "Hit the gym",
+            "status": "new",
+            "created_by": "5b37598359a01c43346f8632",
+            "updated_by": "5b37598359a01c43346f8632"
+        },
+        {
+            "id": "5ad1976b1980d1e6bc222b7b",
+            "todo_text": "Meet the george",
+            "status": "new",
+            "created_by": "5b37598359a01c43346f8632",
+            "updated_by": "5b37598359a01c43346f8632"
+        },
+        {
+            "id": "5ad1976bece284c675aebca4",
+            "todo_text": "Buy Eggs",
+            "status": "done",
+            "created_by": "5b37598359a01c43346f8632",
+            "updated_by": "5b37598359a01c43346f8632"
+        },
+        {
+            "id": "5ad1976b732e7c31f9862894",
+            "todo_text": "Read a book",
+            "status": "done",
+            "created_by": "5b37598359a01c43346f8632",
+            "updated_by": "5b37598359a01c43346f8632"
+        },
+        {
+            "id": "5ad1976babfd333dcfd7addb",
+            "todo_text": "Organize office",
+            "status": "undone",
+            "created_by": "5b37598359a01c43346f8632",
+            "updated_by": "5b37598359a01c43346f8632"
+        }
+    ]
 }

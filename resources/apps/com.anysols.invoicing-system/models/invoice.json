@@ -1,18 +1,18 @@
 {
-  "name": "invoice",
-  "label": "Invoice",
-  "fields": [
-    {
-      "name": "number",
-      "type": "string",
-      "display_value": true,
-      "order": 100
-    },
-    {
-      "name": "customer",
-      "type": "reference",
-      "ref": "invoice_customer",
-      "order": 200
-    }
-  ]
+    "name": "invoice",
+    "label": "Invoice",
+    "fields": [
+        {
+            "name": "number",
+            "type": "string",
+            "display_value": true,
+            "order": 100
+        },
+        {
+            "name": "customer",
+            "type": "reference",
+            "ref": "invoice_customer",
+            "order": 200
+        }
+    ]
 }

@@ -85,7 +85,7 @@ function getUserRoles(userId) {
     if (userRoles) {
         dfd.resolve(userRoles);
     } else {
-        model('p_user_role').populateReferences().find({user: userId}).exec().then(function (userRoles) {
+        model('p_user_role').find({user: userId}).populateRefs().exec().then(function (userRoles) {
             userRoles = userRoles.map(userRole => userRole.toObject());
             cache.put(userId, userRoles, 24 * 60 * 60 * 1000);
             dfd.resolve(userRoles);

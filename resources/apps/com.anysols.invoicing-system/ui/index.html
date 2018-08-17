@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/assets/img/favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/assets/img/favicon.png">
 
-    <title>Anysols</title>
+  <title>Anysols</title>
 
-    <!--
-        Stylesheets and Preprocessors
-    -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/views/styles/theme.css" rel="stylesheet">
-    <link href="/views/styles/base.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 38.8px; /* Show it is fixed to the top */
-        }
-    </style>
-    <!--
-       Scripts
-    -->
-    <script src="/assets/js/jquery-3.3.1.min.js"></script>
-    <script src="/assets/js/popper.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script defer src="/assets/js/fontawesome.min.js"></script>
+  <!--
+      Stylesheets and Preprocessors
+  -->
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/views/styles/theme.css" rel="stylesheet">
+  <link href="/views/styles/base.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 38.8px; /* Show it is fixed to the top */
+    }
+  </style>
+  <!--
+     Scripts
+  -->
+  <script src="/assets/js/jquery-3.3.1.min.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script defer src="/assets/js/fontawesome.min.js"></script>
 
 
 </head>
@@ -35,65 +35,65 @@
 <body ng-app="myApp" ng-controller="todoCtrl">
 
 <div class="container-fluid">
-    <h2>My Todo List</h2>
+  <h2>My Todo List</h2>
 
-    <form ng-submit="todoAdd()">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" ng-model="todoInput" placeholder="Add New" aria-label="Add New"
-                   aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Add</button>
-            </div>
-        </div>
-    </form>
-
-    <p><strong>{{result.length}}</strong> Items Left</p>
-
-    <div ng-repeat="item in todoList | filter: query as result track by item.id">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input item-checkbox" ng-model="item.$$done"
-                               id="checkbox-{{$index}}" ng-change="toggleCompleted(item)">
-                        <label class="custom-control-label" for="checkbox-{{$index}}"><span
-                                class="sr-only"></span></label>
-                    </div>
-                </div>
-            </div>
-            <input type="text" class="form-control" ng-model="item.todo_text" disabled>
-            <div class="input-group-append">
-                <button class="btn btn-danger" ng-click="remove(item)">Remove</button>
-            </div>
-        </div>
+  <form ng-submit="todoAdd()">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" ng-model="todoInput" placeholder="Add New" aria-label="Add New"
+             aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Add</button>
+      </div>
     </div>
+  </form>
 
-    <p>
-        <button id="checkAll" class="btn btn-success" ng-click="markAllComplete(result)">Mark all as done</button>
-    </p>
+  <p><strong>{{result.length}}</strong> Items Left</p>
 
-    <a href="#" ng-click="toggle()" ng-if="(todoList.length - result.length) !== 0">{{(todoList.length -
-        result.length)}} Completed</a>
-
-    <div ng-repeat="item in todoList | filter: doneQuery track by item.id" ng-show="openCompleted">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input item-checkbox" ng-model="item.$$done"
-                               id="checkbox-completed-{{$index}}" ng-change="toggleCompleted(item)">
-                        <label class="custom-control-label" for="checkbox-completed-{{$index}}"><span
-                                class="sr-only"></span></label>
-                    </div>
-                </div>
-            </div>
-            <input style="text-decoration: line-through;" type="text" class="form-control" ng-model="item.todo_text"
-                   disabled>
-            <div class="input-group-append">
-                <button class="btn btn-danger" ng-click="remove(item)">Remove</button>
-            </div>
+  <div ng-repeat="item in todoList | filter: query as result track by item.id">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input item-checkbox" ng-model="item.$$done"
+                   id="checkbox-{{$index}}" ng-change="toggleCompleted(item)">
+            <label class="custom-control-label" for="checkbox-{{$index}}"><span
+              class="sr-only"></span></label>
+          </div>
         </div>
+      </div>
+      <input type="text" class="form-control" ng-model="item.todo_text" disabled>
+      <div class="input-group-append">
+        <button class="btn btn-danger" ng-click="remove(item)">Remove</button>
+      </div>
     </div>
+  </div>
+
+  <p>
+    <button id="checkAll" class="btn btn-success" ng-click="markAllComplete(result)">Mark all as done</button>
+  </p>
+
+  <a href="#" ng-click="toggle()" ng-if="(todoList.length - result.length) !== 0">{{(todoList.length -
+    result.length)}} Completed</a>
+
+  <div ng-repeat="item in todoList | filter: doneQuery track by item.id" ng-show="openCompleted">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input item-checkbox" ng-model="item.$$done"
+                   id="checkbox-completed-{{$index}}" ng-change="toggleCompleted(item)">
+            <label class="custom-control-label" for="checkbox-completed-{{$index}}"><span
+              class="sr-only"></span></label>
+          </div>
+        </div>
+      </div>
+      <input style="text-decoration: line-through;" type="text" class="form-control" ng-model="item.todo_text"
+             disabled>
+      <div class="input-group-append">
+        <button class="btn btn-danger" ng-click="remove(item)">Remove</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -103,88 +103,88 @@
 <script defer src="/assets/js/fontawesome.min.js"></script>
 
 <script>
-    var app = angular.module('myApp', []);
-    app.controller('todoCtrl', function ($scope, $http) {
+  var app = angular.module('myApp', []);
+  app.controller('todoCtrl', function ($scope, $http) {
 
-        $scope.openCompleted = false;
+    $scope.openCompleted = false;
 
-        $http({
-            method: 'GET',
-            url: '/api/todo/list'
-        }).then(function (response) {
-            $scope.todoList = response.data;
-            $scope.todoList.forEach(function (item) {
-                item.$$done = (item.status === 'done');
-            });
-        });
-
-        $scope.remove = function (item) {
-            $http({
-                method: 'POST',
-                url: '/api/todo/actions',
-                data: {
-                    action: 'remove',
-                    items: [item.id]
-                }
-            }).then(function () {
-                $scope.todoList = $scope.todoList.filter(function (obj) {
-                    return obj.id !== item.id;
-                });
-            });
-        };
-
-        $scope.query = function (item) {
-            return item.status !== 'done';
-        };
-
-        $scope.doneQuery = function (item) {
-            return item.status === 'done';
-        };
-
-        $scope.todoAdd = function () {
-            $http({
-                method: 'POST',
-                url: '/api/todo/actions',
-                data: {
-                    action: 'create',
-                    record: {
-                        todo_text: $scope.todoInput
-                    }
-                }
-            }).then(function (response) {
-                $scope.todoList.push(response.data);
-                $scope.todoInput = '';
-            });
-        };
-
-        $scope.toggleCompleted = function (item) {
-            if (item.status !== 'done')
-                item.status = 'done';
-            else
-                item.status = 'undone';
-
-            $http({
-                method: 'POST',
-                url: '/api/todo/actions',
-                data: {
-                    action: item.status,
-                    item: item.id
-                }
-            });
-        };
-
-        $scope.markAllComplete = function (list) {
-            angular.forEach(list, function (item) {
-                item.$$done = true;
-                $scope.toggleCompleted(item);
-            });
-        };
-
-        $scope.toggle = function () {
-            $scope.openCompleted = !$scope.openCompleted;
-        };
-
+    $http({
+      method: 'GET',
+      url: '/api/todo/list'
+    }).then(function (response) {
+      $scope.todoList = response.data;
+      $scope.todoList.forEach(function (item) {
+        item.$$done = (item.status === 'done');
+      });
     });
+
+    $scope.remove = function (item) {
+      $http({
+        method: 'POST',
+        url: '/api/todo/actions',
+        data: {
+          action: 'remove',
+          items: [item.id]
+        }
+      }).then(function () {
+        $scope.todoList = $scope.todoList.filter(function (obj) {
+          return obj.id !== item.id;
+        });
+      });
+    };
+
+    $scope.query = function (item) {
+      return item.status !== 'done';
+    };
+
+    $scope.doneQuery = function (item) {
+      return item.status === 'done';
+    };
+
+    $scope.todoAdd = function () {
+      $http({
+        method: 'POST',
+        url: '/api/todo/actions',
+        data: {
+          action: 'create',
+          record: {
+            todo_text: $scope.todoInput
+          }
+        }
+      }).then(function (response) {
+        $scope.todoList.push(response.data);
+        $scope.todoInput = '';
+      });
+    };
+
+    $scope.toggleCompleted = function (item) {
+      if (item.status !== 'done')
+        item.status = 'done';
+      else
+        item.status = 'undone';
+
+      $http({
+        method: 'POST',
+        url: '/api/todo/actions',
+        data: {
+          action: item.status,
+          item: item.id
+        }
+      });
+    };
+
+    $scope.markAllComplete = function (list) {
+      angular.forEach(list, function (item) {
+        item.$$done = true;
+        $scope.toggleCompleted(item);
+      });
+    };
+
+    $scope.toggle = function () {
+      $scope.openCompleted = !$scope.openCompleted;
+    };
+
+  });
 </script>
 
 <script defer src="/assets/js/jquery.smoothwheel.js"></script>

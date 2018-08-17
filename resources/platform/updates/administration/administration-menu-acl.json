@@ -1,15 +1,15 @@
 {
-  "collection": "p_acl",
-  "records": [
-    {
-      "short_description": "Only admin role users to get access to administration menu.",
-      "name": "administration menu",
-      "ref_collection": "",
-      "type": "p_menu",
-      "access": "",
-      "record_id": "5b15588ef362641220dfebc0",
-      "field": "",
-      "id": "5b50cefac995e81be859d2a1"
-    }
-  ]
+    "collection": "p_acl",
+    "records": [
+        {
+            "short_description": "Only admin role users to get access to administration menu.",
+            "name": "administration menu",
+            "ref_collection": "",
+            "type": "p_menu",
+            "access": "",
+            "record_id": "5b15588ef362641220dfebc0",
+            "field": "",
+            "id": "5b50cefac995e81be859d2a1"
+        }
+    ]
 }

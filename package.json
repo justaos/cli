@@ -1,91 +1,91 @@
 {
-  "name": "anysols",
-  "version": "1.5.0",
-  "description": "Sleek and powerful platform for faster and easier application development.",
-  "main": "./src/app.js",
-  "scripts": {
-    "start": "node %NODE_DEBUG_OPTION% src/app.js",
-    "mongod": "bin\\mongod.cmd",
-    "test": "nyc mocha --recursive",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "objectid": "node bin/objectid.js"
-  },
-  "nyc": {
-    "check-coverage": false,
-    "all": true,
-    "extension": [
-      ".js"
-    ],
-    "include": [
-      "**/!(*.spec.*).js"
-    ],
-    "exclude": [
-      "assets/",
-      "docs/",
-      "bin/",
-      "**/gulpfile.js",
-      "test/",
-      "playground.js"
-    ],
-    "reporter": [
-      "html",
-      "lcov",
-      "text",
-      "text-summary"
-    ],
-    "report-dir": "docs/reports/coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/anysols/anysols.git"
-  },
-  "bin": {
-    "anysols": "./bin/anysols.js"
-  },
-  "author": "Shivaji Varma <contact@shivajivarma.com>",
-  "contributors": [],
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://gitlab.com/anysols/anysols/issues"
-  },
-  "homepage": "https://anysols.com",
-  "dependencies": {
-    "anysols-model": "github:anysols/anysols-model#0.7.0",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.18.2",
-    "commander": "^2.16.0",
-    "compression": "^1.7.2",
-    "cookie-parser": "^1.4.3",
-    "copy-dir": "^0.3.0",
-    "dotenv": "^5.0.1",
-    "ejs": "^2.5.8",
-    "express": "^4.16.2",
-    "express-ejs-layouts": "^2.4.0",
-    "express-winston": "^2.5.0",
-    "glob": "^7.1.2",
-    "inquirer": "^6.0.0",
-    "istanbul": "^0.4.5",
-    "js2xmlparser": "^3.0.0",
-    "json-stringify-safe": "^5.0.1",
-    "jsonfile": "^4.0.0",
-    "jsonwebtoken": "^8.2.0",
-    "lodash": "^4.17.5",
-    "memory-cache": "^0.2.0",
-    "moment": "^2.22.2",
-    "mongoose": "^5.2.6",
-    "mongoose-schema-extend": "^0.2.2",
-    "node-schedule": "^1.3.0",
-    "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "q": "^1.5.1",
-    "winston": "^2.4.1"
-  },
-  "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.1.0",
-    "nyc": "^11.6.0",
-    "objectid": "^3.2.1",
-    "uuid": "^3.2.1"
-  }
+    "name": "anysols",
+    "version": "1.5.1",
+    "description": "Sleek and powerful platform for faster and easier application development.",
+    "main": "./src/app.js",
+    "scripts": {
+        "start": "node %NODE_DEBUG_OPTION% src/app.js",
+        "mongod": "bin\\mongod.cmd",
+        "test": "nyc mocha --recursive",
+        "coverage": "nyc report --reporter=text-lcov | coveralls",
+        "objectid": "node bin/objectid.js"
+    },
+    "nyc": {
+        "check-coverage": false,
+        "all": true,
+        "extension": [
+            ".js"
+        ],
+        "include": [
+            "**/!(*.spec.*).js"
+        ],
+        "exclude": [
+            "assets/",
+            "docs/",
+            "bin/",
+            "**/gulpfile.js",
+            "test/",
+            "playground.js"
+        ],
+        "reporter": [
+            "html",
+            "lcov",
+            "text",
+            "text-summary"
+        ],
+        "report-dir": "docs/reports/coverage"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/anysols/anysols.git"
+    },
+    "bin": {
+        "anysols": "./bin/anysols.js"
+    },
+    "author": "Shivaji Varma <contact@shivajivarma.com>",
+    "contributors": [],
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://gitlab.com/anysols/anysols/issues"
+    },
+    "homepage": "https://anysols.com",
+    "dependencies": {
+        "anysols-model": "github:anysols/anysols-model#0.7.1",
+        "bcrypt-nodejs": "0.0.3",
+        "body-parser": "^1.18.2",
+        "commander": "^2.16.0",
+        "compression": "^1.7.2",
+        "cookie-parser": "^1.4.3",
+        "copy-dir": "^0.3.0",
+        "cron": "^1.3.0",
+        "dotenv": "^5.0.1",
+        "ejs": "^2.5.8",
+        "express": "^4.16.2",
+        "express-ejs-layouts": "^2.4.0",
+        "express-winston": "^2.5.0",
+        "glob": "^7.1.2",
+        "inquirer": "^6.0.0",
+        "istanbul": "^0.4.5",
+        "js2xmlparser": "^3.0.0",
+        "json-stringify-safe": "^5.0.1",
+        "jsonfile": "^4.0.0",
+        "jsonwebtoken": "^8.2.0",
+        "lodash": "^4.17.5",
+        "memory-cache": "^0.2.0",
+        "moment": "^2.22.2",
+        "mongoose": "^5.2.6",
+        "mongoose-schema-extend": "^0.2.2",
+        "passport": "^0.4.0",
+        "passport-jwt": "^4.0.0",
+        "passport-local": "^1.0.0",
+        "q": "^1.5.1",
+        "winston": "^2.4.1"
+    },
+    "devDependencies": {
+        "chai": "^4.1.2",
+        "mocha": "^5.1.0",
+        "nyc": "^11.6.0",
+        "objectid": "^3.2.1",
+        "uuid": "^3.2.1"
+    }
 }

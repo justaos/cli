@@ -1,16 +1,16 @@
 {
-  "name": "p_role_contains",
-  "label": "Contained Role (m2m)",
-  "fields": [
-    {
-      "name": "role",
-      "type": "reference",
-      "ref": "p_role"
-    },
-    {
-      "name": "contains",
-      "type": "reference",
-      "ref": "p_role"
-    }
-  ]
+    "name": "p_role_contains",
+    "label": "Contained Role (m2m)",
+    "fields": [
+        {
+            "name": "role",
+            "type": "reference",
+            "ref": "p_role"
+        },
+        {
+            "name": "contains",
+            "type": "reference",
+            "ref": "p_role"
+        }
+    ]
 }

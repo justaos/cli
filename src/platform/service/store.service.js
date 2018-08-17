@@ -2,7 +2,7 @@ const Q = require('q');
 const logger = require('../../config/logger');
 
 const BaseService = require('./base.service');
-const modelUtils = require('../../model/model-utils');
+const modelUtils = require('../model-utils');
 const fileUtils = require('../../utils/file-utils');
 const constants = require('../platform-constants');
 const ViewService = require('./view.service');
@@ -12,6 +12,24 @@ class StoreService extends BaseService {
 
     constructor(user) {
         super(user);
+    }
+
+    /** helper functions **/
+    static readModelsForPackage(pkg) {
+        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.APPS + '/' + pkg + '/models/**.json');
+        let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
+        modelDefinitions.forEach(function (modelDef) {
+            modelDef.fields = modelDef.fields.concat(defaultFields);
+        });
+        return modelDefinitions;
+    }
+
+    static loadDataForPackage(pkg) {
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**/*.json');
+    }
+
+    static loadSampleDataForPackage(pkg) {
+        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**/*.json');
     }
 
     getApplications(cb) {
@@ -60,24 +78,6 @@ class StoreService extends BaseService {
             platform.serveStaticFiles(pkg);
         });
         return dfd.promise;
-    }
-
-    /** helper functions **/
-    static readModelsForPackage(pkg) {
-        let modelDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.APPS + '/' + pkg + '/models/**.json');
-        let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
-        modelDefinitions.forEach(function (modelDef) {
-            modelDef.fields = modelDef.fields.concat(defaultFields);
-        });
-        return modelDefinitions;
-    }
-
-    static loadDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/updates/**/*.json');
-    }
-
-    static loadSampleDataForPackage(pkg) {
-        return modelUtils.loadDataFromPath(constants.path.APPS + '/' + pkg + '/samples/**/*.json');
     }
 }
 

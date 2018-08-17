@@ -1,15 +1,15 @@
 {
-  "collection": "p_related_list",
-  "records": [
-    {
-      "ref_collection": "p_collection",
-      "view": "5b52ce5a0ced1bf429000001",
-      "id": "5b5f27ad19a901298473fb51"
-    },
-    {
-      "ref_collection": "p_view",
-      "view": "5b52ce5a0ced1bf429000001",
-      "id": "5b67c5ff47d5e8b80b000001"
-    }
-  ]
+    "collection": "p_related_list",
+    "records": [
+        {
+            "ref_collection": "p_collection",
+            "view": "5b52ce5a0ced1bf429000001",
+            "id": "5b5f27ad19a901298473fb51"
+        },
+        {
+            "ref_collection": "p_view",
+            "view": "5b52ce5a0ced1bf429000001",
+            "id": "5b67c5ff47d5e8b80b000001"
+        }
+    ]
 }

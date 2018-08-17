@@ -171,6 +171,7 @@ var FormScript = /** @class */ (function () {
     return FormScript;
 }());
 // @ts-ignore
+var $ = jQuery;
 (function (window, $) {
     // @ts-ignore
     window.FormScript = FormScript;

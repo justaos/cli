@@ -2,7 +2,7 @@ const Q = require('q');
 const vm = require('vm');
 
 const logger = require('../../config/logger');
-const modelUtils = require('../../model/model-utils');
+const modelUtils = require('../model-utils');
 const BaseService = require('./base.service');
 const constants = require('../platform-constants');
 

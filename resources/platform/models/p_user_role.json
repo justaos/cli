@@ -1,16 +1,16 @@
 {
-  "name": "p_user_role",
-  "label": "User Role",
-  "fields": [
-    {
-      "name": "user",
-      "type": "reference",
-      "ref": "p_user"
-    },
-    {
-      "name": "role",
-      "type": "reference",
-      "ref": "p_role"
-    }
-  ]
+    "name": "p_user_role",
+    "label": "User Role",
+    "fields": [
+        {
+            "name": "user",
+            "type": "reference",
+            "ref": "p_user"
+        },
+        {
+            "name": "role",
+            "type": "reference",
+            "ref": "p_role"
+        }
+    ]
 }

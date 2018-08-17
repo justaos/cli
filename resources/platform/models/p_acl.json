@@ -1,90 +1,90 @@
 {
-  "name": "p_acl",
-  "label": "Access Control (ACL)",
-  "fields": [
-    {
-      "name": "name",
-      "type": "string",
-      "display_value": true,
-      "order": 100
-    },
-    {
-      "name": "short_description",
-      "type": "string",
-      "length": 500,
-      "order": 200
-    },
-    {
-      "name": "type",
-      "type": "option",
-      "options": [
+    "name": "p_acl",
+    "label": "Access Control (ACL)",
+    "fields": [
         {
-          "order": "100",
-          "language": "en",
-          "label": "RECORD",
-          "value": "record"
+            "name": "name",
+            "type": "string",
+            "display_value": true,
+            "order": 100
         },
         {
-          "order": "200",
-          "language": "en",
-          "label": "MENU",
-          "value": "p_menu"
+            "name": "short_description",
+            "type": "string",
+            "length": 500,
+            "order": 200
         },
         {
-          "order": "300",
-          "language": "en",
-          "label": "MODULE",
-          "value": "p_module"
+            "name": "type",
+            "type": "option",
+            "options": [
+                {
+                    "order": "100",
+                    "language": "en",
+                    "label": "RECORD",
+                    "value": "record"
+                },
+                {
+                    "order": "200",
+                    "language": "en",
+                    "label": "MENU",
+                    "value": "p_menu"
+                },
+                {
+                    "order": "300",
+                    "language": "en",
+                    "label": "MODULE",
+                    "value": "p_module"
+                }
+            ],
+            "order": 300
+        },
+        {
+            "label": "Collection",
+            "name": "ref_collection",
+            "type": "collection",
+            "order": 400
+        },
+        {
+            "name": "field",
+            "type": "string",
+            "order": 500
+        },
+        {
+            "name": "record_id",
+            "type": "string",
+            "order": 600
+        },
+        {
+            "name": "access",
+            "type": "option",
+            "options": [
+                {
+                    "order": "100",
+                    "language": "en",
+                    "label": "CREATE",
+                    "value": "create"
+                },
+                {
+                    "order": "200",
+                    "language": "en",
+                    "label": "READ",
+                    "value": "read"
+                },
+                {
+                    "order": "300",
+                    "language": "en",
+                    "label": "UPDATE",
+                    "value": "update"
+                },
+                {
+                    "order": "300",
+                    "language": "en",
+                    "label": "DELETE",
+                    "value": "delete"
+                }
+            ],
+            "order": 700
         }
-      ],
-      "order": 300
-    },
-    {
-      "label": "Collection",
-      "name": "ref_collection",
-      "type": "collection",
-      "order": 400
-    },
-    {
-      "name": "field",
-      "type": "string",
-      "order": 500
-    },
-    {
-      "name": "record_id",
-      "type": "string",
-      "order": 600
-    },
-    {
-      "name": "access",
-      "type": "option",
-      "options": [
-        {
-          "order": "100",
-          "language": "en",
-          "label": "CREATE",
-          "value": "create"
-        },
-        {
-          "order": "200",
-          "language": "en",
-          "label": "READ",
-          "value": "read"
-        },
-        {
-          "order": "300",
-          "language": "en",
-          "label": "UPDATE",
-          "value": "update"
-        },
-        {
-          "order": "300",
-          "language": "en",
-          "label": "DELETE",
-          "value": "delete"
-        }
-      ],
-      "order": 700
-    }
-  ]
+    ]
 }
