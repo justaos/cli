@@ -59,8 +59,12 @@
                     <p id="app-description"></p>
                     <div>
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="sample-data">
-                            <label class="form-check-label" for="sample-data">Sample Data</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input record-checkbox"
+                                       id="sample-data">
+                                <label class="custom-control-label" for="sample-data">Sample Data<span
+                                            class="sr-only"></span></label>
+                            </div>
                         </div>
                         <br/>
                         <button class="btn btn-primary" id="btn-install">Install</button>

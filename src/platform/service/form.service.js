@@ -47,7 +47,7 @@ class FormService extends BaseService {
             conditions = JSON.parse(query.conditions);
         }
         let Model = that._as.model(collectionName);
-        let records = Model.populateReferences().find(conditions, null, options).exec();
+        let records = Model.find(conditions, null, options).populateRefs().exec();
         let collectionPromise = this._getCollectionByName(collectionName);
         let fieldsPromise = this.getFieldsForCollection(collectionName);
 
@@ -125,7 +125,7 @@ class FormService extends BaseService {
 
     findRecordById(modelName, id) {
         let Model = this._as.model(modelName);
-        return Model.populateReferences().findById(id).exec();
+        return Model.findById(id).populateRefs().exec();
     }
 
     createRecord(modelName, plainRecord) {

@@ -18,7 +18,7 @@ class MenuService extends BaseService {
 
     filterBasedOnAccess(type, records) {
         let that = this;
-        let recordIDs = records.map(record => record.id);
+        let recordIDs = records.map(record => record.get('id'));
         let filteredRecords = [];
 
         return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ class MenuService extends BaseService {
                 records.forEach(function (record) {
                     let dfd = Q.defer();
                     promises.push(dfd.promise);
-                    let aclRolesForMenu = acls.filter(acl => acl.get('record_id') === record.getID()).map(acl => acl.id);
+                    let aclRolesForMenu = acls.filter(acl => acl.get('record_id') === record.get('id')).map(acl => acl.get('id'));
                     that.recordHasAccess(aclRolesForMenu).then(function (access) {
                         if (access)
                             filteredRecords.push(record);
@@ -42,13 +42,15 @@ class MenuService extends BaseService {
     }
 
     async recordHasAccess(aclIDs) {
-        if (aclIDs.length) {
+        if(this.sessionUser.hasRole('admin')){
+            return true;
+        } else if (aclIDs.length) {
             let AclRole = this._as.model('p_acl_role');
             let aclRoles = await AclRole.find({acl: aclIDs[0]}).exec();
             aclRoles = aclRoles.map(aclRole => aclRole.toObject());
             return await this.hasAccess(aclRoles)
         } else {
-            return true;
+            return false;
         }
     }
 
@@ -59,7 +61,7 @@ class MenuService extends BaseService {
 
     hasAccess(aclRoles) {
         let that = this;
-        if (that.sessionUser.hasRole('admin') || !aclRoles.length)
+        if (!aclRoles.length)
             return true;
         let flag = false;
         aclRoles.forEach(function (aclRole) {
@@ -79,8 +81,8 @@ class MenuService extends BaseService {
         let menu = await this.getMenuById(menuId);
         let modules = await this._as.model('p_module').find({ref_menu: menuId}, null, {sort: {order: 1}}).exec();
         if (menu) {
-            modules = modules.map(module => module.toObject());
             modules = await that.filterBasedOnAccess('p_module', modules);
+            modules = modules.map(module => module.toObject());
             return {menu, modules: dsUtils.flatToHierarchy(modules)};
         }
         throw new Error("Menu not found");

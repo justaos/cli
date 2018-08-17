@@ -11,7 +11,7 @@ fileUtils.readJsonFileSync = function (file, options) {
 fileUtils.readJsonFilesFromPathSync = function (path, options) {
     let result = [];
     glob.sync(path).forEach(function (file) {
-        let data = fileUtils.readJsonFileSync(file);
+        let data = fileUtils.readJsonFileSync(file, options);
         result.push(data);
     });
     return result;
