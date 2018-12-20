@@ -1,6 +1,6 @@
 {
     "name": "anysols",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "description": "Sleek and powerful platform for faster and easier application development.",
     "main": "./src/app.js",
     "scripts": {
