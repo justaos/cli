@@ -50,7 +50,7 @@
     },
     "homepage": "https://anysols.com",
     "dependencies": {
-        "anysols-model": "github:anysols/anysols-model#0.7.1",
+        "anysols-model": "github:anysols/anysols-model#0.7.2",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
         "commander": "^2.16.0",
