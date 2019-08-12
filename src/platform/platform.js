@@ -7,13 +7,11 @@ const logger = require('../config/logger');
 const stringUtils = require('../utils/string-utils');
 const fileUtils = require('../utils/file-utils');
 
-const {DatabaseService, ModelBuilder} = require('anysols-model');
+const {AnysolsModel} = require('anysols-model');
 
 const modelUtils = require('./model-utils');
 const platformRoutes = require('./platform-routes');
 const constants = require('./platform-constants');
-
-const model = new ModelBuilder().build();
 
 const PlatformService = require('./service/platform.service');
 const ViewService = require('./service/view.service');
@@ -27,7 +25,8 @@ class Platform {
     }
 
     static upsertCollection(collectionDef) {
-        let Collection = model(constants.model.COLLECTION);
+        let am = modelUtils.getAnysolsModel();
+        let Collection = am.model(constants.model.COLLECTION);
         return Collection.upsert({name: collectionDef.name}, {
             name: collectionDef.name,
             label: collectionDef.label
@@ -36,13 +35,15 @@ class Platform {
 
     initialize() {
         let dfd = Q.defer();
-        DatabaseService.connect(config.db).then(() => {
-            DatabaseService.databaseExists().then(() => {
+        let anysolsModel = new AnysolsModel();
+        anysolsModel.connect(config.db).then(() => {
+            anysolsModel.databaseExists().then(() => {
                 dfd.resolve(true);
             }, () => {
                 dfd.resolve(false)
             });
         }, dfd.reject);
+        modelUtils.setAnysolsModel(anysolsModel);
         return dfd.promise;
     }
 
@@ -64,9 +65,11 @@ class Platform {
     }
 
     populateSysData(collectionDef) {
+        let am = modelUtils.getAnysolsModel();
+
         let dfd = Q.defer();
-        let Field = model(constants.model.FIELD);
-        let Option = model(constants.model.OPTION);
+        let Field = am.model(constants.model.FIELD);
+        let Option = am.model(constants.model.OPTION);
         Platform.upsertCollection(collectionDef).then(function (collectionRecord) {
             let promises = [];
             collectionDef.fields.forEach(function (field) {
@@ -99,7 +102,8 @@ class Platform {
     scanApplications() {
         let that = this;
         logger.info('Scanning for apps');
-        let Application = model(constants.model.APPLICATION);
+        let am = modelUtils.getAnysolsModel();
+        let Application = am.model(constants.model.APPLICATION);
         glob.sync(constants.path.APPS + '/**/config.json').forEach(file => {
             let config = fileUtils.readJsonFileSync(file);
             Application.upsert({package: config.package}, config).exec();
@@ -115,7 +119,8 @@ class Platform {
         let that = this;
         let dfd = Q.defer();
         logger.info('platform', 'clean installing...');
-        DatabaseService.dropDatabase().then(function () {
+        var anysolsModel = modelUtils.getAnysolsModel();
+        anysolsModel.dropDatabase().then(function () {
             let platformSchemaDefinitions = fileUtils.readJsonFilesFromPathSync(constants.path.PATFORM_MODELS + '/**.json');
             let defaultFields = fileUtils.readJsonFileSync(constants.path.DEFAULT_FIELDS);
             platformSchemaDefinitions.forEach(function (modelDef) {

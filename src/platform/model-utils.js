@@ -1,11 +1,20 @@
 const Q = require('q');
 const logger = require('../config/logger');
 const {ModelBuilder, ModelService} = require('anysols-model');
-const model = new ModelBuilder().build();
 const glob = require('glob');
 const fileUtils = require('../utils/file-utils');
 
+let anysolsModel;
+
 let ModelUtils = {
+
+    setAnysolsModel(am) {
+        anysolsModel = am;
+    },
+
+    getAnysolsModel() {
+        return anysolsModel;
+    },
 
     loadSchemasIntoStore(defs) {
         let backlog = {};
@@ -14,7 +23,7 @@ let ModelUtils = {
     },
 
     loadData(data) {
-        let Model = model(data.collection);
+        let Model = anysolsModel.model(data.collection);
         if (data.record)
             return Model.upsert({_id: data.record.id}, data.record).exec();
         else if (data.records) {
@@ -41,8 +50,8 @@ let ModelUtils = {
         let dfd = Q.defer();
         let backlog = {};
         let loadSchemaFn = loadSchemaFactory(backlog);
-        let Collection = model('p_collection');
-        let Field = model('p_field');
+        let Collection = anysolsModel.model('p_collection');
+        let Field = anysolsModel.model('p_field');
         Collection.find({}).exec().then((collections) => {
             if (collections.length) {
                 let promises = [];
@@ -73,10 +82,9 @@ let ModelUtils = {
 };
 
 function loadSchemaFactory(backlog) {
-    let modelService = new ModelService();
     return function loadSchema(schemaDefinition) {
-        if (!modelService.isModelDefined(schemaDefinition.name)) {
-            modelService.define(schemaDefinition);
+        if (!anysolsModel.isModelDefined(schemaDefinition.name)) {
+            anysolsModel.defineModel(schemaDefinition);
             logger.info('model-utils (loadSchemaFactory) ::', ' loaded ' + schemaDefinition.name);
         } else {
             logger.info('model-utils (loadSchemaFactory) ::', ' model already loaded : ' + schemaDefinition.name);

@@ -3,22 +3,19 @@ const cache = require('memory-cache');
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const Q = require('q');
-
 const hashUtils = require('../utils/hash-utils');
-const {ModelBuilder} = require('anysols-model');
-const model = new ModelBuilder().build();
-
 const config = require('../config/config');
-
 const JWTStrategy = passportJWT.Strategy;
+const modelUtils = require('../platform/model-utils');
 
 module.exports = function () {
     passport.use(new LocalStrategy(
         function (username, password, done) {
 
+            const anysolsModel = modelUtils.getAnysolsModel();
             //Assume there is a DB module providing a global UserModel
             username = username.replace('.', '[.]');
-            model('p_user').findOne({username: new RegExp(`^${username}$`, 'i')}).exec().then(function (user) {
+            anysolsModel.model('p_user').findOne({username: new RegExp(`^${username}$`, 'i')}).exec().then(function (user) {
                 if (!user)
                     return done(null, false, {
                         found: false,
@@ -44,9 +41,9 @@ module.exports = function () {
             secretOrKey: config.app.cookieSecret || 'secret'
         },
         function (jwtPayload, cb) {
-
+            const anysolsModel = modelUtils.getAnysolsModel();
             //find the user in db if needed
-            return model('p_user').findById(jwtPayload.id).exec().then((user) => {
+            return anysolsModel.model('p_user').findById(jwtPayload.id).exec().then((user) => {
                 if (user) {
                     user = user.toObject();
                     getUserRoles(user.id).then(function (userRoles) {
@@ -85,7 +82,8 @@ function getUserRoles(userId) {
     if (userRoles) {
         dfd.resolve(userRoles);
     } else {
-        model('p_user_role').find({user: userId}).populateRefs().exec().then(function (userRoles) {
+        const anysolsModel = modelUtils.getAnysolsModel();
+        anysolsModel.model('p_user_role').find({user: userId}).populateRefs().exec().then(function (userRoles) {
             userRoles = userRoles.map(userRole => userRole.toObject());
             cache.put(userId, userRoles, 24 * 60 * 60 * 1000);
             dfd.resolve(userRoles);

@@ -3,9 +3,7 @@
   "db": {
 	"host": "localhost",
 	"port": "27017",
-	"name": "anysols",
-	"user": "root",
-	"password": "root",
+	"database": "anysols",
 	"dialect": "mongodb"
   },
   "app": {
