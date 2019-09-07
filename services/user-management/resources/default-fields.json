@@ -1,0 +1,12 @@
+[
+    {
+        "name": "created_by",
+        "type": "reference",
+        "ref": "p_user"
+    },
+    {
+        "name": "updated_by",
+        "type": "reference",
+        "ref": "p_user"
+    }
+]

@@ -49,12 +49,8 @@
         "url": "https://gitlab.com/anysols/anysols/issues"
     },
     "homepage": "https://anysols.com",
-    "temp": {
-        "anysols-model-local": "file:../anysols-model",
-        "anysols-model-github": "github:anysols/anysols-model#0.7.2"
-    },
     "dependencies": {
-        "anysols-model": "^1.0.0-rc2",
+        "anysols-platform": "^0.5.0",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
         "commander": "^2.16.0",
