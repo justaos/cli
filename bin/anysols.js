@@ -1,52 +1,27 @@
 #!/usr/bin/env node
-const copydir = require('copy-dir');
-const _ = require('lodash');
+const Anysols = require("../lib").default;
 const program = require('commander');
-const {prompt} = require('inquirer');
-
-function setupPlatform() {
-    const fileUtils = require('../src-js/utils/file-utils');
-    let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../resources/config.json'); // load from default config.
-    const prodConfig = _.cloneDeep(defaultConfig, true);
-    prodConfig.logger = 'info';
-    prodConfig.db.password = 'YOUR_DB_PASSWORD';
-    prodConfig.app.port = 80;
-    let generatedConfig = {
-        development: defaultConfig,
-        test: prodConfig,
-        production: prodConfig
-    };
-    fileUtils.writeJsonFileSync(process.cwd() + '/anysols-config.json', generatedConfig);
-    fileUtils.writeFileSync(process.cwd() + '/.env', 'NODE_ENV=development');
-}
+const fs = require('fs');
 
 program
-    .version('1.3.0', '-v, --version')
-    .command('setup')
-    .description('Setup the platform')
-    .action(function (args) {
-        let setupChoice = ['platform only', 'platform + sample applications'];
+    .version('1.3.0', '-v, --version');
 
-        prompt([{
-            type: 'list',
-            name: 'type',
-            message: 'Setup type. Select the option you wish to perform',
-            choices: setupChoice
-        }]).then(answers => {
-            if (answers.type === setupChoice[0]) {
-                setupPlatform();
-            } else {
-                setupPlatform();
-                copydir.sync(__dirname + '/../resources/apps', process.cwd() + '/resources/apps');
-            }
-            console.log("project setup complete");
-            console.log("please run the command `anysols run` to start the application");
-        });
+program.command('setup')
+    .description('Setup the platform')
+    .action(function () {
+        const files = fs.readdirSync(process.cwd());
+        if (!files.length)
+            Anysols.projectSetup();
+        else
+            throw new Error("Folder should be empty to create project.")
     });
 
-program.command('run').action(function () {
-    require('../lib/app');
-});
+program.command('run')
+    .description('Run the platform')
+    .action(function () {
+        const anysols = new Anysols();
+        anysols.run();
+    });
 
 program.parse(process.argv);
 

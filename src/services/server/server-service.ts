@@ -1,11 +1,14 @@
 import * as express from "express";
-import {Logger} from "anysols-utils";
+import {Logger, readFileSync, readJsonFileSync} from "anysols-utils";
 import {ServerInterface} from "./server-interface";
 import {Express, Request, Response, Router, NextFunction} from "express";
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as engine from 'express-ejs-layouts';
 import * as compression from 'compression';
+import * as ejs from "ejs";
+import {cwdPath} from "../../config";
+import * as http from "http";
 
 const privates = new WeakMap();
 
@@ -29,11 +32,12 @@ export class ServerService {
     }
 
     async stop() {
-
+        _getServer(this).close();
+        logger.log('stopped server');
     }
 
     getInterface(): ServerInterface {
-        return new ServerInterface(_getApp(this));
+        return new ServerInterface(_getRouter(this));
     }
 }
 
@@ -43,7 +47,7 @@ function _getApp(that: ServerService): Express {
     return privates.get(that).app;
 }
 
-function _getRouter(that: ServerService): Express {
+function _getRouter(that: ServerService): Router {
     return privates.get(that).router;
 }
 
@@ -60,6 +64,8 @@ function _registerRouterAndHandlers(that: ServerService) {
         },
         level: 9
     }));
+
+    app.use('/assets', express.static(cwdPath + '/assets'));
 
     // set ui path, template engine and default layout
     app.use(engine);
@@ -79,12 +85,47 @@ function _registerRouterAndHandlers(that: ServerService) {
 }
 
 function _handleErrors(that: ServerService) {
+
+    const app = _getApp(that);
+
+    // assume "not found" in the error msgs
+    // is a 404. this is somewhat silly, but
+    // valid, you can do whatever you like, set
+    // properties, use instanceof etc.
+    app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
+        // treat as 404
+        if (err.message
+            && (~err.message.indexOf('not found')
+                || (~err.message.indexOf('Cast to ObjectId failed')))) {
+            return next();
+        }
+
+        // log it
+        // send emails if you want
+        logger.error(err.message);
+        console.error(err);
+
+        if (req.headers['content-type'] === 'application/json') {
+            res.status(500).send({
+                message: err.toString(),
+                details: _thisLine(err)
+            });
+        } else
+            res.status(500).render('500', {error: err.stack}); // error page
+    });
+
+
+    const ejs404 = readFileSync(cwdPath + "/views/404.ejs");
+
     // assume 404 since no middleware responded
     _getApp(that).use(function (req: Request, res: Response, next: NextFunction) {
 
         // respond with html page
         if (req.accepts('html')) {
-            res.render('404', {url: req.url});
+            let html = "Not found";
+            if (ejs404)
+                html = ejs.render(ejs404.toString(), {url: req.originalUrl});
+            res.type('html').send(html);
             return;
         }
 
@@ -99,10 +140,22 @@ function _handleErrors(that: ServerService) {
     });
 }
 
+function _thisLine(err: any) {
+    const regex = /\((.*):(\d+):(\d+)\)$/;
+    const match = regex.exec(err.stack.split("\n")[2]);
+    if (match && match.length >= 3) {
+        return {
+            filepath: match[1] ? match[1] : '',
+            line: match[2] ? match[2] : '',
+            column: match[3] ? match[3] : ''
+        }
+    }
+}
+
 function _startExpressServer(that: ServerService): Promise<any> {
     const config = _getConfig(that);
     return new Promise((resolve, reject) => {
-        _getApp(that).listen(config.port, function () {
+        privates.get(that).server = _getApp(that).listen(config.port, function () {
             resolve();
         });
     });
@@ -110,4 +163,8 @@ function _startExpressServer(that: ServerService): Promise<any> {
 
 function _getConfig(that: ServerService) {
     return privates.get(that).config;
+}
+
+function _getServer(that: ServerService): http.Server {
+    return privates.get(that).server;
 }
