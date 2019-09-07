@@ -1,5 +1,5 @@
 const {assert} = require('chai');
-const hashUtils = require('../../../src/utils/hash-utils');
+const hashUtils = require('../../../src-js/utils/hash-utils');
 
 describe('hash-utils', function() {
 

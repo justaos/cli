@@ -21,7 +21,7 @@ if (programName === 'anysols.js' || programName === 'anysols') {
         console.log(FgRed,
             '*********************************************************************');
         console.log(FgRed,
-            '***               anyols-config.js file not found                 ***');
+            '***               anysols-config.js file not found                 ***');
         console.log(FgRed,
             '*** Please initiate the project by running `anysols init` command ***');
         console.log(FgRed,

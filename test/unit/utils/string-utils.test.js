@@ -1,5 +1,5 @@
 const {assert} = require('chai');
-const stringUtils = require('../../../src/utils/string-utils');
+const stringUtils = require('../../../src-js/utils/string-utils');
 
 describe('string-utils', function() {
 

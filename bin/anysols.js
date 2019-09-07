@@ -5,7 +5,7 @@ const program = require('commander');
 const {prompt} = require('inquirer');
 
 function setupPlatform() {
-    const fileUtils = require('../src/utils/file-utils');
+    const fileUtils = require('../src-js/utils/file-utils');
     let defaultConfig = fileUtils.readJsonFileSync(__dirname + '/../resources/config.json'); // load from default config.
     const prodConfig = _.cloneDeep(defaultConfig, true);
     prodConfig.logger = 'info';
@@ -45,7 +45,7 @@ program
     });
 
 program.command('run').action(function () {
-    require('../src/app');
+    require('../lib/app');
 });
 
 program.parse(process.argv);

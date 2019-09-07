@@ -1,25 +1,6 @@
 'use strict';
 
-const {AnysolsPlatform} = require("anysols-platform");
-
-const platform = new AnysolsPlatform({
-        "loggerLevel": "info",
-        "db": {
-            "host": "localhost",
-            "port": "27017",
-            "database": "anysols",
-            "dialect": "mongodb",
-        },
-        services: ["server"]
-    }
-);
-
-platform.boot().then(() => {
-
-});
-
-
-/*const Platform = require('./platform');
+const Platform = require('./platform');
 const express = require('express');
 const router = express.Router();
 const logger = require('./config/logger');
@@ -56,9 +37,6 @@ router.get('/editor', (req, res, next) => {
 app.listen(config.app.port);
 
 logger.info('listening on port ' + config.app.port);
-*/
-
-
 
 
 process.on('unhandledRejection', function onError(err) {

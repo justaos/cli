@@ -1,6 +1,6 @@
 const {assert} = require('chai');
 const fs = require('fs');
-const fileUtils = require('../../../src/utils/file-utils.js');
+const fileUtils = require('../../../src-js/utils/file-utils.js');
 
 describe('file-utils', function() {
 

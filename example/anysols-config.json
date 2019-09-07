@@ -1,0 +1,21 @@
+{
+    "name": "Anysols - Platform for Business applications",
+    "loggerLevel": "info",
+    "db": {
+        "host": "localhost",
+        "port": "27017",
+        "database": "anysols",
+        "dialect": "mongodb"
+    },
+    "services": [
+        {
+            "name": "server",
+            "config": {
+                "port": 8080,
+                "cookieName": "x-auth-token",
+                "cookieSecret": "anysolsindia",
+                "tokenExpiration": 86400000
+            }
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 const {assert} = require('chai');
 const fs = require('fs');
-const dsUtils = require('../../../src/utils/ds-utils.js');
+const dsUtils = require('../../../src-js/utils/ds-utils.js');
 
 describe('ds-utils', function() {
 
