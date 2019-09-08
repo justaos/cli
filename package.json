@@ -51,7 +51,7 @@
     },
     "homepage": "https://anysols.com",
     "dependencies": {
-        "anysols-platform": "file:../anysols-platform",
+        "anysols-core-service": "^0.6.1",
         "anysols-utils": "^0.2.0",
         "body-parser": "^1.19.0",
         "commander": "^2.16.0",

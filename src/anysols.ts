@@ -1,7 +1,9 @@
-import {AnysolsPlatform} from "anysols-platform";
+import {AnysolsCoreService} from "anysols-core-service";
 import {cwdPath, rootPath} from "./config";
 import {readJsonFileSync, writeFileSync, copySync} from "anysols-utils";
 import {ServerService} from "./services/server/server-service";
+
+const services = [AnysolsCoreService, ServerService];
 
 export default class Anysols {
 
@@ -17,15 +19,16 @@ export default class Anysols {
         writeFileSync(cwdPath + '/.env', 'NODE_ENV=development');
     }
 
-    run() {
+    async run() {
         const anysolsConfig = readJsonFileSync(cwdPath + "/anysols-config.json", null);
 
-        const platform = new AnysolsPlatform({
-            "db": anysolsConfig.db
-        });
-
-        platform.boot().then(() => {
-            new ServerService(anysolsConfig.services[0].config).start();
-        });
+        for (const serviceDefinition of anysolsConfig.services) {
+            let Service: any;
+            for (Service of services) {
+                if (Service.getName() === serviceDefinition.name) {
+                    await new Service(serviceDefinition.config).start();
+                }
+            }
+        }
     }
 }

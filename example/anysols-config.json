@@ -1,13 +1,16 @@
 {
     "name": "Anysols - Platform for Business applications",
     "loggerLevel": "info",
-    "db": {
-        "host": "localhost",
-        "port": "27017",
-        "database": "anysols",
-        "dialect": "mongodb"
-    },
     "services": [
+        {
+            "name": "core",
+            "config": {
+                "host": "localhost",
+                "port": "27017",
+                "database": "anysols",
+                "dialect": "mongodb"
+            }
+        },
         {
             "name": "server",
             "config": {

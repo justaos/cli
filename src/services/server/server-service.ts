@@ -20,7 +20,7 @@ export class ServerService {
         privates.set(this, {app, router, config});
     }
 
-    getName() {
+    static getName() {
         return "server";
     }
 

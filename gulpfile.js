@@ -1,5 +1,4 @@
-var gulp = require('gulp');
-var del = require('del');
+const del = require('del');
 
 function cleanOutput() {
     return del([
