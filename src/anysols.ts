@@ -1,9 +1,9 @@
 import {AnysolsCoreService} from "anysols-core-service";
-import {cwdPath, rootPath} from "./config";
+import * as platformConfig from "./config";
 import {readJsonFileSync, writeFileSync, copySync} from "anysols-utils";
-import {ServerService} from "./services/server/server-service";
+import {AnysolsServerService} from "anysols-server-service";
 
-const services = [AnysolsCoreService, ServerService];
+const services = [AnysolsCoreService, AnysolsServerService];
 
 export default class Anysols {
 
@@ -12,20 +12,30 @@ export default class Anysols {
     }
 
     static projectSetup() {
-        const config = readJsonFileSync(cwdPath + "/anysols-config.json", null);
+        const config = readJsonFileSync(platformConfig.cwdPath + "/anysols-config.json", null);
         if (config)
             throw new Error("");
-        copySync(rootPath + '/example', cwdPath);
-        writeFileSync(cwdPath + '/.env', 'NODE_ENV=development');
+        copySync(platformConfig.rootPath + '/example', platformConfig.cwdPath);
+        writeFileSync(platformConfig.cwdPath + '/.env', 'NODE_ENV=development');
     }
 
     async run() {
-        const anysolsConfig = readJsonFileSync(cwdPath + "/anysols-config.json", null);
+        const anysolsConfig = readJsonFileSync(platformConfig.cwdPath + "/anysols-config.json", null);
 
         for (const serviceDefinition of anysolsConfig.services) {
             let Service: any;
             for (Service of services) {
                 if (Service.getName() === serviceDefinition.name) {
+                    if (Service.getName() === 'server') {
+                        if (serviceDefinition.config.assets)
+                            serviceDefinition.config.assets = platformConfig.cwdPath + "/" + serviceDefinition.config.assets;
+                        if (serviceDefinition.config.pages) {
+                            for (let key of Object.keys(serviceDefinition.config.pages)) {
+                                serviceDefinition.config.pages[key] = platformConfig.cwdPath + "/" + serviceDefinition.config.pages[key];
+                            }
+                        }
+                    }
+
                     await new Service(serviceDefinition.config).start();
                 }
             }
