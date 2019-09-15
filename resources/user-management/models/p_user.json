@@ -1,0 +1,29 @@
+{
+    "name": "p_user",
+    "label": "User",
+    "fields": [
+        {
+            "name": "username",
+            "type": "string",
+            "display_value": true,
+            "mandatory": true,
+            "order": 100
+        },
+        {
+            "name": "first_name",
+            "type": "string",
+            "order": 200
+        },
+        {
+            "name": "last_name",
+            "type": "string",
+            "order": 300
+        },
+        {
+            "name": "password",
+            "type": "string",
+            "hint": "Leave the input field blank, if you do not want to change password",
+            "order": 400
+        }
+    ]
+}

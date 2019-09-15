@@ -17,8 +17,19 @@
                 "port": 8080,
                 "assets": "assets",
                 "pages": {
-                    "404": "views/404.ejs"
+                    "404": "views/404.ejs",
+                    "500": "views/500.ejs"
                 }
+            }
+        },  {
+            "name": "userManagement"
+        }, {
+            "name": "security",
+            "config": {
+                "cookieName": "x-auth-token",
+                "cookieSecret": "anysolsindia",
+                "tokenExpiration": 86400000,
+                "loginPage": "views/login.ejs"
             }
         }
     ]

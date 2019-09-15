@@ -15,7 +15,7 @@ const level = config.loggerLevel;
 
 const options = {
     transports: [
-        new (winston.transports.Console)({
+        new winston.transports.Console({
             colorize: true,
             level: level
         })

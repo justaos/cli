@@ -46,7 +46,7 @@
         },
         {
             "name": "script",
-            "type": "script",
+            "type": "string",
             "default_value": "(function(req, res){\r\n    // write you code here\r\n    var data = {};\r\n    res.send(data);\r\n})(req, res);",
             "order": 400
         }

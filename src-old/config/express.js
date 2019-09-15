@@ -1,10 +1,8 @@
 const express = require('express');
 const engine = require('express-ejs-layouts');
-const compression = require('compression');
 const expressWinston = require('express-winston');
 const logger = require('../config/logger');
 const config = require('../config/config');
-const stringify = require('json-stringify-safe');
 
 module.exports = function (app, router) {
 

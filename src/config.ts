@@ -1,19 +1,19 @@
 import * as path from "path";
 
-const rootPath = path.normalize(__dirname + '/..');
+const ROOT_PATH = path.normalize(__dirname + '/..');
 
 const programName = path.basename(process.argv[1]);
 
-let cwdPath: string;
+let CWD_PATH: string;
 
 if (programName === 'anysols.js' || programName === 'anysols') {
-    cwdPath = process.cwd(); // current working directory
+    CWD_PATH = process.cwd(); // current working directory
 } else {
-    cwdPath = path.normalize(__dirname + '/../example');
+    CWD_PATH = path.normalize(__dirname + '/../example');
 }
 
 
 export {
-    rootPath,
-    cwdPath
+    ROOT_PATH,
+    CWD_PATH
 }
