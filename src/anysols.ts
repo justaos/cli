@@ -3,7 +3,7 @@ import {readJsonFileSync, writeFileSync, copySync} from "anysols-utils";
 
 import {AnysolsCoreService} from "anysols-core-service";
 import {AnysolsServerService} from "anysols-server-service";
-import PlatformAPIsApplication from "./system-applications/platform-apis/platformAPIsApplication";
+import PlatformApplication from "./system-applications/platform/platformApplication";
 import SecurityApplication from "./system-applications/security/securityApplication";
 import UserManagementApplication from "./system-applications/userManagement/userManagement";
 
@@ -38,22 +38,18 @@ export default class Anysols {
                 let ServiceClass = serviceClasses[serviceName];
                 console.log("loading service :: " + serviceName);
                 if (ServiceClass.getName() === 'server') {
-                    if (serviceDefinition.config.assets)
-                        serviceDefinition.config.assets = platformConfig.CWD_PATH + "/" + serviceDefinition.config.assets;
-                    if (serviceDefinition.config.pages)
-                        for (let key of Object.keys(serviceDefinition.config.pages))
-                            serviceDefinition.config.pages[key] = platformConfig.CWD_PATH + "/" + serviceDefinition.config.pages[key];
-                }  else if (ServiceClass.getName() === 'security') {
-                    if (serviceDefinition.config.loginPage)
-                        serviceDefinition.config.loginPage = platformConfig.CWD_PATH + "/" + serviceDefinition.config.loginPage;
+                    if (serviceDefinition.config.assetsPath)
+                        serviceDefinition.config.assetsPath = platformConfig.CWD_PATH + "/" + serviceDefinition.config.assetsPath;
+                    if (serviceDefinition.config.viewsPath)
+                        serviceDefinition.config.viewsPath = platformConfig.CWD_PATH + "/" + serviceDefinition.config.viewsPath;
                 }
                 let service = new ServiceClass(serviceDefinition.config, null, services);
                 await service.start();
                 services[serviceName] = service;
             }
         }
-        let platformAPIsApplication = new PlatformAPIsApplication({}, null, services);
-        await platformAPIsApplication.start();
+        let platformApplication = new PlatformApplication({}, null, services);
+        await platformApplication.start();
 
     }
 }

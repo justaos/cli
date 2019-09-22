@@ -2,7 +2,7 @@ import {Logger} from "anysols-utils/lib";
 
 const privates = new WeakMap();
 
-export default class PlatformAPIsApplication {
+export default class PlatformApplication {
 
     constructor(config: any, logger: any | null, services: any) {
         privates.set(this, {config, services});
@@ -26,6 +26,12 @@ export default class PlatformAPIsApplication {
                 next(err);
             });
         });
+        _getService(that).server.get('/', {}, (req: any, res: any, next: any) => {
+            res.render('index', {layout: false});
+        });
+        _getService(that).server.get('/home', {authenticate: true}, (req: any, res: any, next: any) => {
+            res.render('home', {layout: false});
+        });
     }
 
     async stop() {
@@ -34,13 +40,13 @@ export default class PlatformAPIsApplication {
 
 }
 
-const logger = new Logger(PlatformAPIsApplication.name);
+const logger = new Logger(PlatformApplication.name);
 
 
-function _getConfig(that: PlatformAPIsApplication) {
+function _getConfig(that: PlatformApplication) {
     return privates.get(that).config;
 }
 
-function _getService(that: PlatformAPIsApplication) {
+function _getService(that: PlatformApplication) {
     return privates.get(that).services;
 }

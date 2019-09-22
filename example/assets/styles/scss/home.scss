@@ -1,0 +1,90 @@
+@import './color.scss';
+
+body {
+  padding-top: 48px;
+  background: $grey-1;
+
+  .header-navigation {
+    background-color: white;
+
+    .navbar-brand {
+      font-size: inherit;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:hover, &:focus {
+        background: $primary-10;
+      }
+    }
+
+    #nav-search {
+      transition: all .3s;
+      width: 15em;
+
+      &:hover, &:focus {
+        width: 25em;
+      }
+    }
+
+    .dropdown {
+      transition: all .3s;
+      border: 1px solid transparent;
+      &.show {
+        background: $grey-3;
+        border-color: $primary-5;
+      }
+      .dropdown-menu {
+        border-radius: initial;
+        border: none;
+        padding: 0;
+
+        .dropdown-item {
+          padding: 1em;
+
+          &:hover {
+            background: $white;
+            color: $primary-5;
+          }
+        }
+
+        .dropdown-divider {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .menu-item-wrapper {
+    min-width: 22em;
+    width: 25%;
+
+    .menu-item {
+      background-color: white;
+      height: 150px;
+      padding: 1rem .5rem;
+
+      .menu-icon {
+        color: var(--primary-label);
+      }
+    }
+
+    &:hover, &:focus, &:active {
+      .menu-item {
+        transition: all .3s !important;
+        color: white;
+        background-color: var(--primary-label);
+
+        .menu-icon {
+          color: #E8EAF6;
+        }
+      }
+    }
+
+  }
+
+  .card-deck {
+    .card-body {
+      padding: 1rem;
+    }
+  }
+}

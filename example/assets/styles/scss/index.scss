@@ -1,26 +1,9 @@
 body {
-  .menu-item-wrapper {
-    min-width: 22em;
-    width: 25%;
-    .menu-item {
-      background-color: white;
-      height: 150px;
-      padding: 1rem .5rem;
-      .menu-icon {
-        color: var(--primary-label);
-      }
-    }
+  .jumbotron {
+    background: transparent;
+  }
 
-    &:hover, &:focus, &:active {
-      .menu-item {
-        transition: all .3s !important;
-        color: white;
-        background-color: var(--primary-label);
-        .menu-icon {
-          color: #E8EAF6;
-        }
-      }
-    }
-
+  .card {
+    border: 0;
   }
 }

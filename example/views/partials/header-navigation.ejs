@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-md header-navigation fixed-top justify-content-between py-0 shadow-sm">
+    <a class="navbar-brand py-2 mx-0" href="/">
+        <anysols-logo scale="5" animate style="display: block; height: 24px; width: 44px;"></anysols-logo>
+
+    </a>
+    <div class="py-2 px-2 mr-auto">
+        Anysols
+    </div>
+    <form class="form-inline">
+        <div class="input-group mr-sm-2">
+            <input id="nav-search" type="text" class="form-control form-control-sm" placeholder="Search"
+                   aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a href="/profile" class="nav-link dropdown-toggle no-style" href="#"  id="navbar-dropdown-menu" data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                <img src="/assets/img/user.png" class="rounded-circle bg-primary" style="height: 30px; width: 30px">
+                <%= (!!locals.user) ? user.username : 'John Smith' %>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbar-dropdown-menu">
+                <a class="dropdown-item" href="/profile"><i class="fas fa-cog"></i> Account Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            </div>
+        </li>
+    </ul>
+</nav>

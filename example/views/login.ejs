@@ -20,20 +20,19 @@
 <body>
 <form class="form-signin" action="javascript:void(0);" method="post">
     <div id="signin-header" class="text-center mb-4">
-        <img src="https://raw.githubusercontent.com/anysols/anysols.github.io/master/assets/img/logo.png" alt=""
-             width="142" height="142">
+        <anysols-logo scale="18" style="display:inline-block; height: 120px;" animate></anysols-logo>
         <h1 class="h3 mb-3 font-weight-normal">Sign in to Anysols</h1>
     </div>
 
     <div class="form-label-group">
         <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off" required
                autofocus>
-        <label for="username">Username</label>
+        <label for="username" class="sr-only">Username</label>
     </div>
 
     <div class="form-label-group">
         <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="off" required>
-        <label for="password">Password</label>
+        <label for="password" class="sr-only">Password</label>
     </div>
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
@@ -73,5 +72,6 @@
     });
   })();
 </script>
+<script src="https://rawcdn.githack.com/anysols/anysols-ui/ecf8bdbdd4f405452b0d5b8fa4c34a1d9376fa44/web-components/anysolsLogo.js"></script>
 </body>
 </html>

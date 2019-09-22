@@ -8,6 +8,7 @@ import * as passportJWT from 'passport-jwt';
 import * as jwt from 'jsonwebtoken';
 import AnysolsUser from "../userManagement/anysolsUser";
 import * as ejs from "ejs";
+import * as fs from "fs";
 
 const LocalStrategy = passportLocal.Strategy;
 const JWTStrategy = passportJWT.Strategy;
@@ -79,17 +80,9 @@ function _initializeApis(that: SecurityApplication) {
         (req, res);
     });
 
-    let loginPageEjs: any;
-    if (config.loginPage) {
-        try {
-            loginPageEjs = readFileSync(config.loginPage).toString();
-        } catch (e) {
-            _getLogger(that).warn("Login view Not found");
-        }
-    }
     server.get('/auth/login', {}, (req: any, res: any, next: any) => {
-        if (loginPageEjs)
-            res.status(200).type('html').send(ejs.render(loginPageEjs, {}));
+        if (fs.existsSync(server.getViewsPath() + '/' + config.loginPage + '.ejs'))
+            res.status(200).render(config.loginPage, {layout: false});
         else
             next();
     });
@@ -137,11 +130,11 @@ function _registerJWTStrategy(that: SecurityApplication) {
         },
         function (jwtPayload, cb) {
             //find the user in db if needed
-            return userManagement.getUserByUsername(jwtPayload.username).then((user: AnysolsRecord | null) => {
+            userManagement.getUserByUsername(jwtPayload.username).then((user: AnysolsRecord | null) => {
                 if (user) {
                     cb(null, user);
                 } else
-                    throw Error('no such user')
+                    cb(new Error('no such user'));
             });
         }
     ));

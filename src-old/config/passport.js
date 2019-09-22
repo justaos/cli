@@ -9,27 +9,6 @@ const JWTStrategy = passportJWT.Strategy;
 const modelUtils = require('../platform/model-utils');
 
 module.exports = function () {
-    passport.use(new LocalStrategy(
-        function (username, password, done) {
-
-            const anysolsModel = modelUtils.getAnysolsModel();
-            //Assume there is a DB module providing a global UserModel
-            username = username.replace('.', '[.]');
-            anysolsModel.model('p_user').findOne({username: new RegExp(`^${username}$`, 'i')}).exec().then(function (user) {
-                if (!user)
-                    return done(null, false, {
-                        found: false,
-                        message: 'Username does not exist'
-                    });
-
-                if (!hashUtils.validateHash(password, user.get('password')))
-                    return done(null, false,
-                        {found: true, message: 'Incorrect password.'});
-
-                return done(null, user.toObject(), {message: 'Logged In Successfully'});
-
-            });
-        }));
 
     passport.use(new JWTStrategy({
             jwtFromRequest: function (req) {
