@@ -13,14 +13,11 @@
   },
   "homepage": "https://gitlab.com/anysols/anysols#README",
   "dependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-watch": "^5.0.0",
-    "office-ui-fabric-react": "^7.37.0",
-    "run-sequence": "^2.2.1"
+    "gulp-sourcemaps": "^2.6.5"
   },
   "devDependencies": {
-    "sass-material-colors": "0.0.5"
+    "sass-material-colors": "^0.0.5"
   }
 }

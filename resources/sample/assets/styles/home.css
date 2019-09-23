@@ -1,0 +1,62 @@
+/**
+ * Retrieves a color value from the $material-colors Sass map
+ * Inspired by https://github.com/nilskaspersson/Google-Material-UI-Color-Palette/
+ *
+ * @function
+ * @param {string} color-name             - quoted, lower-case, dasherized color
+ *                                          name (e.g. 'pink', 'amber')
+ * @param {string} [color-variant='500']  - quoted, lowercase color variant (e.g.
+ *                                          '200', 'a100')
+ */
+body {
+  padding-top: 48px;
+  background: #fafafa; }
+  body .header-navigation {
+    background-color: white; }
+    body .header-navigation .navbar-brand {
+      font-size: inherit;
+      padding-left: 10px;
+      padding-right: 10px; }
+      body .header-navigation .navbar-brand:hover, body .header-navigation .navbar-brand:focus {
+        background: #fafafa; }
+    body .header-navigation #nav-search {
+      transition: all .3s;
+      width: 15em; }
+      body .header-navigation #nav-search:hover, body .header-navigation #nav-search:focus {
+        width: 25em; }
+    body .header-navigation .dropdown {
+      transition: all .3s;
+      border: 1px solid transparent; }
+      body .header-navigation .dropdown.show {
+        background: #eeeeee;
+        border-color: #42a5f5; }
+      body .header-navigation .dropdown .dropdown-menu {
+        border-radius: initial;
+        border: none;
+        padding: 0; }
+        body .header-navigation .dropdown .dropdown-menu .dropdown-item {
+          padding: 1em; }
+          body .header-navigation .dropdown .dropdown-menu .dropdown-item:hover {
+            background: #fff;
+            color: #42a5f5; }
+        body .header-navigation .dropdown .dropdown-menu .dropdown-divider {
+          margin: 0; }
+  body .menu-item-wrapper {
+    min-width: 22em;
+    width: 25%; }
+    body .menu-item-wrapper .menu-item {
+      background-color: white;
+      height: 150px;
+      padding: 1rem .5rem; }
+      body .menu-item-wrapper .menu-item .menu-icon {
+        color: var(--primary-label); }
+    body .menu-item-wrapper:hover .menu-item, body .menu-item-wrapper:focus .menu-item, body .menu-item-wrapper:active .menu-item {
+      transition: all .3s !important;
+      color: white;
+      background-color: var(--primary-label); }
+      body .menu-item-wrapper:hover .menu-item .menu-icon, body .menu-item-wrapper:focus .menu-item .menu-icon, body .menu-item-wrapper:active .menu-item .menu-icon {
+        color: #E8EAF6; }
+  body .card-deck .card-body {
+    padding: 1rem; }
+
+/*# sourceMappingURL=home.css.map */

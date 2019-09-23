@@ -10,7 +10,8 @@
         "module": "commonjs",
         "declaration": true,
         "outDir": "./lib",
-        "strict": true
+        "strict": true,
+        "sourceMap": true
     },
     "include": [
         "src/**/*"

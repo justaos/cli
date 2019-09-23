@@ -25,10 +25,6 @@ export default class UserManagementApplication {
         for(let schema of userManagementSchemas) {
             await core.defineCollection(schema);
         }
-        const user = core.collection('p_user').createNewRecord();
-        user.set('username', 'admin');
-        user.set('password', '$2a$08$A3a5qp9pFtEh7bMbzonr4.R/gsWepkCAjGYhLENKFnLprCh3U8QK.');
-        await user.insert();
     }
 
     async stop() {

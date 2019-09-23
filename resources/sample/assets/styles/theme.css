@@ -1,0 +1,11 @@
+:root {
+  --primary: #3F51B5;
+  --primary-dark: #283593;
+  --primary-label: #5C6BC0;
+  --primary-button: #1A237E;
+  --page-bg: #fff; }
+
+body {
+  font-family: 'Noto Sans', sans-serif; }
+
+/*# sourceMappingURL=theme.css.map */
