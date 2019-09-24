@@ -9,7 +9,7 @@
   },
   "services": [
     {
-      "name": "server",
+      "name": "anysols-server-service",
       "port": 8080,
       "paths": {
         "assets": "assets",
@@ -19,18 +19,24 @@
         "404": "404",
         "500": "500"
       }
+    },
+    {
+      "name": "anysols-user-management"
+    },
+    {
+      "name": "anysols-security-service",
+      "cookieName": "x-auth-token",
+      "cookieSecret": "anysolsindia",
+      "tokenExpiration": 86400000,
+      "pages": {
+        "login": "login"
+      }
     }
   ],
   "test": [
     {
-      "name": "userManagement"
-    },
-    {
-      "name": "security",
-      "cookieName": "x-auth-token",
-      "cookieSecret": "anysolsindia",
-      "tokenExpiration": 86400000,
-      "loginPage": "login"
+      "name": "security"
+
     }
   ]
 }

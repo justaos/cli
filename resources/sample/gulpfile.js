@@ -1,31 +1,18 @@
-const {src, dest, watch} = require('gulp');
-let sass = require('gulp-sass');
-let sourcemaps = require('gulp-sourcemaps');
+const {src, dest, watch, series} = require('gulp');
+const sass = require('gulp-sass');
+const sourcemaps = require('gulp-sourcemaps');
 
-let SRC = './assets/styles/scss/**/*.scss';
-let DEST = './assets/styles/';
+const SRC = './assets/styles/scss/**/*.scss';
+const DEST = './assets/styles/';
 
-function scssTask(){
-  return src(SRC)
-      .pipe(sourcemaps.init())
-      .pipe(sass())
-      .pipe(sourcemaps.write('.'))
-      .pipe(dest(DEST)
-      );
+function scssTask() {
+    return src(SRC)
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest(DEST));
 }
 
-//build
-function build() {
-  scssTask();
-}
-
-function reload() {
-  return watch(SRC, function() {
-    build();
-  });
-}
-
-exports.default = function() {
-  build();
-  reload();
+exports.default = function () {
+    watch(SRC, scssTask);
 };

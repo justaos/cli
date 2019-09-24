@@ -1,0 +1,1 @@
+{"version":3,"file":"index.css","sources":["index.scss"],"sourcesContent":["body {\r\n  .jumbotron {\r\n    background: transparent;\r\n  }\r\n\r\n  .card {\r\n    border: 0;\r\n  }\r\n}\r\n"],"names":[],"mappings":"AAAA,AACE,IADE,CACF,UAAU,CAAC;EACT,UAAU,EAAE,WAAW,GACxB;;AAHH,AAKE,IALE,CAKF,KAAK,CAAC;EACJ,MAAM,EAAE,CAAC,GACV"}
