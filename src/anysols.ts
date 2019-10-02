@@ -1,23 +1,41 @@
-import * as platformConfig from "./config";
-import {readJsonFileSync, writeFileSync, copySync, readJsonFilesFromPathSync} from "anysols-utils";
+import {readJsonFileSync, writeFileSync, copySync, readJsonFilesFromPathSync, createLogger} from "anysols-utils";
 
 import {AnysolsCollection, AnysolsRecord} from "anysols-odm";
 import {AnysolsCoreService} from "anysols-core-service";
 import {AnysolsServerService} from "anysols-server-service";
 import {AnysolsUserManagement} from "anysols-user-management";
 import {AnysolsSecurityService} from "anysols-security-service";
-import PlatformApplication from "./system-applications/platform/platformApplication";
+import {AnysolsPlatform} from "anysols-platform";
 
 
 import * as path from "path";
-import {SAMPLE_PATH} from "./config";
+import {SAMPLE_PATH, CWD_PATH} from "./config";
 import {CORE_MODELS} from "anysols-core-service/lib/constants";
+import * as fs from "fs";
 
 const serviceClasses: any = {
     [AnysolsServerService.getName()]: AnysolsServerService,
     [AnysolsUserManagement.getName()]: AnysolsUserManagement,
-    [AnysolsSecurityService.getName()]: AnysolsSecurityService
+    [AnysolsSecurityService.getName()]: AnysolsSecurityService,
+    [AnysolsPlatform.getName()]: AnysolsPlatform,
 };
+
+function padStars(str?: string) {
+    const size = 75;
+    if (typeof str === 'string')
+        return '* ' + str.padStart(str.length + Math.floor((size - str.length) / 2), ' ').padEnd(size, ' ') + ' *';
+
+    else
+        return ''.padStart(size + 4, '*');
+}
+
+const FgRed = "\x1b[31m";
+const FgGreen = "\x1b[32m";
+const Reset = "\x1b[0m";
+
+function printf(color: string, str?: string) {
+    console.log(color, padStars(str), Reset);
+}
 
 export default class Anysols {
 
@@ -26,21 +44,36 @@ export default class Anysols {
     }
 
     static projectSetup() {
-        const config = readJsonFileSync(path.normalize(platformConfig.CWD_PATH + "/anysols-config.json"), null);
-        if (config)
-            throw new Error("");
-        copySync(SAMPLE_PATH, platformConfig.CWD_PATH);
-        writeFileSync(platformConfig.CWD_PATH + '/.env', 'NODE_ENV=development');
+        if (fs.existsSync(path.normalize(CWD_PATH + "/anysols-config.json")))
+            throw new Error("Project already existing in the folder");
+        copySync(SAMPLE_PATH, CWD_PATH);
+        writeFileSync(CWD_PATH + '/.env', 'NODE_ENV=development');
     }
 
     async run() {
-        const anysolsConfig = readJsonFileSync(platformConfig.CWD_PATH + "/anysols-config.json", null);
+        let anysolsConfig;
+        try {
+            anysolsConfig = readJsonFileSync(CWD_PATH + "/anysols-config.json", null);
+            printf(FgGreen);
+            printf(FgGreen, 'project name : ' + anysolsConfig.name);
+            printf(FgGreen, 'current working directory : ' + CWD_PATH);
+            printf(FgGreen);
+        } catch (e) {
+            printf(FgRed);
+            printf(FgRed, 'anysols-config.json file not found');
+            printf(FgRed, 'Please initiate the project by running `anysols setup` command');
+            printf(FgRed);
+            process.exit(0);
+        }
+
         const services: any = {};
-        const coreService = new AnysolsCoreService(anysolsConfig.core, undefined);
+        const coreService = new AnysolsCoreService(anysolsConfig.core, logger);
         await coreService.start();
         services[AnysolsCoreService.getName()] = coreService;
 
         const serviceCol = coreService.collection(CORE_MODELS.SERVICE);
+        if (!serviceCol)
+            throw new Error("Unknown model " + CORE_MODELS.SERVICE);
         const serviceRecords: AnysolsRecord[] = await serviceCol.find({}).toArray();
         for (const serviceConfig of anysolsConfig.services) {
             const serviceName = serviceConfig.name;
@@ -51,52 +84,63 @@ export default class Anysols {
 
             if (serviceConfig.paths)
                 Object.keys(serviceConfig.paths).forEach((key: string) => {
-                    serviceConfig.paths[key] = platformConfig.CWD_PATH + "/" + serviceConfig.paths[key];
+                    serviceConfig.paths[key] = CWD_PATH + "/" + serviceConfig.paths[key];
                 });
-            let service = new ServiceClass(serviceConfig, null, services);
+            let service = new ServiceClass(serviceConfig, logger, services);
             await service.start();
-            console.log("Service started :: " + serviceName);
+            logger.info("Started '" + serviceName + "'");
             services[serviceName] = service;
+            const projectPath = ServiceClass.getProjectPath();
             if (!serviceRecord) {
-                const projectPath = ServiceClass.getProjectPath();
                 const modelsPath = path.normalize(projectPath + "/resources/models/**.json");
                 for (const schemaDefinition of readJsonFilesFromPathSync(modelsPath, null))
-                    services[AnysolsCoreService.getName()].defineCollection(schemaDefinition);
-                await _saveService(services[AnysolsCoreService.getName()], ServiceClass.getName(), ServiceClass.getVersion());
-            }
-        }
+                    await coreService.defineCollection(schemaDefinition);
 
-
-        /*for (const serviceDefinition of anysolsConfig.services) {
-            let serviceName: string = serviceDefinition.name;
-            if (serviceClasses[serviceName]) {
-                let ServiceClass = serviceClasses[serviceName];
-                console.log("loading service :: " + serviceName);
-                if (ServiceClass.getName() === 'server') {
-                    if (serviceDefinition.config.assetsPath)
-                        serviceDefinition.config.assetsPath = platformConfig.CWD_PATH + "/" + serviceDefinition.config.assetsPath;
-                    if (serviceDefinition.config.viewsPath)
-                        serviceDefinition.config.viewsPath = platformConfig.CWD_PATH + "/" + serviceDefinition.config.viewsPath;
+                const updatesPath = path.normalize(projectPath + "/resources/updates/**/*.json");
+                for (const updateFile of readJsonFilesFromPathSync(updatesPath, null))
+                    await coreService.loadUpdateRecords(updateFile);
+                await _saveService(coreService, ServiceClass.getName(), ServiceClass.getVersion());
+            } else if (serviceRecord.get('version') !== ServiceClass.getVersion()) {
+                logger.info("Upgrading '" + serviceName + "'");
+                const modelsPath = path.normalize(projectPath + "/resources/models/**.json");
+                for (const schemaDefinition of readJsonFilesFromPathSync(modelsPath, null)) {
+                    if (coreService.isCollectionDefined(schemaDefinition.name)) {
+                        const col = coreService.collection(schemaDefinition.name);
+                        if (!col)
+                            throw new Error("Unknown model :: " + schemaDefinition.name);
+                        const rec: AnysolsRecord | null = await col.findOne({name: schemaDefinition.name});
+                        if (rec)
+                            await rec.delete();
+                    }
+                    await coreService.defineCollection(schemaDefinition);
                 }
-                let service = new ServiceClass(serviceDefinition.config, null, services);
-                await service.start();
-                services[serviceName] = service;
+
+                const updatesPath = path.normalize(projectPath + "/resources/updates/**/*.json");
+                for (const updateFile of readJsonFilesFromPathSync(updatesPath, null)) {
+                    await coreService.deleteRecords(updateFile);
+                    await coreService.loadUpdateRecords(updateFile);
+                }
+                serviceRecord.set('name', serviceName);
+                serviceRecord.set('version', ServiceClass.getVersion());
+                await serviceRecord.update();
             }
         }
-        let platformApplication = new PlatformApplication({}, null, services);
-        await platformApplication.start();*/
+
 
     }
 }
 
+const logger = createLogger({label: Anysols.name});
+
 async function _saveService(core: AnysolsCoreService, name: string, version: string) {
-    const serviceCol: AnysolsCollection = core.collection(CORE_MODELS.SERVICE);
+    const serviceCol = core.collection(CORE_MODELS.SERVICE);
+    if (!serviceCol)
+        throw new Error("Unknown model " + CORE_MODELS.SERVICE);
     const serviceRecord = serviceCol.createNewRecord();
     serviceRecord.set('name', name);
     serviceRecord.set('version', version);
     await serviceRecord.insert();
 }
-
 
 process.on('unhandledRejection', function onError(err) {
     console.error(err);

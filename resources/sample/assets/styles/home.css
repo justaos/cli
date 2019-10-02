@@ -41,22 +41,34 @@ body {
             color: #42a5f5; }
         body .header-navigation .dropdown .dropdown-menu .dropdown-divider {
           margin: 0; }
-  body .menu-item-wrapper {
-    min-width: 22em;
-    width: 25%; }
-    body .menu-item-wrapper .menu-item {
-      background-color: white;
-      height: 150px;
-      padding: 1rem .5rem; }
-      body .menu-item-wrapper .menu-item .menu-icon {
-        color: var(--primary-label); }
-    body .menu-item-wrapper:hover .menu-item, body .menu-item-wrapper:focus .menu-item, body .menu-item-wrapper:active .menu-item {
-      transition: all .3s !important;
-      color: white;
-      background-color: var(--primary-label); }
-      body .menu-item-wrapper:hover .menu-item .menu-icon, body .menu-item-wrapper:focus .menu-item .menu-icon, body .menu-item-wrapper:active .menu-item .menu-icon {
-        color: #E8EAF6; }
   body .card-deck .card-body {
     padding: 1rem; }
+  body .applications {
+    display: flex;
+    flex-wrap: wrap; }
+  body .app {
+    cursor: pointer;
+    padding-right: 30px;
+    color: inherit; }
+    body .app:last-child {
+      padding-right: 0; }
+    body .app .app-icon {
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      background: white;
+      height: 80px;
+      width: 80px;
+      border-radius: 20px;
+      padding: 10px; }
+    body .app .app-title {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      width: 120px; }
+    body .app:hover {
+      text-decoration: none;
+      color: #2196f3; }
+      body .app:hover > .app-icon {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }
 
 /*# sourceMappingURL=home.css.map */

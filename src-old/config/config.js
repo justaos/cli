@@ -45,18 +45,5 @@ config.env = env;
 config.root = rootPath;
 config.cwd = cwdPath;
 
-let size = 50;
-
-function logBox(str) {
-    console.log('* ' + _.padEnd(str, size, ' ') + ' *');
-}
-
-console.log(_.padStart('', size + 4, '*'));
-logBox('program : ' + programName);
-logBox('environment : ' + config.env);
-logBox('logger level : ' + config.loggerLevel);
-logBox('port : ' + config.app.port);
-logBox('current working directory : ' + config.cwd);
-console.log(_.padStart('', size + 4, '*'));
 
 module.exports = config;

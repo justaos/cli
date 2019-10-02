@@ -14,7 +14,6 @@ if (programName === 'anysols.js' || programName === 'anysols') {
     CWD_PATH = SAMPLE_PATH;
 }
 
-
 export {
     ROOT_PATH,
     CWD_PATH,

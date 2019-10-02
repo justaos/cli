@@ -31,12 +31,9 @@
       "pages": {
         "login": "login"
       }
-    }
-  ],
-  "test": [
+    },
     {
-      "name": "security"
-
+      "name": "anysols-platform"
     }
   ]
 }

@@ -12,17 +12,21 @@
     <!--
         Stylesheets and Preprocessors
     -->
-    <link href="/assets/3rd-party/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/styles/base.css" rel="stylesheet">
+    <link href="/anysols-ui/3rd-party/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/anysols-ui/styles/base.css" rel="stylesheet">
     <link href="/assets/styles/home.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <!--
        Scripts
     -->
-    <script src="/assets/3rd-party/js/jquery-3.3.1.min.js"></script>
-    <script src="/assets/3rd-party/js/popper.min.js"></script>
-    <script src="/assets/3rd-party/js/bootstrap.min.js"></script>
-    <script defer src="/assets/3rd-party/js/fontawesome.min.js"></script>
+    <script src="/anysols-ui/3rd-party/js/jquery-3.3.1.min.js"></script>
+    <script src="/anysols-ui/3rd-party/js/popper.min.js"></script>
+    <script src="/anysols-ui/3rd-party/js/bootstrap.min.js"></script>
+    <script defer src="/anysols-ui/3rd-party/js/fontawesome.min.js"></script>
+
+    <script src="/anysols-ui/web-components/anysolsLogo.js"></script>
+    <script src="/anysols-ui/web-components/anysolsTime.js"></script>
+    <script src="/anysols-ui/web-components/anysolsList.js"></script>
 
 </head>
 <body>
@@ -51,9 +55,56 @@
     </div>
 
     <div class="container-fluid pt-5">
-        <div class="shadow bg-white">
-           asfasd
+        <div class="app-category-container">
+            <h2 class="app-category h6 p-3">ADMINISTRATION</h2>
+            <div class="applications">
+                <a class="app" href="/app/settings">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/settings.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Settings
+                    </div>
+                </a>
+                <a class="app" href="/app/user-and-permissions">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/person-male.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Users and Permissions
+                    </div>
+                </a>
+            </div>
         </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <anysols-list id="test" style="height: 500px; display: block"></anysols-list>
+        <script>
+            let $list = document.getElementById('test');
+            fetch('/api/platform/list/p_collection').then(function (response) {
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                    return;
+                }
+
+                // Examine the text in the response
+                response.json().then(function (data) {
+                    let cols = [];
+                    data.listElements.forEach(function (e) {
+                        cols.push({
+                            name: e.field.name,
+                            label: e.field.label,
+                            width: 300
+                        });
+                    });
+                    $list.cols = cols;
+                    $list.data = data.records;
+                });
+
+            });
+        </script>
     </div>
 
 </main>
@@ -76,7 +127,7 @@
             legend: {
                 display: false
             },
-            scales:{
+            scales: {
                 xAxes: [{
                     display: false //this will remove all the x-axis grid lines
                 }],
@@ -87,7 +138,5 @@
         }
     });
 </script>
-<script src="https://rawcdn.githack.com/anysols/anysols-ui/ecf8bdbdd4f405452b0d5b8fa4c34a1d9376fa44/web-components/anysolsLogo.js"></script>
-<script src="https://rawcdn.githack.com/anysols/anysols-ui/ecf8bdbdd4f405452b0d5b8fa4c34a1d9376fa44/web-components/anysolsTime.js"></script>
 </body>
 </html>
