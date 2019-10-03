@@ -1,27 +1,27 @@
 {
-    "name": "anysols-platform-ui",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "start": "node app.js",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "snyk-protect": "snyk protect",
-        "prepare": "npm run snyk-protect"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://gitlab.com/anysols/anysols/issues"
-    },
-    "homepage": "https://gitlab.com/anysols/anysols#README",
-    "dependencies": {
-        "gulp": "^4.0.0",
-        "gulp-sass": "^4.0.2",
-        "gulp-sourcemaps": "^2.6.4",
-        "gulp-watch": "^5.0.0",
-        "run-sequence": "^2.2.1",
-        "snyk": "^1.89.0"
-    },
-    "snyk": true
+  "name": "anysols-platform-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/anysols/anysols/issues"
+  },
+  "homepage": "https://gitlab.com/anysols/anysols#README",
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-watch": "^5.0.0",
+    "run-sequence": "^2.2.1",
+    "snyk": "^1.230.5"
+  },
+  "snyk": true
 }
