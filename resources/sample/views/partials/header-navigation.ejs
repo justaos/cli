@@ -19,9 +19,8 @@
         <li class="nav-item dropdown">
             <a href="/profile" class="nav-link dropdown-toggle no-style" href="#"  id="navbar-dropdown-menu" data-toggle="dropdown"
                aria-haspopup="true"
-               aria-expanded="false">
+               aria-expanded="false" title="<%= (!!locals.user) ? user.username : '' %>">
                 <img src="/assets/img/user.png" class="rounded-circle bg-primary" style="height: 30px; width: 30px">
-                <%= (!!locals.user) ? user.username : 'John Smith' %>
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbar-dropdown-menu">
                 <a class="dropdown-item" href="/profile"><i class="fas fa-cog"></i> Account Settings</a>

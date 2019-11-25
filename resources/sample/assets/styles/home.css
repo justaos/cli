@@ -43,6 +43,8 @@ body {
           margin: 0; }
   body .card-deck .card-body {
     padding: 1rem; }
+  body .app-category {
+    text-transform: uppercase; }
   body .applications {
     display: flex;
     flex-wrap: wrap; }

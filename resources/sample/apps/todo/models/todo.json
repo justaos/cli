@@ -3,7 +3,7 @@
     "label": "Todo",
     "fields": [
         {
-            "name": "todo_text",
+            "name": "description",
             "type": "string",
             "display_value": true,
             "mandatory": true,
@@ -16,19 +16,19 @@
             "order": 200,
             "options": [
                 {
-                    "order": "100",
+                    "order": 100,
                     "language": "en",
                     "label": "NEW",
                     "value": "new"
                 },
                 {
-                    "order": "100",
+                    "order": 200,
                     "language": "en",
                     "label": "DONE",
                     "value": "done"
                 },
                 {
-                    "order": "200",
+                    "order": 300,
                     "language": "en",
                     "label": "UNDONE",
                     "value": "undone"

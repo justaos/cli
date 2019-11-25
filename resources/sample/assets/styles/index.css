@@ -1,3 +1,11 @@
+body .brand-logo h1 {
+  font-size: 24px;
+  color: #2977c9;
+  font-weight: 400; }
+
+body .news-section {
+  background: #5968aa; }
+
 body .jumbotron {
   background: transparent; }
 

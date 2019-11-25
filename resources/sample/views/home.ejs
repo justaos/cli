@@ -56,6 +56,19 @@
 
     <div class="container-fluid pt-5">
         <div class="app-category-container">
+            <h2 class="app-category h6 p-3">Productive tools</h2>
+            <div class="applications">
+                <a class="app" href="/app/todo">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/app.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Todo
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="app-category-container">
             <h2 class="app-category h6 p-3">ADMINISTRATION</h2>
             <div class="applications">
                 <a class="app" href="/app/settings">
@@ -79,10 +92,10 @@
     </div>
 
     <div class="container-fluid py-5">
-        <anysols-list id="test" style="height: 500px; display: block"></anysols-list>
+        <!--anysols-list id="test" style="height: 500px; display: block"></anysols-list-->
         <script>
             let $list = document.getElementById('test');
-            fetch('/api/platform/list/p_collection').then(function (response) {
+            fetch('/api/platform/list/p_collection?sort={name:-1}').then(function (response) {
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
@@ -102,7 +115,6 @@
                     $list.cols = cols;
                     $list.data = data.records;
                 });
-
             });
         </script>
     </div>

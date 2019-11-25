@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<form class="form-signin" action="javascript:void(0);" method="post">
+<form id="form-signin" class="form-signin" action="javascript:void(0);" method="post">
     <div id="signin-header" class="text-center mb-4">
         <anysols-logo scale="18" style="display:inline-block; height: 120px;" animate></anysols-logo>
         <h1 class="h3 mb-3 font-weight-normal">Sign in to Anysols</h1>
@@ -38,39 +38,59 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     <p class="mt-5 mb-3 text-muted text-center">&copy; 2018-2019</p>
 </form>
-<script src="/anysols-ui/3rd-party/js/jquery-3.3.1.min.js"></script>
-<script src="/anysols-ui/3rd-party/js/popper.min.js"></script>
-<script src="/anysols-ui/3rd-party/js/bootstrap.min.js"></script>
 <script>
-  (function() {
-    'use strict';
-    let $signInHeader = $('#signin-header');
-    let $username = $('#username');
-    let $password = $('#password');
-    let searchParams = new URLSearchParams(window.location.search);
-    let redirect = searchParams.get('redirect');
-    if (!redirect)
-      redirect = '/';
-    $('form').on('submit', function(e) {
-      let data = {};
-      data.username = $username.val();
-      data.password = $password.val();
-      $.post('/auth/login', data).then(function() {
-        window.location.href = redirect;
-      }, function(res) {
-        $signInHeader.find('.alert').remove();
-        $signInHeader.append('<div class="alert alert-danger" role="alert">' + res.responseJSON.message + '</div>');
-        if (!res.responseJSON.user) {
-          $username.val(null).focus();
-          $password.val(null);
-        } else
-          $password.val(null).focus();
-      });
+    (function () {
+        'use strict';
+        const $signInHeader = document.getElementById('signin-header');
+        const $username = document.getElementById('username');
+        const $password = document.getElementById('password');
+        const searchParams = new URLSearchParams(window.location.search);
+        let redirect = searchParams.get('redirect');
+        if (!redirect)
+            redirect = '/home';
 
-      //stop form submission
-      e.preventDefault();
-    });
-  })();
+
+        const $form = document.getElementById('form-signin');
+        const formData  = new FormData();
+        formData.set('username', 'admin');
+
+        $form.addEventListener('submit', function (evt) {
+            //stop form submission
+            evt.preventDefault();
+
+            const params = {
+                username: $username.value,
+                password: $password.value
+            };
+            const searchParams = Object.keys(params).map((key) => {
+                return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+            }).join('&');
+
+            fetch('/auth/login', {
+                method: 'POST',
+                headers:{'content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+                body: searchParams
+            }).then(function (res) {
+                if (res.ok) {
+                    window.location.href = redirect;
+                } else {
+                    const $alert = $signInHeader.querySelector('.alert')
+                    if ($alert) $alert.remove();
+                    res.json().then(function (data) {
+                        var child = document.createElement('div');
+                        child.innerHTML = ('<div class="alert alert-danger" role="alert">' + data.message + '</div>');
+                        $signInHeader.appendChild(child.firstChild);
+                        $password.value = null;
+                        if (!data.user) {
+                            $username.value = null;
+                            $username.focus();
+                        } else
+                            $password.focus();
+                    })
+                }
+            });
+        });
+    })();
 </script>
 <script src="/anysols-ui/web-components/anysolsLogo.js"></script>
 </body>

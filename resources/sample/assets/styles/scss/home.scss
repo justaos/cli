@@ -1,4 +1,4 @@
-@import '../../../../../node_modules/anysols-ui/styles/scss/color.scss';
+@import '../../../../../node_modules/anysols-server-service/node_modules/anysols-ui/styles/scss/color.scss';
 
 body {
   padding-top: 48px;
@@ -60,6 +60,10 @@ body {
     .card-body {
       padding: 1rem;
     }
+  }
+
+  .app-category {
+    text-transform: uppercase;
   }
 
   .applications {

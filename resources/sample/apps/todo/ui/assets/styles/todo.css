@@ -1,0 +1,83 @@
+body {
+  padding-top: 48px;
+  background: #fafafa; }
+  body .app-close {
+    height: 48px;
+    width: 48px;
+    background: red;
+    color: white;
+    display: flex; }
+    body .app-close .fa-times {
+      margin: auto; }
+  body .app-icon {
+    width: 48px; }
+  body .title {
+    font-size: 24px;
+    padding-bottom: 24px; }
+  body .sub-title {
+    font-size: 20px;
+    font-weight: 400;
+    padding-bottom: 12px; }
+  body .spinner-grow {
+    background: #5cdbd3;
+    height: 30px;
+    width: 30px; }
+  body .tasks {
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-right: 20px; }
+    body .tasks .task {
+      position: relative;
+      background: white; }
+      body .tasks .task .task-content {
+        border: 1px solid #cccccc;
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 4px;
+        display: flex; }
+        body .tasks .task .task-content .task-description {
+          flex: 5; }
+        body .tasks .task .task-content .task-menu {
+          padding: 0 10px;
+          color: #006d75; }
+        body .tasks .task .task-content .task-checkbox {
+          width: 24px;
+          height: 24px;
+          border: 2px solid #5cdbd3;
+          border-radius: 100%;
+          background: white;
+          cursor: pointer; }
+          body .tasks .task .task-content .task-checkbox .fa-check {
+            display: none; }
+        body .tasks .task .task-content:hover {
+          color: #006d75;
+          background: #87e8de;
+          border-color: #5cdbd3; }
+      body .tasks .task .task-menu-options {
+        display: none;
+        position: absolute;
+        background: #565c6a;
+        color: white;
+        border-radius: 4px;
+        top: 48px;
+        right: -16px; }
+        body .tasks .task .task-menu-options .option {
+          padding: 8px 24px; }
+          body .tasks .task .task-menu-options .option:first-child {
+            padding-top: 16px; }
+          body .tasks .task .task-menu-options .option:last-child {
+            padding-bottom: 16px; }
+        body .tasks .task .task-menu-options.open {
+          display: block; }
+      body .tasks .task.task-completed {
+        background: #e6fffb; }
+        body .tasks .task.task-completed .task-description {
+          text-decoration: line-through; }
+        body .tasks .task.task-completed .task-checkbox {
+          background: #5cdbd3;
+          text-align: center;
+          color: white; }
+          body .tasks .task.task-completed .task-checkbox .fa-check {
+            display: inline-block; }
+
+/*# sourceMappingURL=todo.css.map */

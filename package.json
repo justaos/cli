@@ -51,6 +51,7 @@
     },
     "homepage": "https://anysols.com",
     "dependencies": {
+        "anysols-commons": "file:../anysols-commons",
         "anysols-core-service": "file:../anysols-core-service",
         "anysols-server-service": "file:../anysols-server-service",
         "anysols-user-management": "file:../anysols-user-management",
@@ -65,7 +66,7 @@
         "ejs": "^2.7.1"
     },
     "devDependencies": {
-        "anysols-odm": "^1.6.6",
+        "anysols-odm": "^1.6.7",
         "@types/ejs": "^2.6.3",
         "chai": "^4.2.0",
         "del": "^5.1.0",
