@@ -53,7 +53,7 @@
     "dependencies": {
         "@anysols/anysols-commons": "^0.1.0",
         "@anysols/anysols-core-service": "^1.1.0",
-        "@anysols/anysols-server-service": "^1.2.0",
+        "@anysols/anysols-server-service": "^1.2.1",
         "@anysols/anysols-user-management": "^0.2.0",
         "@anysols/anysols-security-service": "^0.2.0",
         "@anysols/anysols-platform": "^1.5.0",

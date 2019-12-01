@@ -137,7 +137,8 @@ export default class Anysols {
         //const coreService: AnysolsCoreService = this.serviceManager.getService(ANYSOLS_CORE_SERVICE);
         for (const serviceConfig of this.anysolsConfig.services) {
             this.transformServiceConfig(serviceConfig);
-            const {name: serviceName} = serviceConfig;
+            let {name: serviceName} = serviceConfig;
+            serviceName = "@anysols/" + serviceName;
             const serviceRecord = serviceRecords.find((rec) => rec.get('name') === serviceName);
             const ServiceClass = this.getServiceClassByName(serviceName);
             const service = new ServiceClass(serviceConfig, logger, this.serviceManager);
