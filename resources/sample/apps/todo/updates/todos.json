@@ -1,0 +1,15 @@
+{
+    "collection": "todo",
+    "records": [
+        {
+            "_id" : "5d9a1b2d7055a407971f9ef5",
+            "description" : "todo 1",
+            "status" : "new"
+        },
+        {
+            "_id" : "5d9a1b7f7055a407971f9f1f",
+            "description" : "todo 2",
+            "status" : "new"
+        }
+    ]
+}

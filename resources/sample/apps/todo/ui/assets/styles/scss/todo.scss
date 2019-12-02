@@ -1,0 +1,131 @@
+$task-dark-color: #5cdbd3;
+$task-text-color: #006d75;
+
+body {
+  padding-top: 48px;
+  background: #fafafa;
+
+  .app-close {
+    height: 48px;
+    width: 48px;
+    background: red;
+    color: white;
+
+    display: flex;
+    .fa-times {
+      margin: auto;
+    }
+  }
+
+  .app-icon {
+    width: 48px;
+  }
+
+  .title {
+    font-size: 24px;
+    padding-bottom: 24px;
+  }
+
+  .sub-title {
+    font-size: 20px;
+    font-weight: 400;
+    padding-bottom: 12px;
+  }
+
+  .spinner-grow {
+    background: $task-dark-color;
+    height: 30px;
+    width: 30px;
+  }
+
+  .tasks {
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-right: 20px;
+    .task {
+      position: relative;
+      background: white;
+
+      .task-content {
+        border: 1px solid #cccccc;
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 4px;
+        display: flex;
+
+        .task-description {
+          flex: 5;
+        }
+
+        .task-menu {
+          padding: 0 10px;
+          color: $task-text-color;
+        }
+
+        .task-checkbox {
+          width: 24px;
+          height: 24px;
+          border: 2px solid $task-dark-color;
+          border-radius: 100%;
+          background: white;
+          cursor: pointer;
+
+          .fa-check {
+            display: none;
+          }
+        }
+
+
+        &:hover {
+          color: $task-text-color;
+          background: #87e8de;
+          border-color: $task-dark-color;
+        }
+      }
+
+      .task-menu-options {
+        display: none;
+        position: absolute;
+        background: #565c6a;
+        color: white;
+        border-radius: 4px;
+        top: 48px;
+        right: -16px;
+
+        .option {
+          padding: 8px 24px;
+
+          &:first-child {
+            padding-top: 16px;
+          }
+
+          &:last-child {
+            padding-bottom: 16px;
+          }
+        }
+
+        &.open {
+          display: block;
+        }
+      }
+
+      &.task-completed {
+        background: #e6fffb;
+
+        .task-description {
+          text-decoration: line-through;
+        }
+
+        .task-checkbox {
+          background: $task-dark-color;
+          text-align: center;
+          color: white;
+
+          .fa-check {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}

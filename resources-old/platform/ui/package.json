@@ -1,0 +1,26 @@
+{
+    "name": "anysols-platform-ui",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "gulp",
+        "snyk-protect": "snyk protect",
+        "prepare": "npm run snyk-protect"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://gitlab.com/anysols/anysols/issues"
+    },
+    "homepage": "https://gitlab.com/anysols/anysols#README",
+    "dependencies": {
+        "gulp": "^3.9.1",
+        "gulp-sass": "^4.0.2",
+        "gulp-sourcemaps": "^2.6.5",
+        "gulp-watch": "^5.0.0",
+        "run-sequence": "^2.2.1",
+        "snyk": "^1.143.0"
+    },
+    "snyk": true
+}

@@ -1,0 +1,112 @@
+@import '../../../../../node_modules/anysols-server-service/node_modules/anysols-ui/styles/scss/color.scss';
+
+body {
+  padding-top: 48px;
+  background: $grey-1;
+
+  .header-navigation {
+    background-color: white;
+
+    .navbar-brand {
+      font-size: inherit;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:hover, &:focus {
+        background: $grey-1;
+      }
+    }
+
+    #nav-search {
+      transition: all .3s;
+      width: 15em;
+
+      &:hover, &:focus {
+        width: 25em;
+      }
+    }
+
+    .dropdown {
+      transition: all .3s;
+      border: 1px solid transparent;
+
+      &.show {
+        background: $grey-3;
+        border-color: $primary-5;
+      }
+
+      .dropdown-menu {
+        border-radius: initial;
+        border: none;
+        padding: 0;
+
+        .dropdown-item {
+          padding: 1em;
+
+          &:hover {
+            background: $white;
+            color: $primary-5;
+          }
+        }
+
+        .dropdown-divider {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .card-deck {
+    .card-body {
+      padding: 1rem;
+    }
+  }
+
+  .app-category {
+    text-transform: uppercase;
+  }
+
+  .applications {
+    display: flex;
+    flex-wrap: wrap
+  }
+
+  .app {
+    cursor: pointer;
+    padding-right: 30px;
+    color: inherit;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .app-icon {
+      box-shadow: $box-shadow-2;
+      background: white;
+      height: 80px;
+      width: 80px;
+      border-radius: 20px;
+      padding: 10px
+    }
+
+    .app-title {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      width: 120px;
+    }
+
+    &:hover {
+      text-decoration: none;
+      color: $primary-6;
+
+      > .app-icon {
+        box-shadow: $box-shadow-4;
+      }
+    }
+
+  }
+
+
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <title>Anysols</title>
+
+    <!--
+        Stylesheets and Preprocessors
+    -->
+    <link href="/anysols-ui/3rd-party/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/anysols-ui/styles/base.css" rel="stylesheet">
+    <link href="/assets/styles/home.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <!--
+       Scripts
+    -->
+    <script src="/anysols-ui/3rd-party/js/jquery-3.3.1.min.js"></script>
+    <script src="/anysols-ui/3rd-party/js/popper.min.js"></script>
+    <script src="/anysols-ui/3rd-party/js/bootstrap.min.js"></script>
+    <script defer src="/anysols-ui/3rd-party/js/fontawesome.min.js"></script>
+
+    <script src="/anysols-ui/web-components/anysolsLogo.js"></script>
+    <script src="/anysols-ui/web-components/anysolsTime.js"></script>
+    <script src="/anysols-ui/web-components/anysolsList.js"></script>
+
+</head>
+<body>
+<%- include('partials/header-navigation') %>
+<main role="main">
+
+    <div class="container-fluid pt-5">
+        <div class="card-deck">
+            <div class="card shadow rounded-0 border-0 col-3 p-0">
+                <div class="card-body">
+                    <h5 class="card-title">Clock</h5>
+                    <p class="card-text">
+                        <anysols-time></anysols-time>
+                    </p>
+                </div>
+            </div>
+            <div class="card shadow rounded-0 border-0 col-3 p-0">
+                <div class="card-body">
+                    <h5 class="card-title">Visits</h5>
+                    <p class="card-text">
+                        <canvas id="line-chart" height="50px"></canvas>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-5">
+        <div class="app-category-container">
+            <h2 class="app-category h6 p-3">Productive tools</h2>
+            <div class="applications">
+                <a class="app" href="/app/todo">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/app.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Todo
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="app-category-container">
+            <h2 class="app-category h6 p-3">ADMINISTRATION</h2>
+            <div class="applications">
+                <a class="app" href="/app/settings">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/settings.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Settings
+                    </div>
+                </a>
+                <a class="app" href="/app/user-and-permissions">
+                    <div class="app-icon mb-2 mx-auto">
+                        <img class="img-fluid" src="/assets/img/person-male.png"/>
+                    </div>
+                    <div class="app-title text-center" style="">
+                        Users and Permissions
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <!--anysols-list id="test" style="height: 500px; display: block"></anysols-list-->
+        <script>
+            let $list = document.getElementById('test');
+            fetch('/api/platform/list/p_collection?sort={name:-1}').then(function (response) {
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                    return;
+                }
+
+                // Examine the text in the response
+                response.json().then(function (data) {
+                    let cols = [];
+                    data.listElements.forEach(function (e) {
+                        cols.push({
+                            name: e.field.name,
+                            label: e.field.label,
+                            width: 300
+                        });
+                    });
+                    $list.cols = cols;
+                    $list.data = data.records;
+                });
+            });
+        </script>
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+<script>
+    var myChart = new Chart(document.getElementById('line-chart'), {
+        "type": "line",
+        "data": {
+            "labels": ["January", "February", "March", "April", "May", "June", "July"],
+            "datasets": [{
+                label: '',
+                "data": [65, 59, 80, 81, 56, 55, 40],
+                "borderColor": "#36cfc9",
+                "backgroundColor": "#e6fffb",
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    display: false //this will remove all the x-axis grid lines
+                }],
+                yAxes: [{
+                    display: false //this will remove all the x-axis grid lines
+                }]
+            }
+        }
+    });
+</script>
+</body>
+</html>

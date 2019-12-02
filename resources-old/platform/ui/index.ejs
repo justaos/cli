@@ -1,0 +1,61 @@
+<link href="/ui/styles/index.css" rel="stylesheet">
+<%- include('partials/header-navigation') %>
+<main role="main">
+
+    <% if(!menus.length) { %>
+    <div class="center-div">
+        <div class="get-apps">
+            <div class="d-flex justify-content-center">
+                <img src="/assets/img/store.png" style="height: 300px; margin-top: 50px">
+            </div>
+            <h4 class="text-center">Looks like no apps installed here</h4>
+            <p class="text-center">The Store has Apps, Plugins and more! Go get your favourite business applications
+                from <a href="/store">here</a></p>
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-primary" href="/store">Get apps from Store <i class="fas fa-angle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+    <script src="/assets/js/angular.min.js"></script>
+    <script>
+        angular.module('indexApp', []).controller('indexAppController', function ($scope) {
+            $scope.menus = <%- JSON.stringify(menus.map(o => o.toObject())) %>;
+        }).directive('asMenuItem', function () {
+            return {
+                scope: {
+                    menuId: '@',
+                    name: '@',
+                    icon: '@',
+                    description: '@'
+                },
+                replace: true,
+                template: '<a class="no-style menu-item-wrapper m-2" ng-href="/menu/{{menuId}}">\n' +
+                    '                <div class="row menu-item box-shadow rounded m-0">\n' +
+                    '                    <div class="col-md-12">\n' +
+                    '                        <i class="menu-icon fas fa-rocket fa-4x mx-auto" ng-class="icon"></i>\n' +
+                    '                    </div>\n' +
+                    '                    <div class="col-md-12">\n' +
+                    '                        <h2 class="h5">{{name}}</h2>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </a>'
+            };
+        });
+    </script>
+    <div class="container-fluid" ng-app="indexApp" ng-controller="indexAppController">
+        <div class="row">
+            <div class="col-sm-4 my-3">
+                <input type="text" class="form-control form-control-sm" ng-model="search" placeholder="Search"
+                       aria-label="Search">
+            </div>
+        </div>
+        <div class="d-flex flex-wrap">
+            <as-menu-item ng-if="!menu.hidden" ng-repeat="menu in menus | filter:search"
+                          menu-id="{{menu.id}}" icon="{{menu.icon}}" name="{{menu.label}}"
+                          description="{{menu.description}}"></as-menu-item>
+        </div>
+    </div>
+    <% } %>
+</main>
+

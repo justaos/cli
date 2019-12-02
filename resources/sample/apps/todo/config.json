@@ -1,0 +1,7 @@
+{
+    "label": "Todo App",
+    "name": "todo",
+    "version": "1.0.0",
+    "description": "Sample application demonstrating the capabilities of the platform.",
+    "dependencies": []
+}
