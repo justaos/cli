@@ -1,20 +1,18 @@
-import {readJsonFileSync, writeFileSync, copySync, readJsonFilesFromPathSync, createLogger} from "anysols-utils";
-
-import {AnysolsCollection, AnysolsRecord} from "@anysols/anysols-odm";
-import {AnysolsCoreService, ANYSOLS_CORE_SERVICE} from "@anysols/anysols-core-service";
-import {AnysolsServerService, ANYSOLS_SERVER_SERVICE} from "@anysols/anysols-server-service";
-import {ANYSOLS_USER_MANAGEMENT, AnysolsUserManagement} from "@anysols/anysols-user-management";
-import {ANYSOLS_SECURITY_SERVICE, AnysolsSecurityService} from "@anysols/anysols-security-service";
-import {ANYSOLS_PLATFORM, AnysolsPlatform} from "@anysols/anysols-platform";
-
-
 import * as path from "path";
-import {SAMPLE_PATH, CWD_PATH} from "./config";
-import {CORE_MODELS} from "@anysols/anysols-core-service/lib/constants";
 import * as fs from "fs";
 import * as glob from "glob";
-import {ServiceManager} from "@anysols/anysols-commons";
 
+import {readJsonFileSync, writeFileSync, copySync, readJsonFilesFromPathSync, createLogger} from "@anysols/utils";
+import {AnysolsRecord} from "@anysols/odm";
+import {AnysolsCoreService, ANYSOLS_CORE_SERVICE} from "@anysols/core-service";
+import {AnysolsServerService, ANYSOLS_SERVER_SERVICE} from "@anysols/server-service";
+import {ANYSOLS_USER_MANAGEMENT, AnysolsUserManagement} from "@anysols/user-management";
+import {ANYSOLS_SECURITY_SERVICE, AnysolsSecurityService} from "@anysols/security-service";
+import {ANYSOLS_PLATFORM, AnysolsPlatform} from "@anysols/platform";
+import {CORE_MODELS} from "@anysols/core-service/lib/constants";
+import {ServiceManager} from "@anysols/commons";
+
+import {SAMPLE_PATH, CWD_PATH} from "./config";
 
 const serviceClasses: any = {
     [ANYSOLS_SERVER_SERVICE]: AnysolsServerService,
@@ -164,9 +162,7 @@ export default class Anysols {
                     await coreService.deleteRecords(updateFile);
                     await coreService.loadUpdateRecords(updateFile);
                 }
-                serviceRecord.set('name', serviceName);
-                serviceRecord.set('version', service.getVersion());
-                await serviceRecord.update();
+                await _updateService(serviceRecord, serviceName, service.getVersion());
             }
         }
 
@@ -218,6 +214,12 @@ async function _saveService(that: Anysols, name: string, version: string) {
     serviceRecord.set('name', name);
     serviceRecord.set('version', version);
     await serviceRecord.insert();
+}
+
+async function _updateService(serviceRecord: AnysolsRecord, name: string, version: string) {
+    serviceRecord.set('name', name);
+    serviceRecord.set('version', version);
+    await serviceRecord.update();
 }
 
 async function _saveApplication(core: AnysolsCoreService, name: string, label: string) {

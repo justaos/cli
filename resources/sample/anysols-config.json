@@ -9,7 +9,7 @@
   },
   "services": [
     {
-      "name": "anysols-server-service",
+      "name": "server-service",
       "port": 8080,
       "paths": {
         "assets": "assets",
@@ -21,10 +21,10 @@
       }
     },
     {
-      "name": "anysols-user-management"
+      "name": "user-management"
     },
     {
-      "name": "anysols-security-service",
+      "name": "security-service",
       "cookieName": "x-auth-token",
       "cookieSecret": "anysolsindia",
       "tokenExpiration": 86400000,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "name": "anysols-platform"
+      "name": "platform"
     }
   ]
 }

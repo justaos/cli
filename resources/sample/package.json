@@ -16,7 +16,7 @@
     "gulp": "^4.0.2",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "anysols-ui": "^0.0.1"
+    "@anysols/anysols-ui": "^0.2.0"
   },
   "devDependencies": {
     "sass-material-colors": "^0.0.5"
