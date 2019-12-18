@@ -5,9 +5,9 @@
 
   <h3 align="center">Anysols</h3>
 
-  <p align="center">
+  <span align="center">
     Sleek and powerful platform for faster and easier application development.
-  </p>
+  </span>
 </p>
 
 **Master**  
@@ -15,7 +15,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/anysols/anysols/badge)](https://www.codefactor.io/repository/github/anysols/anysols)
 
 ## Prerequisites
-* Install nodejs  (version 8.9.4)  
+* Install nodejs  (version 12.13.1)  
 https://nodejs.org/en/download/
 
 * Install npm
@@ -24,22 +24,15 @@ https://nodejs.org/en/download/
 https://www.mongodb.com/download-center?#community
 
 ## Setup
-![Set up](resources-old/carbon.png)
+![Set up](resources/carbon.png)
 
 ## Run
-`Note: Check db config in anysols-config.js before running the application.`
+`Note: Check db config in anysols-config.json before running the application.`
 
 ```cmd 
 anysols run
 ```
 
-## Steps to install sample 'TODO' application on platform
-
-1. login into system using 'admin' user credentials.
-2. Click on menu icon on the header -> navigate to 'store'.
-3. In the store you will find TODO application, open it.
-4. Click install.
-5. Once installation is done, go to home page. there you can see installed TODO application.
 
 browser [http://localhost:8080](http://localhost:8080)
 

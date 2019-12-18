@@ -184,14 +184,15 @@ export default class Anysols {
 
                 for (const updateFile of readJsonFilesFromPathSync(updatesPath, null))
                     await coreService.loadUpdateRecords(updateFile);
-                await _saveApplication(coreService, config.name, config.label);
-            } else {
+                await _saveApplication(coreService, config.name, config.label, config.version);
+            } else if (appRecord.get('version') !== config.version) {
                 logger.info("Upgrading application - '" + config.name + "'");
                 await this.updateModels(modelsPath);
                 for (const updateFile of readJsonFilesFromPathSync(updatesPath, null)) {
                     await coreService.deleteRecords(updateFile);
                     await coreService.loadUpdateRecords(updateFile);
                 }
+                await _updateApplication(appRecord, config.version);
             }
 
             const server: AnysolsServerService = this.serviceManager.getService(ANYSOLS_SERVER_SERVICE);
@@ -222,14 +223,20 @@ async function _updateService(serviceRecord: AnysolsRecord, name: string, versio
     await serviceRecord.update();
 }
 
-async function _saveApplication(core: AnysolsCoreService, name: string, label: string) {
+async function _saveApplication(core: AnysolsCoreService, name: string, label: string, version: string) {
     const appCol = core.collection("p_application");
     if (!appCol)
         throw new Error("Unknown model " + "p_application");
     const appRecord = appCol.createNewRecord();
     appRecord.set('name', name);
     appRecord.set('label', label);
+    appRecord.set('version', version);
     await appRecord.insert();
+}
+
+async function _updateApplication(serviceRecord: AnysolsRecord, version: string) {
+    serviceRecord.set('version', version);
+    await serviceRecord.update();
 }
 
 process.on('unhandledRejection', function onError(err) {
