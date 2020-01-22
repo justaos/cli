@@ -1,5 +1,5 @@
 {
-    "name": "anysols",
+    "name": "@plt4rm/cli",
     "version": "2.5.0",
     "description": "Sleek and powerful platform for faster and easier application development.",
     "main": "lib/app.js",
@@ -42,7 +42,7 @@
         "url": "https://github.com/anysols/anysols.git"
     },
     "bin": {
-        "anysols": "./bin/anysols.js"
+        "plt4rm": "./bin/anysols.js"
     },
     "author": "Shivaji Varma <contact@shivajivarma.com>",
     "contributors": [],
@@ -57,7 +57,7 @@
         "@anysols/server-service": "^1.2.3",
         "@anysols/user-management": "^0.2.6",
         "@anysols/security-service": "^0.2.6",
-        "@anysols/platform": "../anysols-platform",
+        "@anysols/platform": "^1.6.2",
         "@anysols/utils": "^0.6.6",
         "commander": "^2.16.0",
         "cron": "^1.3.0",

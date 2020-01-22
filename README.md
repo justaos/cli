@@ -1,17 +1,6 @@
-<p align="center">
-  <a href="https://anysols.com">
-    <img src="https://anysols.com/assets/img/logo-small.png" alt="Anysols" height=72>
-  </a>
 
-  <h3 align="center">Anysols</h3>
 
-  <span align="center">
-    Sleek and powerful platform for faster and easier application development.
-  </span>
-</p>
-
-**Master**  
-[![Build](https://github.com/anysols/anysols-odm/workflows/Node%20CI/badge.svg)](https://github.com/anysols/anysols-odm/actions?workflow=Node+CI)
+[![Build](https://github.com/plt4rm/plt4rm-cli/workflows/Node%20CI/badge.svg)](https://github.com/anysols/anysols-odm/actions?workflow=Node+CI)
 [![CodeFactor](https://www.codefactor.io/repository/github/anysols/anysols/badge)](https://www.codefactor.io/repository/github/anysols/anysols)
 
 ## Prerequisites

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Disallow: /no-search/
+Sitemap: https://cli.plt4rm.com/sitemap.xml

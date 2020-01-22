@@ -1,0 +1,34 @@
+ <footer class="footer {% if page.root != true %}footer-default{% endif %}" {% if page.root == true %}data-background-color="black"{% endif %}>
+	<div class="container">
+		<nav>
+			<ul>
+				<li>
+					<a href="{{ site.baseurl }}{% if page.root != true %}/{% endif %}#">
+						{{site.title}}
+					</a>
+				</li>
+				<li>
+					<a href="{{ site.baseurl }}{% if page.root != true %}/{% endif %}#hash-about">
+						About Us
+					</a>
+				</li>
+				<li>
+					<a href="{{ site.baseurl }}{% if page.root != true %}/{% endif %}blog/">
+						Blog
+					</a>
+				</li>
+				<li>
+					<a href="{{ site.baseurl }}{% if page.root != true %}/{% endif %}license.txt">
+						MIT License
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="copyright">
+			&copy;
+			<script>
+				document.write(new Date().getFullYear())
+			</script>, <b>{{site.title}}</b></a>.  All right reserved. <a href="#"><i  class="now-ui-icons arrows-1_minimal-up"></i></a>
+		</div>
+	</div>
+</footer>
