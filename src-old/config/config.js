@@ -14,8 +14,8 @@ const programName = path.basename(process.argv[1]);
 if (programName === 'anysols.js' || programName === 'anysols') {
     cwdPath = process.cwd(); // current working directory
     try {
-        console.log(cwdPath + '/anysols-config.json');
-        configs = fileUtils.readJsonFileSync(cwdPath + '/anysols-config.json'); // load from default config.
+        console.log(cwdPath + '/config.json');
+        configs = fileUtils.readJsonFileSync(cwdPath + '/config.json'); // load from default config.
     } catch (e) {
         const FgRed = '\x1b[31m';
         console.log(FgRed,

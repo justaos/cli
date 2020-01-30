@@ -1,0 +1,4 @@
+npm install -g @plt4rm/cli
+plt4rm new project-name
+cd project-name
+plt4rm run

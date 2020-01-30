@@ -1,0 +1,60 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "plt4rm's project",
+  "dependencies": {
+    "@plt4rm/plt4rm": "file://../../plt4rm-projects/plt4rm"
+  },
+  "plt4rm": {
+    "loggerLevel": "info",
+    "services": {
+      "database": {
+        "host": "localhost",
+        "port": "27017",
+        "database": "plt4rm",
+        "dialect": "mongodb"
+      },
+      "server": {
+        "port": 8080,
+        "paths": {
+          "assets": "assets",
+          "views": "views"
+        },
+        "pages": {
+          "404": "404",
+          "500": "500"
+        }
+      }
+    },
+    "services2": [
+      {
+        "name": "server-service",
+        "port": 8080,
+        "paths": {
+          "assets": "assets",
+          "views": "views"
+        },
+        "pages": {
+          "404": "404",
+          "500": "500"
+        }
+      },
+      {
+        "name": "user-management"
+      },
+      {
+        "name": "security-service",
+        "tokenName": "x-auth-token",
+        "tokenSecret": "anysolsindia",
+        "tokenExpiration": 86400000,
+        "pages": {
+          "login": "login"
+        }
+      },
+      {
+        "name": "platform"
+      }
+    ]
+  }
+}
+
