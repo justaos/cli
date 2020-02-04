@@ -1,0 +1,25 @@
+<div class="site-section" id="blog-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title mb-3">Blog Posts</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for num in (0..2) %}
+            {% if site.posts[num] %}
+            <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+                <div class="h-entry">
+                    <img src="{{ site.posts[num].image }}" alt="Image" class="img-fluid">
+                    <h2><a href="#">{{ site.posts[num].title }}</a></h2>
+                    <div class="meta mb-4">{% include author.html %} <span class="mx-2">&bullet;</span> {{ site.posts[num].date | date: "%b %-d, %Y"  }}</div>
+                    <p><a href="{{ site.posts[num].url }}">Continue Reading...</a></p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

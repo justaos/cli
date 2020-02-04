@@ -91,6 +91,8 @@ nbproject
 .idea
 .node_history
 dump.rdb
+_site
+.jekyll-cache
 
 npm-debug.log
 lib-cov

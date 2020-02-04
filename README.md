@@ -22,7 +22,7 @@ https://www.mongodb.com/download-center?#community
 The plt4rm CLI makes it easy to create an application that already works, right out of the box.
 
 
-### plt4rm start
+### plt4rm run
 Easily start your plt4rm and load installed cloud applications on platform.
 
 Check configuration in config.json before running the plt4rm. 
