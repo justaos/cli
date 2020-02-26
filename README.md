@@ -15,7 +15,7 @@ https://nodejs.org/en/download/
 https://www.mongodb.com/download-center?#community
 
 ## Setup
-![Set up](resources/setup.svg)
+![Set up](resources/setup.png)
 
 ## Commands
 ### plt4rm new

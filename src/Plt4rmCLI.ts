@@ -14,7 +14,7 @@ let packageJson = {
     "version": "1.0.0",
     "description": "plt4rm's project",
     "dependencies": {
-        "@plt4rm/plt4rm": "1.0.0"
+        "@plt4rm/plt4rm": ""
     },
     "plt4rm": {
         "loggerLevel": "info",

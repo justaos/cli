@@ -1,6 +1,11 @@
 name: Node CI
 
-on: [push]
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - master
+      - 'releases/**'
 
 jobs:
   build:

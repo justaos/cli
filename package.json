@@ -1,10 +1,9 @@
 {
     "name": "@plt4rm/cli",
-    "version": "2.5.1",
+    "version": "2.5.2",
     "description": "Sleek and powerful platform for faster and easier application development.",
     "scripts": {
         "prepare": "npm run build",
-        "debug": "ts-node ./src/app.ts",
         "build": "gulp | tsc",
         "local_install": "npm run build && npm install -g .",
         "publish": "npm publish"
