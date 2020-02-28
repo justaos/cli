@@ -16,6 +16,9 @@ let packageJson = {
     "dependencies": {
         "@plt4rm/plt4rm": ""
     },
+    "scripts": {
+        "start": "plt4rm run"
+    },
     "plt4rm": {
         "loggerLevel": "info",
         "services": {
@@ -36,8 +39,10 @@ let packageJson = {
                     "500": "500"
                 }
             }
-        }
-    }
+        },
+        "programs": ["@plt4rm/user-management", "@plt4rm/security"]
+    },
+
 };
 
 export default class Plt4rmCLI {
