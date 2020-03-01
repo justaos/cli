@@ -1,6 +1,6 @@
 {
   "name": "@plt4rm/cli",
-  "version": "2.5.5",
+  "version": "2.5.6",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "scripts": {
     "prepare": "npm run build",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anysols/anysols.git"
+    "url": "https://github.com/plt4rm/plt4rm-cli.git"
   },
   "bin": {
     "plt4rm": "./bin/start.js"
@@ -19,9 +19,9 @@
   "contributors": [],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://gitlab.com/anysols/anysols/issues"
+    "url": "https://gitlab.com/plt4rm/plt4rm-cli/issues"
   },
-  "homepage": "https://anysols.com",
+  "homepage": "https://plt4rm.com",
   "dependencies": {
     "@plt4rm/commons": "^0.2.7",
     "commander": "^2.16.0",
