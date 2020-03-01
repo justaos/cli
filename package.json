@@ -1,11 +1,12 @@
 {
   "name": "@plt4rm/cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "scripts": {
+    "preinstall": "npm run build",
     "prepare": "npm run build",
     "build": "gulp | tsc",
-    "local_install": "npm run build && npm install -g .",
+    "local_install": "npm install -g .",
     "publish": "npm publish"
   },
   "repository": {
