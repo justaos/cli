@@ -52,7 +52,6 @@ export default class Plt4rmCLI {
             console.error(`Folder "./${projectName}" already exists, please choose a different project name.`);
         } else {
             copySync(PROJECT_PATH, projectFolder);
-            writeFileSync(projectFolder + '/.env', 'NODE_ENV=development');
             const plt4rmRep = npm.repo("@plt4rm/plt4rm");
             plt4rmRep.package()
                 .then(function (pkg: any) {
