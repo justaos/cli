@@ -24,9 +24,10 @@
   "homepage": "https://plt4rm.com",
   "dependencies": {
     "@plt4rm/commons": "^0.2.7",
-    "commander": "^2.16.0",
+    "commander": "^4.1.1",
     "npm-api": "^1.0.0",
-    "pm2": "^4.2.3"
+    "pm2": "^4.2.3",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.6",
