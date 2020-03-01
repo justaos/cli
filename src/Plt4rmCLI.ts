@@ -8,7 +8,6 @@ import * as shell from "shelljs";
 import * as NpmApi from "npm-api";
 
 const npm = new NpmApi();
-
 let packageJson = {
     "name": "project",
     "version": "1.0.0",
