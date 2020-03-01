@@ -40,7 +40,7 @@ let packageJson = {
                 }
             }
         },
-        "programs": ["@plt4rm/user-management", "@plt4rm/security"]
+        "programs": ["@plt4rm/core", "@plt4rm/user-management", "@plt4rm/security"]
     },
 
 };
