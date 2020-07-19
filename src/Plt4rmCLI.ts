@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import {copySync, writeFileSync, writeJsonFileSync} from "@plt4rm/utils";
+import {copySync, writeFileSync, writeJsonFileSync, readJsonFileSync} from "@plt4rm/utils";
 import {CWD_PATH, PROJECT_PATH} from "./constants";
 import {PRINT_COLORS, printBox} from "./utils";
 import * as shell from "shelljs";
@@ -8,41 +8,6 @@ import * as shell from "shelljs";
 import * as NpmApi from "npm-api";
 
 const npm = new NpmApi();
-let packageJson = {
-    "name": "project",
-    "version": "1.0.0",
-    "description": "plt4rm's project",
-    "dependencies": {
-        "@plt4rm/plt4rm": ""
-    },
-    "scripts": {
-        "start": "plt4rm run"
-    },
-    "plt4rm": {
-        "loggerLevel": "info",
-        "services": {
-            "database": {
-                "host": "localhost",
-                "port": "27017",
-                "database": "plt4rm",
-                "dialect": "mongodb"
-            },
-            "server": {
-                "port": 8080,
-                "paths": {
-                    "assets": "assets",
-                    "views": "views"
-                },
-                "pages": {
-                    "404": "404",
-                    "500": "500"
-                }
-            }
-        },
-        "programs": ["@plt4rm/core", "@plt4rm/user-management", "@plt4rm/security"]
-    },
-
-};
 
 export default class Plt4rmCLI {
 
@@ -52,6 +17,7 @@ export default class Plt4rmCLI {
             console.error(`Folder "./${projectName}" already exists, please choose a different project name.`);
         } else {
             copySync(PROJECT_PATH, projectFolder);
+            const packageJson = readJsonFileSync(PROJECT_PATH + "/package.json")
             const plt4rmRep = npm.repo("@plt4rm/plt4rm");
             plt4rmRep.package()
                 .then(function (pkg: any) {

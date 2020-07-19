@@ -1,0 +1,55 @@
+{
+    "name": "project",
+    "version": "1.0.0",
+    "description": "plt4rm's project",
+    "dependencies": {
+        "@plt4rm/plt4rm": ""
+    },
+    "scripts": {
+        "start": "plt4rm run"
+    },
+    "plt4rm": {
+        "loggerLevel": "info",
+        "services": {
+            "database": {
+                "host": "localhost",
+                "port": "27017",
+                "database": "plt4rm",
+                "dialect": "mongodb"
+            },
+            "server": {
+                "port": 8080,
+                "paths": {
+                    "assets": "assets",
+                    "views": "views"
+                },
+                "pages": {
+                    "404": "404",
+                    "500": "500"
+                }
+            }
+        },
+        "programs": {
+            "@plt4rm/user-management": {},
+            "@plt4rm/security": {},
+            "@plt4rm/core": {
+                "email": {
+                    "host": "smtp.office365.com",
+                    "port": "587",
+                    "auth": {
+                        "user": "USERNAME",
+                        "pass": "PASSWORD"
+                    },
+                    "secureConnection": false,
+                    "secure": false,
+                    "tls": {
+                        "ciphers": "SSLv3"
+                    },
+                    "requireTLS": true
+                }
+            },
+            "@plt4rm/task-management": {}
+        }
+    }
+}
+
