@@ -1,6 +1,6 @@
 {
   "name": "@plt4rm/cli",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "scripts": {
     "prepare": "npm run build",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://plt4rm.com",
   "dependencies": {
-    "@plt4rm/commons": "^0.2.8",
+    "@plt4rm/utils": "^0.7.6",
     "commander": "^2.16.0",
     "npm-api": "^1.0.0",
     "pm2": "^4.2.3",

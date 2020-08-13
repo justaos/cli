@@ -42,7 +42,7 @@ export default class Plt4rmCLI {
     }
 
     static run() {
-        const {Plt4rm} = require(CWD_PATH + "/node_modules/@plt4rm/plt4rm");
+        const {Plt4rm} = require(CWD_PATH + "/node_modules/@p4rm/plt4rm");
         new Plt4rm(CWD_PATH).run();
     }
 
