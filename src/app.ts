@@ -1,3 +1,3 @@
-import Plt4rmCLI from "./Plt4rmCLI";
+import P4RMCLI from "./P4RMCLI";
 
-Plt4rmCLI.run();
+P4RMCLI.run();

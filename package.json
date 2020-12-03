@@ -1,6 +1,6 @@
 {
   "name": "@plt4rm/cli",
-  "version": "3.6.2",
+  "version": "4.0.0",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "scripts": {
     "prepare": "npm run build",

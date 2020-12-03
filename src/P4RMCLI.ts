@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import {copySync, writeFileSync, writeJsonFileSync, readJsonFileSync} from "@plt4rm/utils";
+import {copySync, readJsonFileSync, writeJsonFileSync} from "@plt4rm/utils";
 import {CWD_PATH, PROJECT_PATH} from "./constants";
 import {PRINT_COLORS, printBox} from "./utils";
 import * as shell from "shelljs";
@@ -9,7 +9,7 @@ import * as NpmApi from "npm-api";
 
 const npm = new NpmApi();
 
-export default class Plt4rmCLI {
+export default class P4RMCLI {
 
     static createNewProject(projectName: string) {
         const projectFolder = path.normalize(CWD_PATH + "/" + projectName);
@@ -42,8 +42,8 @@ export default class Plt4rmCLI {
     }
 
     static run() {
-        const {Plt4rm} = require(CWD_PATH + "/node_modules/@p4rm/plt4rm");
-        new Plt4rm(CWD_PATH).run();
+        const {Platform} = require(CWD_PATH + "/node_modules/@p4rm/p4rm");
+        new Platform(CWD_PATH).run();
     }
 
 }

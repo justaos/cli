@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const program = require("commander");
-const {Plt4rmCLI, VERSION} = require("../index");
+const {P4RMCLI, VERSION} = require("../index");
 const pm2 = require('pm2');
 
 
@@ -13,14 +13,14 @@ program.parse(process.argv);
 program.command('new <name>')
     .description('Creates a new workspace and sets plt4rm configuration values in the config.json file for the workspace.')
     .action(function (name) {
-        Plt4rmCLI.createNewProject(name);
+        P4RMCLI.createNewProject(name);
     });
 
 program.command('run')
     .description('Builds and serves your project as a service.')
     .action(function () {
-        if (!program.serive) {
-            Plt4rmCLI.run();
+        if (!program.serve) {
+            P4RMCLI.run();
         } else
             pm2.connect(function (err) {
                 if (err) {

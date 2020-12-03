@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "plt4rm's project",
     "dependencies": {
-        "@plt4rm/plt4rm": ""
+        "@p4rm/plt4rm": ""
     },
     "scripts": {
         "start": "plt4rm run"
@@ -31,9 +31,9 @@
             }
         },
         "programs": {
-            "user-management": {},
-            "security": {},
-            "core":  {
+            "@p4rm/user-management": {},
+            "@p4rm/security": {},
+            "@p4rm/core":  {
                 "sender": {
                     "host": "smtp.office365.com",
                     "port": "587",
@@ -56,7 +56,7 @@
                     "tls": true
                 }
             },
-            "task-management": {}
+            "@p4rm/task-management": {}
         }
     }
 }

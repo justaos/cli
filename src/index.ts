@@ -1,8 +1,8 @@
-import Plt4rmCLI from "./Plt4rmCLI";
+import P4RMCLI from "./P4RMCLI";
 import {PACKAGE_NAME, VERSION} from "./constants";
 
 export {
-    Plt4rmCLI,
+    P4RMCLI,
     PACKAGE_NAME,
     VERSION
 };
