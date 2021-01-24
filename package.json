@@ -1,5 +1,5 @@
 {
-  "name": "@plt4rm/cli",
+  "name": "p4rm",
   "version": "4.0.0",
   "description": "Sleek and powerful platform for faster and easier application development.",
   "scripts": {
@@ -17,28 +17,28 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/plt4rm/plt4rm-cli.git"
+    "url": "https://github.com/p4rm/cli.git"
   },
   "bin": {
-    "plt4rm": "./bin/start.js"
+    "p4rm": "./bin/start.js"
   },
   "author": "Shivaji Varma <contact@shivajivarma.com>",
   "contributors": [],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://gitlab.com/plt4rm/plt4rm-cli/issues"
+    "url": "https://gitlab.com/p4rm/cli/issues"
   },
-  "homepage": "https://plt4rm.com",
+  "homepage": "https://p4rm.com",
   "dependencies": {
-    "@plt4rm/utils": "^0.7.6",
-    "commander": "^2.16.0",
+    "@p4rm/file-utils": "^1.4.0",
+    "commander": "^7.0.0",
     "npm-api": "^1.0.0",
-    "pm2": "^4.2.3",
-    "shelljs": "^0.8.3"
+    "pm2": "^4.5.1",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
-    "@types/shelljs": "^0.8.6",
-    "del": "^5.1.0",
+    "@types/node": "^14.14.21",
+    "@types/shelljs": "^0.8.8",
     "gulp": "^4.0.2",
     "typescript": "^3.8.3",
     "ts-node": "^8.6.2"
