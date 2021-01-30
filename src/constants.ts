@@ -1,28 +1,24 @@
 import * as path from 'path';
-import FileUtils from '@p4rm/file-utils';
 
 const ROOT_PATH = path.normalize(__dirname + '/..');
-const PROJECT_PATH = path.normalize(ROOT_PATH + '/resources/project');
-const PLAYGROUND_PATH = path.normalize(ROOT_PATH + '/resources/playground');
+
+const PLATFORM_PACKAGE_NAME = '@p4/platform';
 
 const programName = path.basename(process.argv[1]);
 
 let CWD_PATH: string;
 
-if (programName === 'start.js' || programName === 'plt4rm') {
-  CWD_PATH = process.cwd(); // current working directory
+if (programName === 'playground') {
+  CWD_PATH = path.normalize(ROOT_PATH + '/resources/playground');
 } else {
-  CWD_PATH = PLAYGROUND_PATH;
+  CWD_PATH = process.cwd(); // current working directory
 }
 
-const packageJson: any = FileUtils.readJsonFileSync(path.normalize(ROOT_PATH + '/package.json'), null);
-const PACKAGE_NAME = packageJson.name;
-const VERSION = packageJson.version;
+console.log('CWD :: ' + CWD_PATH);
+
 
 export {
   ROOT_PATH,
   CWD_PATH,
-  PROJECT_PATH,
-  PACKAGE_NAME,
-  VERSION,
+  PLATFORM_PACKAGE_NAME
 };

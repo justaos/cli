@@ -1,0 +1,11 @@
+{
+    "name": "project",
+    "version": "1.0.0",
+    "description": "project",
+    "scripts": {
+        "start": "p4rm run"
+    },
+    "dependencies": {
+        "@p4/platform": ""
+    }
+}

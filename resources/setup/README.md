@@ -1,0 +1,6 @@
+Project
+---------
+
+```shell
+npm start
+```

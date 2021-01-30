@@ -1,12 +1,3 @@
-// @ts-ignore
-import * as NpmApi from 'npm-api';
-
-export async function getLatestPackageJson(packageName: string) {
-  const npm = new NpmApi();
-  const repo = npm.repo(packageName);
-  return repo.package();
-}
-
 function padStars(str?: string) {
   const size = 75;
   if (typeof str === 'string')

@@ -1,46 +1,81 @@
 {
   "name": "p4rm",
   "version": "4.0.0",
-  "description": "Sleek and powerful platform for faster and easier application development.",
-  "scripts": {
-    "prepare": "npm run build",
-    "build": "gulp | tsc",
-    "local_install": "npm install -g .",
-    "publish": "npm publish"
-  },
-  "files": [
-    "lib",
-    "bin",
-    "resources",
-    "index.js",
-    "index.ts"
+  "description": "Software Development Kit for P4RM",
+  "keywords": [
+    "oclif",
+    "p4rm",
+    "P4RM CLI",
+    "devkit",
+    "sdk",
+    "P4RM DevKit"
   ],
+  "homepage": "https://github.com/p4rm/cli.git",
+  "bugs": {
+    "url": "https://gitlab.com/p4rm/cli/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/p4rm/cli.git"
   },
-  "bin": {
-    "p4rm": "./bin/start.js"
-  },
+  "license": "Apache-2.0",
   "author": "Shivaji Varma <contact@shivajivarma.com>",
   "contributors": [],
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://gitlab.com/p4rm/cli/issues"
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "bin": {
+    "p4rm": "../bin/run"
   },
-  "homepage": "https://p4rm.com",
+  "files": [
+    "/bin",
+    "/lib",
+    "resources",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "scripts": {
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postpack": "rimraf oclif.manifest.json",
+    "test": "echo NO TESTS",
+    "debug": "./bin/run new test",
+    "local_publish": "npm install -g .",
+    "posttest": "eslint . --ext .ts --config ../.eslintrc",
+    "version": "oclif-dev readme && git add README.md"
+  },
   "dependencies": {
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.1",
+    "tslib": "^1.14.1",
     "@p4rm/file-utils": "^1.4.0",
-    "commander": "^7.0.0",
-    "npm-api": "^1.0.0",
-    "pm2": "^4.5.1",
-    "shelljs": "^0.8.4"
+    "extract-zip": "^2.0.1",
+    "shelljs": "^0.8.4",
+    "ora": "^5.3.0",
+    "inquirer": "^7.3.3",
+    "pm2": "^4.5.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.21",
+    "@oclif/dev-cli": "^1.26.0",
+    "@types/node": "^10.17.51",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.1.0",
+    "globby": "^10.0.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7",
     "@types/shelljs": "^0.8.8",
-    "gulp": "^4.0.2",
-    "typescript": "^3.8.3",
-    "ts-node": "^8.6.2"
+    "@types/inquirer": "^7.3.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "p4rm",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
   }
 }

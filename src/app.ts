@@ -1,3 +1,3 @@
-import P4RMCLI from './P4RMCLI';
+import ProjectRunUtils from './ProjectRunUtils';
 
-P4RMCLI.run();
+new ProjectRunUtils().start();

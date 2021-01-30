@@ -1,21 +1,21 @@
 {
     "name": "project",
     "version": "1.0.0",
-    "description": "plt4rm's project",
-    "dependencies": {
-        "@p4rm/plt4rm": ""
-    },
+    "description": "project",
     "scripts": {
-        "start": "plt4rm run"
+        "start": "p4rm run"
     },
-    "plt4rm": {
+    "dependencies": {
+        "@p4/platform": "0.7.0"
+    },
+    "config": {
         "environment": "PRODUCTION",
         "loggerLevel": "info",
         "services": {
             "database": {
                 "host": "localhost",
                 "port": "27017",
-                "database": "plt4rm",
+                "database": "p4rm",
                 "dialect": "mongodb"
             },
             "server": {
@@ -33,7 +33,7 @@
         "programs": {
             "@p4rm/user-management": {},
             "@p4rm/security": {},
-            "@p4rm/core":  {
+            "@p4rm/core": {
                 "sender": {
                     "host": "smtp.office365.com",
                     "port": "587",
@@ -60,4 +60,3 @@
         }
     }
 }
-
