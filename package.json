@@ -1,6 +1,6 @@
 {
   "name": "p4rm",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Software Development Kit for P4RM",
   "keywords": [
     "oclif",
@@ -53,7 +53,7 @@
     "shelljs": "^0.8.4",
     "ora": "^5.3.0",
     "inquirer": "^7.3.3",
-    "pm2": "^4.5.1"
+    "pm2": "^4.5.4"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
