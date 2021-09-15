@@ -1,6 +1,0 @@
-Project
----------
-
-```shell
-npm start
-```

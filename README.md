@@ -1,9 +1,9 @@
-plt4rm cli
+P4RM CLI
 ----
-A command line interface for plt4rm
+A command line interface for P4RM
 
-[![Build](https://github.com/plt4rm/plt4rm-cli/workflows/Node%20CI/badge.svg)](https://github.com/plt4rm/plt4rm-cli/actions?workflow=Node+CI)
-[![CodeFactor](https://www.codefactor.io/repository/github/plt4rm/plt4rm-cli/badge)](https://www.codefactor.io/repository/github/plt4rm/plt4rm-cli)
+[![Build](https://github.com/p4rm/cli/workflows/Node%20CI/badge.svg)](https://github.com/p4rm/cli/actions?workflow=Node+CI)
+[![CodeFactor](https://www.codefactor.io/repository/github/p4rm/cli/badge)](https://www.codefactor.io/repository/github/p4rm/cli)
 
 ## Prerequisites
 * Install nodejs  (version 12.13.1)  
@@ -15,19 +15,19 @@ https://nodejs.org/en/download/
 https://www.mongodb.com/download-center?#community
 
 ## Setup
-![Set up](resources/setup.png)
+![Set up](resources/setup.svg)
 
 ## Commands
-### plt4rm new
-The plt4rm CLI makes it easy to create an application that already works, right out of the box.
+### p4rm new
+The P4RM CLI makes it easy to create an application that already works, right out of the box.
 
 
-### plt4rm run
-Easily start your plt4rm and load installed cloud applications on platform.
+### p4rm run
+Easily start your P4RM and load installed cloud applications on platform.
 
-Check configuration in config.json before running the plt4rm. 
+Check configuration in config.json before running the P4RM. 
 
-By default platform starts on port 8080. Open  [http://localhost:8080](http://localhost:8080) to view the landing page of plt4rm.
+By default, platform starts on port 8080. Open  [http://localhost:8080](http://localhost:8080) to view the landing page of P4RM.
 
 
 ## Code of Conduct

@@ -28,11 +28,11 @@
     "p4rm": "../bin/run"
   },
   "files": [
-    "/bin",
-    "/lib",
+    "bin",
+    "lib",
     "resources",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "npm-shrinkwrap.json",
+    "oclif.manifest.json"
   ],
   "scripts": {
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
