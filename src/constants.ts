@@ -14,9 +14,6 @@ if (programName === 'playground') {
   CWD_PATH = process.cwd(); // current working directory
 }
 
-console.log('CWD :: ' + CWD_PATH);
-
-
 export {
   ROOT_PATH,
   CWD_PATH,

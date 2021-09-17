@@ -28,12 +28,12 @@ export default class New extends Command {
 
   async run() {
     const { args, flags } = this.parse(New);
-    const questions = [
+    const questions: inquirer.QuestionCollection<any> = [];/* [
       {
         type: 'password',
         name: 'authToken',
         message: 'Authentication token?'
-      }];
+      }];*/
 
 
     const psUtils = new ProjectSetupUtils(args.name);
@@ -42,11 +42,14 @@ export default class New extends Command {
         const spinner = ora('Creating new project').start();
         spinner.spinner = 'dots';
         spinner.text = 'Downloading project resources';
-        psUtils.downloadAndExtractProjectFiles(() => {
-          psUtils.placeAuthToken(answers.authToken);
-          spinner.text = 'Installing dependencies';
-          psUtils.installDependencies(() => {
-            spinner.stop();
+        psUtils.downloadSetupZip(() => {
+          spinner.text = 'Extracting project files from zip';
+          psUtils.extractProjectFiles(() => {
+            psUtils.updateDatabaseName();
+            spinner.text = 'Installing dependencies';
+            psUtils.installDependencies(() => {
+              spinner.stop();
+            });
           });
         });
       });
