@@ -2,7 +2,7 @@ import * as path from 'path';
 
 const ROOT_PATH = path.normalize(__dirname + '/..');
 
-const PLATFORM_PACKAGE_NAME = '@p4/platform';
+const PLATFORM_PACKAGE_NAME = '@os/platform';
 
 const programName = path.basename(process.argv[1]);
 

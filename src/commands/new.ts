@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { Command, Flags } from '@oclif/core';
 import ProjectSetupUtils from '../ProjectSetupUtils';
 import * as ora from 'ora';
 import { PRINT_COLORS, printBox } from '../utils';
@@ -8,13 +8,13 @@ export default class New extends Command {
   static description = 'Creates a new project and sets platform configuration in the package.json -> config property';
 
   static examples = [
-    `$ p4rm new my-first-project`
+    `$ justaos new my-first-project`
   ];
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
     // flag with no value (-f, --force)
-    force: flags.boolean({ char: 'f' })
+    force: Flags.boolean({ char: 'f' })
   };
 
   static args = [
@@ -26,15 +26,9 @@ export default class New extends Command {
     }
   ];
 
-  async run() {
-    const { args, flags } = this.parse(New);
-    const questions: inquirer.QuestionCollection<any> = [];/* [
-      {
-        type: 'password',
-        name: 'authToken',
-        message: 'Authentication token?'
-      }];*/
-
+  async run(): Promise<void> {
+    const { args, flags } = await this.parse(New);
+    const questions: inquirer.QuestionCollection<any> = [];
 
     const psUtils = new ProjectSetupUtils(args.name);
     if (!psUtils.isProjectAlreadyExist()) {

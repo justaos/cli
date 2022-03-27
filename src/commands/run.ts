@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { Command, Flags } from '@oclif/core';
 import { PRINT_COLORS, printBox } from '../utils';
 import ProjectRunUtils from '../ProjectRunUtils';
 
@@ -6,17 +6,17 @@ export default class Run extends Command {
   static description = 'Starts project as a service on pm2';
 
   static examples = [
-    `$ p4rm run`
+    `$ justaos run`
   ];
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
     // flag with no value (--service)
-    service: flags.boolean({})
+    service: Flags.boolean({})
   };
 
-  async run() {
-    const { args, flags } = this.parse(Run);
+  async run(): Promise<void> {
+    const { args, flags } = await this.parse(Run);
     const prUtils = new ProjectRunUtils();
     if (prUtils.isProjectFolder()) {
       if (flags.service)

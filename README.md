@@ -1,9 +1,8 @@
-P4RM CLI
+JUSTAOS CLI
 ----
-A command line interface for P4RM
+A command line interface for JUSTAOS.
 
-[![Build](https://github.com/p4rm/cli/workflows/Node%20CI/badge.svg)](https://github.com/p4rm/cli/actions?workflow=Node+CI)
-[![CodeFactor](https://www.codefactor.io/repository/github/p4rm/cli/badge)](https://www.codefactor.io/repository/github/p4rm/cli)
+[![Build](https://github.com/justaos/cli/workflows/Build/badge.svg)](https://github.com/justaos/cli/actions?workflow=Build)
 
 ## Prerequisites
 * Install nodejs  (version 12.13.1)  
@@ -18,16 +17,16 @@ https://www.mongodb.com/download-center?#community
 ![Set up](resources/setup.svg)
 
 ## Commands
-### p4rm new
-The P4RM CLI makes it easy to create an application that already works, right out of the box.
+### justaos new
+The JUSTAOS CLI makes it easy to create an application that already works, right out of the box.
 
 
-### p4rm run
-Easily start your P4RM and load installed cloud applications on platform.
+### justaos run
+Easily start your JUSTAOS and load installed cloud applications on platform.
 
-Check configuration in config.json before running the P4RM. 
+Check configuration in config.json before running the JUSTAOS. 
 
-By default, platform starts on port 8080. Open  [http://localhost:8080](http://localhost:8080) to view the landing page of P4RM.
+By default, platform starts on port 8080. Open  [http://localhost:8080](http://localhost:8080) to view the landing page of JUSTAOS.
 
 
 ## Code of Conduct

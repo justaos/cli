@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as https from 'https';
 import * as extract from 'extract-zip';
 import * as shell from 'shelljs';
-import FileUtils from '@p4rm/file-utils';
+import FileUtils from '@justaos/file-utils';
 import { PRINT_COLORS, printBox } from './utils';
 
 

@@ -1,31 +1,32 @@
 {
-  "name": "p4rm",
-  "version": "6.0.0",
-  "description": "Software Development Kit for P4RM",
+  "name": "justaos",
+  "version": "1.0.0",
+  "description": "Software Development Kit for JUSTAOS",
   "keywords": [
     "oclif",
-    "p4rm",
-    "P4RM CLI",
+    "justaos",
+    "JUSTAOS CLI",
     "devkit",
     "sdk",
-    "P4RM DevKit"
+    "JUSTAOS DevKit"
   ],
-  "homepage": "https://github.com/p4rm/cli.git",
+  "homepage": "https://github.com/justaos/cli.git",
   "bugs": {
-    "url": "https://gitlab.com/p4rm/cli/issues"
+    "url": "https://gitlab.com/justaos/cli/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/p4rm/cli.git"
+    "url": "https://github.com/justaos/cli.git"
   },
   "license": "Apache-2.0",
-  "author": "Shivaji Varma <contact@shivajivarma.com>",
+  "author": "Shivaji Varma Pusapati Venkata <contact@shivajivarma.com>",
   "contributors": [],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "bin": {
-    "p4rm": "../bin/run"
+    "justaos": "../bin/run",
+    "justaos-dev": "../bin/dev"
   },
   "files": [
     "bin",
@@ -35,47 +36,57 @@
     "oclif.manifest.json"
   ],
   "scripts": {
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postpack": "rimraf oclif.manifest.json",
-    "test": "echo NO TESTS",
+    "build": "shx rm -rf dist && tsc -b",
     "debug": "./bin/run new test",
+    "lint": "eslint . --ext .ts --config .eslintrc",
     "local_publish": "npm install -g .",
-    "posttest": "eslint . --ext .ts --config ../.eslintrc",
-    "version": "oclif-dev readme && git add README.md"
+    "prepack": "yarn build && oclif manifest && oclif readme",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "posttest": "yarn lint",
+    "version": "oclif readme && git add README.md"
   },
   "dependencies": {
-    "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.1",
-    "tslib": "^1.14.1",
-    "@p4rm/file-utils": "^1.4.0",
+    "@oclif/core": "^1.6.1",
+    "@oclif/plugin-help": "^5.1.12",
+    "@oclif/plugin-plugins": "^2.1.0",
+    "@justaos/file-utils": "^1.0.3",
     "extract-zip": "^2.0.1",
-    "shelljs": "^0.8.4",
-    "ora": "^5.3.0",
     "inquirer": "^7.3.3",
-    "pm2": "^4.5.4"
+    "ora": "^5.3.0",
+    "pm2": "^4.5.4",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.0",
-    "@types/node": "^10.17.51",
-    "eslint": "^5.16.0",
-    "eslint-config-oclif": "^3.1.0",
-    "eslint-config-oclif-typescript": "^0.1.0",
-    "globby": "^10.0.2",
-    "rimraf": "^3.0.2",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
+    "@oclif/test": "^2.1.0",
+    "@types/chai": "^4.3.0",
+    "@types/inquirer": "^7.3.1",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.4",
     "@types/shelljs": "^0.8.8",
-    "@types/inquirer": "^7.3.1"
+    "chai": "^4.3.6",
+    "eslint": "^7.32.0",
+    "eslint-config-oclif": "^4.0.0",
+    "eslint-config-oclif-typescript": "^1.0.2",
+    "globby": "^11",
+    "mocha": "^9",
+    "oclif": "^2",
+    "shx": "^0.3.3",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "p4rm",
+    "bin": "justaos",
     "plugins": [
       "@oclif/plugin-help"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
