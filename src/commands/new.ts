@@ -39,7 +39,6 @@ export default class New extends Command {
         psUtils.downloadSetupZip(() => {
           spinner.text = 'Extracting project files from zip';
           psUtils.extractProjectFiles(() => {
-            psUtils.updateDatabaseName();
             spinner.text = 'Installing dependencies';
             psUtils.installDependencies(() => {
               spinner.stop();

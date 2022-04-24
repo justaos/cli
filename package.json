@@ -1,7 +1,7 @@
 {
   "name": "justaos",
   "version": "1.0.0",
-  "description": "Software Development Kit for JUSTAOS",
+  "description": "JUSTAOS CLI",
   "keywords": [
     "oclif",
     "justaos",
@@ -21,30 +21,28 @@
   "license": "Apache-2.0",
   "author": "Shivaji Varma Pusapati Venkata <contact@shivajivarma.com>",
   "contributors": [],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "bin": {
     "justaos": "../bin/run",
     "justaos-dev": "../bin/dev"
   },
   "files": [
-    "bin",
-    "lib",
-    "resources",
-    "npm-shrinkwrap.json",
-    "oclif.manifest.json"
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
   ],
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
-    "debug": "./bin/run new test",
     "lint": "eslint . --ext .ts --config .eslintrc",
-    "local_publish": "npm install -g .",
-    "prepack": "yarn build && oclif manifest && oclif readme",
     "postpack": "shx rm -f oclif.manifest.json",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
-    "version": "oclif readme && git add README.md"
+    "prepack": "yarn build && oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md",
+    "local_publish": "npm install -g ."
   },
   "dependencies": {
     "@oclif/core": "^1.6.1",
@@ -80,10 +78,11 @@
     "node": ">=12.0.0"
   },
   "oclif": {
-    "commands": "./lib/commands",
+    "commands": "./dist/commands",
     "bin": "justaos",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
     ]
   },
   "publishConfig": {

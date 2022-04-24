@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CWD_PATH, PLATFORM_PACKAGE_NAME } from './constants';
+import { CWD_PATH, OS_PACKAGE_NAME } from './constants';
 import * as fs from 'fs';
 import * as pm2 from 'pm2';
 
@@ -18,8 +18,8 @@ export default class ProjectRunUtils {
   }
 
   start() {
-    const {Platform} = require(this.projectFolder + "/node_modules/" + PLATFORM_PACKAGE_NAME);
-    new Platform(this.projectFolder).run();
+    const OS = require(this.projectFolder + "/node_modules/" + OS_PACKAGE_NAME);
+    new OS.default(this.projectFolder).run();
   }
 
 

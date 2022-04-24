@@ -26,7 +26,7 @@ export default class ProjectSetupUtils {
     fs.mkdirSync(this.projectFolder);
     const setupZipFilePath = path.normalize(this.projectFolder + '/setup.zip');
     const setupZipFile = fs.createWriteStream(setupZipFilePath);
-    https.get('https://codeload.github.com/p4rm/setup/zip/refs/tags/latest', (response) => {
+    https.get('https://codeload.github.com/justaos/setup/zip/refs/tags/latest', (response) => {
       response.pipe(setupZipFile);
       setupZipFile.on('finish', () => {
         setupZipFile.close();
@@ -53,13 +53,6 @@ export default class ProjectSetupUtils {
     let file = FileUtils.readFileSync(npmrcPath, 'utf8').toString();
     file = file.replace('{{P4RM_NPM_TOKEN}}', authToken);
     FileUtils.writeFileSync(npmrcPath, file);
-  }
-
-  updateDatabaseName() {
-    const packageJsonPath = path.normalize(this.projectFolder + '/package.json');
-    const packageJson = FileUtils.readJsonFileSync(packageJsonPath, 'utf8');
-    packageJson.config.services.database.database = `p4_${this.projectName}`;
-    FileUtils.writeJsonFileSync(packageJsonPath, packageJson);
   }
 
   installDependencies(callback: any) {

@@ -1,21 +1,8 @@
-import * as path from 'path';
+const OS_PACKAGE_NAME = '@os/os';
 
-const ROOT_PATH = path.normalize(__dirname + '/..');
-
-const PLATFORM_PACKAGE_NAME = '@os/platform';
-
-const programName = path.basename(process.argv[1]);
-
-let CWD_PATH: string;
-
-if (programName === 'playground') {
-  CWD_PATH = path.normalize(ROOT_PATH + '/resources/playground');
-} else {
-  CWD_PATH = process.cwd(); // current working directory
-}
+let CWD_PATH: string = process.cwd();
 
 export {
-  ROOT_PATH,
   CWD_PATH,
-  PLATFORM_PACKAGE_NAME
+  OS_PACKAGE_NAME
 };

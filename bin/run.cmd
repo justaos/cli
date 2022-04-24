@@ -1,3 +1,3 @@
 @echo off
 
-ts-node "%~dp0\run" %*
+node "%~dp0\run" %*
