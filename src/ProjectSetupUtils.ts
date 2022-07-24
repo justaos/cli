@@ -1,11 +1,11 @@
 import * as path from 'path';
-import { CWD_PATH } from './constants';
+import { CWD_PATH } from './constants.ts';
 import * as fs from 'fs';
 import * as https from 'https';
 import * as extract from 'extract-zip';
 import * as shell from 'shelljs';
-import FileUtils from '@justaos/file-utils';
-import { PRINT_COLORS, printBox } from './utils';
+import FileUtils from '../deps.ts';
+import { PRINT_COLORS, printBox } from './utils.ts';
 
 
 export default class ProjectSetupUtils {

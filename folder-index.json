@@ -1,0 +1,8 @@
+[
+  "\\.mocharc.json",
+  "\\folder-index.json",
+  "\\package-lock.json",
+  "\\package.json",
+  "\\resources\\test.json",
+  "\\tsconfig.json"
+]
