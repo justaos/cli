@@ -6,8 +6,8 @@ A command line interface for JUSTAOS.
 
 ## Prerequisites
 
-- Install deno (version 12.13.1)\
-  https://nodejs.org/en/download/
+- Install deno (version 1.29.1)\
+  https://deno.land/manual@v1.29.1/getting_started/installation
 
 - Install mongodb\
   https://www.mongodb.com/download-center?#community
