@@ -1,4 +1,4 @@
-npm install -g p4rm
-p4rm new project-name
+deno install -A --unstable -n justaos https://deno.land/x/justaos/mod.ts
+justaos new project-name
 cd project-name
-p4rm run
+justaos run

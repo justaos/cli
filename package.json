@@ -3,7 +3,6 @@
   "version": "1.0.3",
   "description": "JUSTAOS CLI",
   "keywords": [
-    "oclif",
     "justaos",
     "JUSTAOS CLI",
     "devkit",
@@ -21,43 +20,9 @@
   "license": "Apache-2.0",
   "author": "Shivaji Varma Pusapati Venkata <contact@shivajivarma.com>",
   "contributors": [],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "bin": {
-    "justaos": "./bin/run",
-    "justaos-dev": "./bin/dev"
-  },
-  "files": [
-    "/bin",
-    "/dist",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
-  ],
   "scripts": {
-    "build": "shx rm -rf dist && tsc -b",
-    "lint": "eslint . --ext .ts --config .eslintrc",
-    "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "yarn lint",
-    "prepack": "yarn build && oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md",
-    "local_publish": "npm install -g ."
-  },
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "oclif": {
-    "commands": "./dist/commands",
-    "bin": "justaos",
-    "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
-    ]
+    "install_local": "deno install -f -A --unstable -n justaos mod.ts",
+    "install_remote": "deno install -f -A --unstable -n justaos https://deno.land/x/justaos/mod.ts"
   },
   "publishConfig": {
     "access": "public"

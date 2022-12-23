@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "std/": "https://deno.land/std@0.170.0/",
+    "justaos_utils/": "https://deno.land/x/justaos_utils@1.3.0/"
+  }
+}

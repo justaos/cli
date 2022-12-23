@@ -1,0 +1,68 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "project",
+  "scripts": {
+    "start": "justaos run",
+    "start:dev": "justaos-dev run"
+  },
+  "dependencies": {
+    "@os/platform": "1.0.2"
+  },
+  "config": {
+    "environment": "PRODUCTION",
+    "loggerLevel": "info",
+    "services": {
+      "database": {
+        "host": "localhost",
+        "port": "27017",
+        "database": "DATABASE_NAME",
+        "dialect": "mongodb"
+      },
+      "server": {
+        "port": 8080,
+        "paths": {
+          "assets": "assets",
+          "views": "views"
+        },
+        "pages": {
+          "404": "/404.html",
+          "500": "/500.html"
+        }
+      }
+    },
+    "programs": {
+      "@p4/user-management": {},
+      "@p4/security": {},
+      "@p4/core": {
+        "product": {
+          "name": "justaOS"
+        },
+        "email": {
+          "sender": {
+            "host": "smtp.office365.com",
+            "port": "587",
+            "auth": {
+              "user": "USERNAME",
+              "pass": "APP_PASSWORD"
+            },
+            "secureConnection": false,
+            "secure": false,
+            "tls": {
+              "ciphers": "SSLv3"
+            },
+            "requireTLS": true
+          },
+          "reciever": {
+            "user": "USERNAME",
+            "password": "APP_PASSWORD",
+            "host": "outlook.office365.com",
+            "port": 993,
+            "tls": true
+          }
+        }
+      },
+      "@p4/task-management": {}
+    }
+  }
+}
