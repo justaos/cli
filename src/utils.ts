@@ -27,6 +27,3 @@ export function printBox(color: string, arr: string[]) {
   });
   printf(color);
 }
-
-export function getConfigPath() {
-}

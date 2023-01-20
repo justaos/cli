@@ -22,6 +22,6 @@ jobs:
           deno-version: ${{ matrix.deno-version }}
       - name: build and test
         run: |
-          deno --version --unstable
+          deno test -A --unstable
         env:
           CI: true

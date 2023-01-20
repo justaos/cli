@@ -18,7 +18,7 @@ A command line interface for JUSTAOS.
 
 ## Commands
 
-### justaos new <<project_name>>
+### justaos new <project-name>
 
 The JUSTAOS CLI makes it easy to create an application that already works, right
 out of the box.

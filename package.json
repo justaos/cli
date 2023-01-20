@@ -21,6 +21,7 @@
   "author": "Shivaji Varma Pusapati Venkata <contact@shivajivarma.com>",
   "contributors": [],
   "scripts": {
+    "test": "deno test -A --allow-run  --unstable",
     "install_local": "deno install -f -A --unstable -n justaos mod.ts",
     "install_remote": "deno install -f -A --unstable -n justaos https://deno.land/x/justaos/mod.ts"
   },
