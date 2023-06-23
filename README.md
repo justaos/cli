@@ -12,10 +12,14 @@ A command line interface for JUSTAOS.
 - Install mongodb\
   https://www.mongodb.com/download-center?#community
 
+
 ## Setup
 
 ![Set up](resources/setup.svg)
 
+```bash
+deno install -A --unstable -n justaos https://deno.land/x/justaos/mod.ts
+```
 ## Commands
 
 ### justaos new <project-name>
