@@ -5,14 +5,15 @@ const indexCommand = new Command()
   .description("Creates index of json files in a directory")
   .action((options: any) => {
     const files = [];
-    for (const file of walkSync("./",
+    const currentPath = path.toFileUrl(Deno.cwd());
+    for (const file of walkSync(currentPath,
       {
         maxDepth: 5,
         includeDirs: false,
         exts: [".json"],
         skip: [/node_modules/]
       })) {
-      files.push("\\" + path.normalize(file.path).replace(Deno.cwd(), ""));
+      files.push(path.toFileUrl(file.path).pathname.replace(currentPath.pathname, ''));
     }
     FileUtils.writeTextFileSync(
       "./folder-index.json",

@@ -1,14 +1,5 @@
 {
   "name": "justaos",
-  "version": "1.0.3",
-  "description": "JUSTAOS CLI",
-  "keywords": [
-    "justaos",
-    "JUSTAOS CLI",
-    "devkit",
-    "sdk",
-    "JUSTAOS DevKit"
-  ],
   "homepage": "https://github.com/justaos/cli.git",
   "bugs": {
     "url": "https://gitlab.com/justaos/cli/issues"
